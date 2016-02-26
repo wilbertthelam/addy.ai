@@ -10,26 +10,28 @@
 			padding: 10px;
 			font: 24px/24px Monaco, sans-serif;
 			background-color: white;
-			text-align: center;
+			text-align: left;
 			}
 		</style>
 	</head>
 
 	<body>
-		First attempt at Addi.ai's ranking system.
-		Enter your name below to find out your ranking:
+		First attempt at Addi.ai's ranking system. <br>
+		Enter your name below to find out your ranking: <br> <br>
 		<form method = "POST">
 			<label for ="nameinput"> Name: </label>
 			<input type = "text" name = "name" id = "nameinput" />
 			<input type = "submit" value = "Enter" />
 		</form>
 		<?php
-			$name = $_POST['name'];
-			if($name == 'Linsen' || $name = 'linsen'){
-				echo "You're last!";
-			}
-			else{
-				echo "You're not last!";
+			if(isset($_POST['name'])){
+				$name = $_POST['name'];
+				if($name == 'Linsen' || $name == 'linsen'){
+					echo "You're last!";
+				}
+				else{
+					echo "You're not last!";
+				}
 			}
 		?>
 	</body>
