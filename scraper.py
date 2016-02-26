@@ -42,10 +42,11 @@ teamNameDict = {} # key: teamId, value: teamName
 teamDict = {} # key: teamId, value: dict with stats for each category
 
 # URL we want to scrape from
-scrapeURL = 'http://games.espn.go.com/flb/scoreboard?leagueId=44067&seasonId=2016'
+baseballBaseURL = 'http://games.espn.go.com/flb/scoreboard?leagueId=44067&seasonId=2016'
+basketbalBaseURL = 'http://games.espn.go.com/fba/scoreboard?leagueId=229752&seasonId=2016'
 
 # HTML response
-response = requests.get(scrapeURL)
+response = requests.get(basketbalBaseURL)
 
 # create DOM tree using BeautifulSoup
 soup = bs4.BeautifulSoup(response.content, 'lxml')
@@ -62,7 +63,9 @@ for t in teamInfo:
 	t_stats = t.findAll('td', id=re.compile('^ls_tmTotalStat_'))
 
 	teamNameDict[teamId] = teamName
-	teamDict[teamId] = baseballStatsObjCreator(t_stats)
+
+	# change obj type depending on sport
+	teamDict[teamId] = basketballStatsObjCreator(t_stats)
 
 # print out team names for each team
 for key, value in teamNameDict.iteritems():
