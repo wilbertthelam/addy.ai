@@ -11,6 +11,11 @@ Automated fantasy power rankings for ESPN fantasy sites
   <li>Run <code>npm start</code> to launch Node.JS server</li>
 </ol>
 
+<h2>Setting up database:</h2>
+<ol>
+  <li>Using local MySQL instance, open and run <code>db_scripts/addyai_db.sql</code></li>
+</ol>
+
 <h2>Running web scraper locally:</h2>
 <ol>
   <li>Make sure Python 2.7x or higher is installed</li>
