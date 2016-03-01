@@ -67,13 +67,17 @@ for t in teamInfo:
 	# change obj type depending on sport
 	teamDict[teamId] = basketballStatsObjCreator(t_stats)
 
-# print out team names for each team
-for key, value in teamNameDict.iteritems():
-	print key, value
+# # print out team names for each team
+# for key, value in teamNameDict.iteritems():
+# 	print key, value
 
-# print out stats for each team
-for key, value in teamDict.iteritems():
-	print key, value
+# # print out stats for each team
+# for key, value in teamDict.iteritems():
+# 	print key, value
+
+# print into Node.JS script
+print teamNameDict
+print teamDict
 
 
 
