@@ -4,30 +4,11 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var mysql = require('mysql');
 
-// connection to MySQL server
-// TODO: move out to separate file probably
-var connection = mysql.createConnection({
-  host     : 'localhost',
-  user     : 'root',
-  password : 'Abc123!@#',
-  database : 'addyai_tester'
-});
-
-connection.connect();
-
-connection.query('SELECT * FROM test_table', function(err, rows, fields) {
-  if (err) throw err;
-  console.log('The solution is: ', rows[0].name);
-});
-
-connection.end();
+var app = express();
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
-
-var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
