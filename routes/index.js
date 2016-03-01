@@ -15,21 +15,29 @@ router.get('/', function(req, res) {
 
 /* GET stats given teamId */
 router.get('/teamStats', function (req, res) {
-
 	// run python web scraper and return data as JSON
+	
+	var jsonMessage = {};
 	PythonShell.run('./scraper/scraper.py', function(err, results) {
 		if (err) {
 			throw err;
 		}
 		var success = true;
-		var message = "team and team stats";
-		console.log(results);
-		res.json({
-			'status': success,
-			'message': message,
-			'teams': results[0],
-			'stats': results[1]});
+		var message = 'team and team stats';
+		// console.log(results);
+
+		jsonMessage.status = success;
+		jsonMessage.message = message;
+		jsonMessage.title = 'Addy.AI Tester Page';
+		jsonMessage.teams = results[0];
+		jsonMessage.stats = results[1];
+
+		res.render('index',jsonMessage);
+		// res.json(jsonMessage); // activate when we have front end framework
+
 	});
+
+
 
 	// connection.query('SELECT * FROM test_table', function(err, rows) {
 	// 	if (err) {
