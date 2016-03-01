@@ -1,0 +1,11 @@
+CREATE TABLE basketball_stats (`team_id` int(70) NOT NULL,
+  `league_id` int(70) NOT NULL,
+  `FT` DECIMAL(4,4) NOT NULL,
+  `FG` DECIMAL(4,4) NOT NULL,
+  `BLK` int(70) NOT NULL,
+  `RB` int(70) NOT NULL,
+  `STL` int(70) NOT NULL,
+  `AST` int(70) NOT NULL,
+  `3PM` int(70) NOT NULL,
+  `PTS` int(70) NOT NULL,
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP)

@@ -16,7 +16,7 @@ router.get('/', function(req, res) {
 /* GET stats given teamId */
 router.get('/teamStats', function (req, res) {
 
-
+	// run python web scraper and return data as JSON
 	PythonShell.run('./scraper/scraper.py', function(err, results) {
 		if (err) {
 			throw err;
