@@ -1,0 +1,71 @@
+/*
+ * -- BASE STYLES --
+ * Most of these are inherited from Base, but I want to change a few.
+ */
+body {
+    color: #526066;
+    margin: 0px;
+}
+
+p {
+    line-height: 1.6em;
+}
+
+
+
+/*
+ * -- MENU STYLES --
+ * Make the menu have a very faint box-shadow.
+ */
+.pure-menu {
+    box-shadow: 0 1px 1px rgba(0,0,0, 0.10);
+
+}
+
+#container {
+    margin: 50px;
+
+}
+
+/*
+ * -- BANNER --
+ * The top banner with the headings. By using a combination
+ * of `display: table;` and `display: table-cell;`, we can
+ * vertically center the text.
+ */
+
+.banner {
+    background: #510000;
+    text-align: center;
+    background-size: cover;
+    height: 100px;
+    width: 100%;
+    margin-bottom: 3em;
+    display: table;
+}
+
+.banner-head {
+    display: table-cell;
+    vertical-align: middle;
+    margin-bottom: 0;
+    font-size: 2em;
+    color: white;
+    font-weight: 500;
+    text-shadow: 0 1px 1px black;
+}
+
+.banner-head #title {
+    border: 2px solid white;
+    padding: 6px;
+
+}
+
+.banner-head #subtitle {
+    color: white;
+    padding: 6px;
+}
+}
+
+
+
+
