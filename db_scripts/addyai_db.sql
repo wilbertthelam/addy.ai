@@ -28,7 +28,7 @@ INSERT INTO `basketball_stats` VALUES(2, 1, 1, 0.534, 0.932, 15, 12, 3, 15, 22, 
 INSERT INTO `basketball_stats` VALUES(3, 1, 1, 0.754, 0.432, 4, 35, 8, 50, 1, 38, '2016-02-21 22:21:06');
 
 ##########################
-# BASEbALL STATS TABLE #
+# BASEBALL STATS TABLE   #
 ##########################
 DROP TABLE IF EXISTS `baseball_stats`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -36,8 +36,9 @@ DROP TABLE IF EXISTS `baseball_stats`;
 
 CREATE TABLE `baseball_stats` (
   `team_id` int(70) NOT NULL,
-  `league_id` int(70) DEFAULT '1',
+  `league_id` int(70) NOT NULL,
   `week` int(70) NOT NULL,
+  `year` int(70) NOT NULL,
   `OBP` DECIMAL(6,4) NOT NULL,
   `ERA` DECIMAL(6,4) NOT NULL,
   `WHIP` DECIMAL(6,4) NOT NULL,
@@ -49,7 +50,7 @@ CREATE TABLE `baseball_stats` (
   `R` int(10) NOT NULL,
   `K` int(10) NOT NULL,
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`team_id`,`league_id`,`week`));
+  PRIMARY KEY (`team_id`,`league_id`,`week`,`year`));
   
   
 
@@ -67,7 +68,16 @@ CREATE TABLE `teams` (`team_id` int(70) NOT NULL,
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP);
 
 # sample data
-INSERT INTO `teams` VALUES(1, 1, 'Corn In Corn Out', 'Addison Wright', '2016-02-22 12:22:25');
-INSERT INTO `teams` VALUES(2, 1, 'Han Sodanilo and Chewibaka', 'Wilbert Lam', '2016-02-22 12:22:25');
-INSERT INTO `teams` VALUES(3, 1, 'baseball sucks and so do wilbs', 'Linsen Wu', '2016-02-22 12:22:25');
-INSERT INTO `teams` VALUES(4, 1, 'Steph Curry Fanclub', 'Davy Til', '2016-02-22 12:22:25');
+INSERT INTO `teams` VALUES(1, 44067, 'This Team is UnFrazierable', 'Wilbert Lam', '2016-02-22 12:22:25');
+INSERT INTO `teams` VALUES(2, 44067, 'Team dickbutt is coming for u', 'Davy Til', '2016-02-22 12:22:25');
+INSERT INTO `teams` VALUES(3, 44067, 'SSID PLWUYANG', 'Chris Chan', '2016-02-22 12:22:25');
+INSERT INTO `teams` VALUES(4, 44067, 'Baseball sucks so does Wilburt', 'Linsen Wu', '2016-02-22 12:22:25');
+INSERT INTO `teams` VALUES(5, 44067, 'Davys Manny Pujols', 'Addison Wright', '2016-02-22 12:22:25');
+INSERT INTO `teams` VALUES(6, 44067, 'Caves Kitchen Curries', 'John Luu', '2016-02-22 12:22:25');
+INSERT INTO `teams` VALUES(7, 44067, 'The Number One Fanned', 'Kevin Yan', '2016-02-22 12:22:25');
+INSERT INTO `teams` VALUES(8, 44067, 'BURT THE MILFHUNTER', 'Loc Nguyen', '2016-02-22 12:22:25');
+
+CREATE OR REPLACE VIEW statv AS
+SELECT  teams.team_name, teams.owner_name, baseball_stats.*
+	FROM teams, baseball_stats
+	WHERE teams.team_id = baseball_stats.team_id;

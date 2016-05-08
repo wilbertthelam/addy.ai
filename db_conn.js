@@ -5,7 +5,7 @@ var db = mysql.createConnection({
   host     : 'localhost',
   user     : 'root',
   password : 'Abc123!@#',
-  database : 'addyai_tester'
+  database : 'addy_ai'
 });
 
 module.exports = db;

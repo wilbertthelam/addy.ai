@@ -40,16 +40,19 @@ def basketballStatsObjCreator(statsDOM):
 #	SCRIPT BELOW
 # ----------------------
 
-# get current week from route 
+# get current week, league, year from route 
 currentWeekStart = int(sys.argv[1])
+leagueId = sys.argv[2]
+seasonId = sys.argv[3]
+
 totalList = []
 for currentWeek in range(1, currentWeekStart):
 	teamNameDict = {} # key: teamId, value: teamName
 	teamList = [] # key: teamId, value: dict with stats for each category
 
 	# URL we want to scrape from
-	currentWeekURL = 'matchupPeriodId=' + str(currentWeek)
-	baseballBaseURL = 'http://games.espn.go.com/flb/scoreboard?leagueId=44067&seasonId=2016&' + currentWeekURL
+	currentWeekURL = 'leagueId=' + str(leagueId) + '&seasonId=' + str(seasonId) + '&matchupPeriodId=' + str(currentWeek)
+	baseballBaseURL = 'http://games.espn.go.com/flb/scoreboard?' + currentWeekURL
 
 	basketbalBaseURL = 'http://games.espn.go.com/fba/scoreboard?leagueId=229752&seasonId=2016'
 
@@ -77,6 +80,8 @@ for currentWeek in range(1, currentWeekStart):
 		teamLine = baseballStatsObjCreator(t_stats)
 		teamLine['team_id'] = teamId
 		teamLine['week'] = currentWeek
+		teamLine['year'] = seasonId
+		teamLine['league_id'] = leagueId
 		teamList.append(teamLine)
 
 	# # print out team names for each team
