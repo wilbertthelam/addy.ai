@@ -36,7 +36,8 @@ router.get('/teams', function(req, res) {
 
 /* GET current week stats information. */
 router.get('/stats', function(req, res) {
-	var statement = 'SELECT * FROM statv WHERE week = ? AND league_id = ? AND year = ? ORDER BY HR DESC;';
+	var stat = req.query.stat;
+	var statement = 'SELECT * FROM statv WHERE week = ? AND league_id = ? AND year = ? ORDER BY ' + stat + ' DESC;';
 	connection.query(statement, [currentWeek, leagueId, seasonId], function(err, results) {
 		if (err) {
 			return res.json({ execSuccess: false, message: 'Cannot get stats.', error: err});

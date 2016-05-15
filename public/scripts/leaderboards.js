@@ -6,6 +6,10 @@ Contains components for the leaderboards
 
 */
 
+import React from 'react';
+import ReactDOM from 'react-dom';
+import $ from 'jquery'
+
 var TeamListBox = React.createClass({
 	loadTeamsFromServer: function() {
 		$.ajax({
@@ -244,7 +248,7 @@ var Runs = React.createClass({
 });
 
 ReactDOM.render(
-	<StatsListBox url="/stats" pollInterval={5000} />,
+	<StatsListBox url="/stats?stat=HR" pollInterval={5000} />,
 	document.getElementById('statsLeaders'));
 
 // RBI Leaderboard Component

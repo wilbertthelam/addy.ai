@@ -7,6 +7,7 @@ import requests
 import bs4
 import sys
 import json
+import re
 
 totalData = [] # list holding all data objects
 
@@ -18,6 +19,11 @@ scoringPeriodId = str(int(sys.argv[1]) * 7 + 1)
 leagueId = str(sys.argv[2])
 seasonId = str(sys.argv[3])
 teamNum = int(sys.argv[4])
+
+# scoringPeriodId = str(42)
+# leagueId = str(44067)
+# seasonId = str(2016)
+# teamNum = int(8)
 
 # create the initial URL
 baseUrl = "http://games.espn.go.com/flb/boxscorefull?view=matchup&version=full"
@@ -51,6 +57,17 @@ for teamId in range(1, teamNum + 1):
         playerInfo = player.find('a', {'class': 'flexpop'})
         batter['player_id'] = playerInfo['playerid']
         batter['player_name'] = playerInfo.string
+        
+        # get player and position info
+        teamPos = playerInfo.next_sibling
+        teamPosArr = re.split('\W+', teamPos)
+        batter['player_team'] = teamPosArr[1]
+        batter['player_position'] = teamPosArr[2]
+
+        if len(teamPosArr) > 3:
+            batter['player_position2'] = teamPosArr[3]
+        if len(teamPosArr) > 4:
+            batter['player_position3'] = teamPosArr[4]
 
         # get player stats
         # player stat options:
@@ -88,6 +105,15 @@ for teamId in range(1, teamNum + 1):
         playerInfo = player.find('a', {'class': 'flexpop'})
         pitcher['player_id'] = playerInfo['playerid']
         pitcher['player_name'] = playerInfo.string
+
+        # get player and position info
+        teamPos = playerInfo.next_sibling
+        teamPosArr = re.split('\W+', teamPos)
+        pitcher['player_team'] = teamPosArr[1]
+        pitcher['player_position'] = teamPosArr[2]
+
+        if len(teamPosArr) > 3:
+            pitcher['player_position2'] = teamPosArr[3]
 
         # get player stats
         # player stat options:
