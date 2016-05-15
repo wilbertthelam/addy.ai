@@ -39,8 +39,8 @@ for i in range(0, currentWeek):
         SBData.append(jData[i*totalTeams + j]['SB'])
         RBIData.append(jData[i*totalTeams + j]['RBI'])
         OBPData.append(jData[i*totalTeams + j]['OBP'])
-        WHIPData.append(jData[i*totalTeams + j]['WHIP'])
-        ERAData.append(jData[i*totalTeams + j]['ERA'])
+        WHIPData.append(jData[i*totalTeams + j]['WHIP'] * -1) # MUST BE NEGATIZED TO ACCOUNT FOR LOWER WHIP
+        ERAData.append(jData[i*totalTeams + j]['ERA'] * -1) # MUST BE NEGATIZED TO ACCOUNT FOR LOWER ERA
         SVData.append(jData[i*totalTeams + j]['SV'])
         WData.append(jData[i*totalTeams + j]['W'])
         KData.append(jData[i*totalTeams + j]['K'])
@@ -65,13 +65,19 @@ for i in range(0, currentWeek):
 def calcIndvScore(data, stat_median, stat_std, norm_factor):
     #print "data" + amstr(data)
     #print ((data - stat_median) * 1.0 / stat_std) * norm_factor
-    return ((data - stat_median) * 1.0 / stat_std) * norm_factor
+    ceil_factor = 0.5
+    x_std_dev = (data - stat_median) * 1.0 / stat_std
+    if x_std_dev > ceil_factor:
+        return ceil_factor * norm_factor
+    elif x_std_dev < -1 * ceil_factor:
+        return -1 * ceil_factor * norm_factor
+    return x_std_dev * norm_factor
 
 # normalization function returns values from 0 to ln(x+1) = 1
 # return 
 def normFactor(i):
     factor = np.log(((np.exp(1)-1)*(i * 1.0 / currentWeek)) + 1)
-    return factor
+    return 1
         
 def createRankingScore():
     #print totalCat
@@ -86,6 +92,7 @@ def createRankingScore():
         for cat in week:
             stat_mean = np.mean(cat)
             stat_median = np.median(cat)
+            #print "stat median for week: " + str(i) + ": " + str(stat_median)
             stat_std = np.std(cat, ddof=1)
 
             indvStatsFunc = np.vectorize(calcIndvScore)
@@ -98,7 +105,7 @@ def createRankingScore():
 def parseResult(finalResult):
     finalMap = {}
     for i in range(0, len(finalResult)):
-        finalMap[i] = finalResult[i]
+        finalMap[i + 1] = finalResult[i]
 
     return json.dumps(finalMap)
 

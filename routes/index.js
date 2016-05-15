@@ -10,7 +10,7 @@ var async = require('async');
 var PythonShell = require('python-shell');
 
 // current week MANUALLY SET FOR NOW
-var currentWeek = 5;
+var currentWeek = 6;
 
 // league information
 var leagueId = 44067;
@@ -59,9 +59,10 @@ router.get('/cumulativeStats', function(req, res) {
 });
 
 /* Calculate power rankings*/
-router.get('/getPowerRankings', function (req, res) {
+router.get('/powerRankings', function (req, res) {
 	// run python web scraper and return data as JSON
 	var powerRankings;
+	var teamResults;
 	async.series({
 		runPyScript : function(cb0) {
 			PythonShell.run('./pralgo.py', {mode: 'json', args: [totalTeams, currentWeek] }, function(err, results) {
@@ -70,15 +71,33 @@ router.get('/getPowerRankings', function (req, res) {
 				}
 
 				//console.log(JSON.stringify(results[0]));
-				powerRankings = results;
+				powerRankings = results[0];
 				cb0(null, null);
 			});
-		}, 
+		},
+
+		getTeams: function(cb1) {
+			var statement = 'SELECT * FROM teams ORDER BY team_id;';
+			connection.query(statement, function(err, results) {
+				if (err) {
+					return res.json({ execSuccess: false, message: 'Cannot get teams.', error: err});
+				} else {
+					teamResults = results;
+					cb1(null, null);
+				}
+			});
+		},
+
+
 	}, function(err) {
 		if (err) {
 			throw err;
 		}
-		res.json({execSuccess: true, data: powerRankings});
+		for (var i = 0; i < teamResults.length; i++) {
+			teamResults[i]['pr_score'] = powerRankings[i+1];
+		}
+		teamResults.sort(function(b,a) {return (a.pr_score > b.pr_score) ? 1 : ((b.pr_score > a.pr_score) ? -1 : 0);} );
+		res.json({execSuccess: true, data: teamResults});
 	});
 });
 
@@ -108,18 +127,26 @@ router.get('/populatePastStats', function (req, res) {
 					return res.json({ execSuccess: false, message: 'Cannot begin transaction.', error: err});
 				}
 			});
-			for (var i = 0; i < listOfStats.length; i++) {
-				var newOrderStmnt = 'INSERT INTO baseball_stats SET ?';
-				connection.query(newOrderStmnt, [listOfStats[i]], function(err) {
+			
+			var statement = 'INSERT INTO baseball_stats SET ?';
+			async.each(listOfStats, function(teamStatLine, callback) {
+				console.log(teamStatLine);
+				connection.query(statement, teamStatLine, function(err) {
 					if (err) {
 						connection.rollback();
-						return res.json({ execSuccess: false, message: 'Cannot close transaction.', error: err});
+						callback(err);
 					} else {
-						connection.commit();
+						callback();
 					}
 				});
-			}
-			cb1(null, null);
+			}, function(err) {
+				if (err) {
+					return res.json({ execSuccess: false, message: 'Cannot close transaction.', error: err});
+				} else {
+					connection.commit();
+					cb1(null, null);
+				}
+			});
 		},
 
 	}, function(err) {
@@ -155,18 +182,26 @@ router.get('/populateCurrentStats', function (req, res) {
 					return res.json({ execSuccess: false, message: 'Cannot begin transaction.', error: err});
 				}
 			});
-			for (var i = 0; i < listOfStats.length; i++) {
-				var newOrderStmnt = 'INSERT INTO baseball_stats SET ?';
-				connection.query(newOrderStmnt, [listOfStats[i]], function(err) {
+
+			var statement = 'INSERT INTO baseball_stats SET ?';
+			async.each(listOfStats, function(teamStatLine, callback) {
+				console.log(teamStatLine);
+				connection.query(statement, teamStatLine, function(err) {
 					if (err) {
 						connection.rollback();
-						return res.json({ execSuccess: false, message: 'Cannot close transaction.', error: err});
+						callback(err);
 					} else {
-						connection.commit();
+						callback();
 					}
 				});
-			}
-			cb1(null, null);
+			}, function(err) {
+				if (err) {
+					return res.json({ execSuccess: false, message: 'Cannot close transaction.', error: err});
+				} else {
+					connection.commit();
+					cb1(null, null);
+				}
+			});
 		},
 
 	}, function(err) {
@@ -177,5 +212,62 @@ router.get('/populateCurrentStats', function (req, res) {
 	});
 
 });
+
+/* Populate all the current weeks player stats */
+router.get('/populateCurrentPlayerStats', function (req, res) {
+	// run python web scraper and return data as JSON
+	var listOfStats;
+	
+	async.series({
+		runPyScript : function(cb0) {
+			PythonShell.run('./scraper/individualStatsScraper.py', {mode: 'json', args: [currentWeek, leagueId, seasonId, totalTeams] }, function(err, results) {
+				if (err) {
+					throw err;
+				}
+
+				listOfStats = results[0];
+				cb0(null, null);
+			});
+		}, 
+
+		updateDb : function(cb1) {
+			//console.log(listOfStats);
+			
+			connection.beginTransaction(function(err){
+				if (err) {
+					return res.json({ execSuccess: false, message: 'Cannot begin transaction.', error: err});
+				}
+			});
+
+			var statement = 'INSERT INTO player_stats SET ?';
+			async.each(listOfStats, function(statLine, callback) {
+				console.log(statLine);
+				connection.query(statement, statLine, function(err) {
+					if (err) {
+						connection.rollback();
+						callback(err);
+					} else {
+						callback();
+					}
+				});
+			}, function(err) {
+				if (err) {
+					return res.json({ execSuccess: false, message: 'Cannot close transaction.', error: err});
+				} else {
+					connection.commit();
+					cb1(null, null);
+				}
+			});
+		},
+
+	}, function(err) {
+		if (err) {
+			throw err;
+		}
+		return res.json({execSuccess: true, message: 'Successfully updated database.'});
+	});
+});
+
+
 
 module.exports = router;

@@ -81,3 +81,37 @@ CREATE OR REPLACE VIEW statv AS
 SELECT  teams.team_name, teams.owner_name, baseball_stats.*
 	FROM teams, baseball_stats
 	WHERE teams.team_id = baseball_stats.team_id;
+    
+########################
+# Player STATS TABLE   #
+########################
+DROP TABLE IF EXISTS `player_stats`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+
+CREATE TABLE `player_stats` (
+  `team_id` int(40) NOT NULL,
+  `league_id` int(40) NOT NULL,
+  `season_id` int(40) NOT NULL,
+  `scoring_period_id` int(40) NOT NULL,
+  `player_id` int(70) NOT NULL,
+  `player_name` varchar(70) NOT NULL,
+  `OBP` DECIMAL(6,4) DEFAULT 0.0,
+  `ERA` DECIMAL(6,4) DEFAULT 0.0,
+  `WHIP` DECIMAL(6,4) DEFAULT 0.0,
+  `RBI` int(10) DEFAULT 0,
+  `SB` int(10) DEFAULT 0,
+  `SV` int(10) DEFAULT 0,
+  `HR` int(10) DEFAULT 0,
+  `W` int(10) DEFAULT 0,
+  `R` int(10) DEFAULT 0,
+  `K` int(10) DEFAULT 0,
+  `AB` int(10) DEFAULT 0,
+  `BH` int(10) DEFAULT 0,
+  `BBB` int(10) DEFAULT 0,
+  `IP` DECIMAL(6,1) DEFAULT 0.0,
+  `PBB` int(10) DEFAULT 0,
+  `ER` int(10) DEFAULT 0,
+  `PH` int(10) DEFAULT 0,
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`team_id`,`league_id`,`season_id`,`scoring_period_id`,`player_id`));

@@ -41,7 +41,7 @@ var TeamList = React.createClass({
 	render: function() {
 		var teamNodes = this.props.data.map(function(data) {
 			return (
-				<Team teamName={data.team_name} ownerName={data.owner_name} key={data.team_id}>
+				<Team teamName={data.team_name} ownerName={data.owner_name} prScore={data.pr_score} key={data.team_id}>
 				</Team>
 			);
 		});
@@ -50,8 +50,9 @@ var TeamList = React.createClass({
 			<table className="pure-table pure-table-horizontal">
 				<thead>
 			        <tr>
-			            <th>Team</th>
-			            <th>Owner</th>
+			        	<th>PR Rating</th>
+			            <th></th>
+			            <th></th>
 			        </tr>
 			    </thead>
 				<tbody>
@@ -67,10 +68,13 @@ var Team = React.createClass({
 		return (
 			<tr className="team">
 				<td>
-					{this.props.teamName}
+					{this.props.prScore}
 				</td>
 				<td>
 					{this.props.ownerName}
+				</td>
+				<td>
+					{this.props.teamName}
 				</td>
 			</tr>
 		);
@@ -78,7 +82,7 @@ var Team = React.createClass({
 });
 
 ReactDOM.render(
-	<TeamListBox url="/teams" pollInterval={5000} />,
+	<TeamListBox url="/powerRankings" pollInterval={5000} />,
 	document.getElementById('teamListContent'));
 
 
@@ -132,12 +136,11 @@ var StatsListBox = React.createClass({
 	},
 	render: function() {
 		var childrens = this.state.buttonData.map(function(childData,childIndex) {
-        	return <OffenseButton onClick={this.handleChildClick.bind(null, childData)} text={childData.buttonText}/>;
+        	// return <OffenseButton onClick={this.handleChildClick.bind(null, childData)} text={childData.buttonText}/>;
     	}.bind(this));
 		return (
 			<div className="statsListBox">
 				{childrens}
-				<RunsList data={this.state.data} />
 				<HomeRunsList data={this.state.data} />
 			</div>
 		);
@@ -174,7 +177,7 @@ var HomeRunsList = React.createClass({
 				<thead>
 			        <tr>
 			            <th>HR</th>
-			            <th>Team</th>
+			            <th></th>
 			        </tr>
 			    </thead>
 				<tbody>

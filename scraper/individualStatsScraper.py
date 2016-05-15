@@ -5,18 +5,19 @@
 
 import requests
 import bs4
-import urlparse
-import re
 import sys
 import json
 
 totalData = [] # list holding all data objects
 
-# TODO: turn these into sys argv
-leagueId = str(44067)
-scoringPeriodId = str(43)
-seasonId = str(2016)
-teamNum = 8
+# arguments inputed in the following order: currentWeek, leagueId, seasonId, teamNum.
+# scoringPeriodId into URL will return up to date resuts for any scoringPeriodId in the week
+# in which the scoring period is the current week * 7 + the # of days past Sunday
+# ex. scoringPeriodId = 1-7 all represent the first week, 8-15 represent the second week, etc.
+scoringPeriodId = str(int(sys.argv[1]) * 7 + 1)
+leagueId = str(sys.argv[2])
+seasonId = str(sys.argv[3])
+teamNum = int(sys.argv[4])
 
 # create the initial URL
 baseUrl = "http://games.espn.go.com/flb/boxscorefull?view=matchup&version=full"
@@ -37,13 +38,14 @@ for teamId in range(1, teamNum + 1):
     listOfBatters = battersTable[0].find_all('tr', {'class': 'pncPlayerRow'})
 
     # loop through each batter and extract the following:
-    # season_id, team_id, scoring_period_id, player_id, player_name,
+    # league_id, season_id, team_id, scoring_period_id, player_id, player_name,
     # (MUST BE IN ORDER) AB, BH, R, HR, RBI, BBB, SB, OBP
     for player in listOfBatters:
         batter = {}
         batter['season_id'] = seasonId
         batter['team_id'] = teamId
         batter['scoring_period_id'] = scoringPeriodId
+        batter['league_id'] = leagueId
 
         # get player information
         playerInfo = player.find('a', {'class': 'flexpop'})
@@ -56,8 +58,15 @@ for teamId in range(1, teamNum + 1):
         playerStatLine = player.find_all('td', {'class': 'playertableStat'})
         i = 0
         for playerStat in playerStatLine:
-            batter[batterStats[i]] = playerStat.string
+            statString = playerStat.string
+            if statString == '--':
+                statString = 0
+            batter[batterStats[i]] = statString
             i += 1
+
+        # pitcherStats = ['IP', 'PH', 'ER', 'PBB', 'K', 'W', 'SV', 'ERA', 'WHIP']
+        # for stat in pitcherStats:
+        #     batter[stat] = 0
 
         totalData.append(batter)
 
@@ -66,13 +75,14 @@ for teamId in range(1, teamNum + 1):
     listOfPitchers = pitchersTable[0].find_all('tr', {'class': 'pncPlayerRow'})
 
     # loop through each pitcher and extract the following:
-    # season_id, team_id, scoring_period_id, player_id, player_name,
+    # league_id, season_id, team_id, scoring_period_id, player_id, player_name,
     # (MUST BE IN ORDER) IP, PH, ER, PBB, K, W, SV, ERA, WHIP
     for player in listOfPitchers:
         pitcher = {}
         pitcher['season_id'] = seasonId
         pitcher['team_id'] = teamId
         pitcher['scoring_period_id'] = scoringPeriodId
+        pitcher['league_id'] = leagueId
 
         # get player information
         playerInfo = player.find('a', {'class': 'flexpop'})
@@ -85,9 +95,16 @@ for teamId in range(1, teamNum + 1):
         playerStatLine = player.find_all('td', {'class': 'playertableStat'})
         i = 0
         for playerStat in playerStatLine:
-            pitcher[pitcherStats[i]] = playerStat.string
+            statString = playerStat.string
+            if statString == '--':
+                statString = 0
+            pitcher[pitcherStats[i]] = statString
             i += 1
+
+        # batterStats = ['AB', 'BH', 'R', 'HR', 'RBI', 'BBB', 'SB', 'OBP']
+        # for stat in batterStats:
+        #     pitcher[stat] = 0
 
         totalData.append(pitcher)
 
-print totalData
+print json.dumps(totalData)
