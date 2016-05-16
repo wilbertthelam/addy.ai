@@ -138,8 +138,8 @@ var StatsHeader = React.createClass({
 	render: function() {
 		return (
 			<tr>
-				<td>{this.props.stat}</td>
-				<td></td>
+				<th>{this.props.stat}</th>
+				<th></th>
 			</tr>
 		);
 	}
@@ -208,7 +208,7 @@ var TeamStatsBox = React.createClass({
 		return (
 			<div>
 				<ButtonsList statCategories={this.state.statCategories} />
-				<StatBox stat={this.state.statCategories[1]} />
+				<StatBox stat={this.state.statCategories[0]} />
 			</div>
 		);
 	}
