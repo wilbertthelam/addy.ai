@@ -16,6 +16,7 @@
     "mysql": "^2.10.2",
     "python-shell": "^0.3.0",
     "react": "^15.0.2",
+    "react-addons-shallow-compare": "^15.0.2",
     "react-dom": "^15.0.2",
     "react-vis": "^0.3.4",
     "serve-favicon": "~2.3.0",

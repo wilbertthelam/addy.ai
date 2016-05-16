@@ -27,6 +27,7 @@ module.exports = {
 	        {
 	            test: /\.js$/,
 	            exclude: /node_modules/,
+	            include: [path.join(__dirname, 'public/scripts/')],
 	            loader: 'babel',
 	        }
     	],
