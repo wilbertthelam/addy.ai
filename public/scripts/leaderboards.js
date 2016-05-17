@@ -95,87 +95,58 @@ ReactDOM.render(
 // TeamStatsBox information
 //--------------------------
 
-// Overarching TeamBattersStat Container
-var TeamBattersStatsBox = React.createClass({
-	getInitialState: function() {
-		return (
-			{ 
-				data: [],
-				statCategory: 'R'
-			}
-		);
-	},
-	getStats: function() {
-		$.ajax({
-			url: '/stats?stat=' + this.state.statCategory,
-			dataType: 'json',
-			cache: false,
-			success: function(data) {
-				//console.log(data.data);
-				this.setState({data: data.data});
-			}.bind(this),
-			error: function(xhr, status, err) {
-				console.error('/stats?stat=' + this.state.statCategory, status, err.toString());
-			}.bind(this)
-		});
-	},
-	handleChildButtonClick: function(stat) {
-		this.setState({statCategory: stat}, function() {
-			this.getStats();
-		});
-	},
-	componentDidMount: function() {
-		this.getStats();
-		//setInterval(this.loadTeamsFromServer, this.props.pollInterval);
-	},
-	render: function() {
-		return (
-			<div>
-				<ButtonsList clickFunc={this.handleChildButtonClick} statCategories={['R', 'HR', 'RBI', 'SB', 'OBP']} />
-				<StatBox statData={this.state.data} stat={this.state.statCategory} />
-			</div>
-		);
+function sortGenerator(statCategory) {
+	return function(a, b) {
+		return b[statCategory] - a[statCategory];
 	}
-});
+}
 
 // Overarching TeamBattersStat Container
-var TeamPitchersStatsBox = React.createClass({
+var TeamStatsBox = React.createClass({
 	getInitialState: function() {
 		return (
 			{ 
 				data: [],
-				statCategory: 'K'
+				statCategory: this.props.categories[0]
 			}
 		);
-	},
-	getStats: function() {
-		$.ajax({
-			url: '/stats?stat=' + this.state.statCategory,
-			dataType: 'json',
-			cache: false,
-			success: function(data) {
-				//console.log(data.data);
-				this.setState({data: data.data});
-			}.bind(this),
-			error: function(xhr, status, err) {
-				console.error('/stats?stat=' + this.state.statCategory, status, err.toString());
-			}.bind(this)
-		});
-	},
-	handleChildButtonClick: function(stat) {
-		this.setState({statCategory: stat}, function() {
-			this.getStats();
-		});
 	},
 	componentDidMount: function() {
 		this.getStats();
 		//setInterval(this.loadTeamsFromServer, this.props.pollInterval);
 	},
+	handleChildButtonClick: function(stat) {
+		this.setState({statCategory: stat}, function() {
+			this.updateStats();
+		});
+	},
+	updateStats: function() {
+		var tempData = this.state.data;
+		var statCategory = this.state.statCategory;
+		tempData.sort(sortGenerator(statCategory))
+		this.setState({data: tempData});
+	},
+	getStats: function() {
+		$.ajax({
+			url: this.props.url,
+			dataType: 'json',
+			cache: false,
+			success: function(data) {
+				//console.log(data.data);
+				this.setState({data: data.data}, function() {
+					this.updateStats();
+				});
+			}.bind(this),
+			error: function(xhr, status, err) {
+				console.error(this.state.statCategory, status, err.toString());
+			}.bind(this)
+		});
+	},
 	render: function() {
 		return (
 			<div>
-				<ButtonsList clickFunc={this.handleChildButtonClick} statCategories={['W', 'K', 'SV', 'ERA', 'WHIP']} />
-				<StatBox statData={this.state.data} stat={this.state.statCategory} />
+				<ButtonsList clickFunc={this.handleChildButtonClick} statCategories={this.props.categories} />
+				<StatBox statData={this.state.data} stat={this.state.statCategory} displayField={this.props.displayField} />
 			</div>
 		);
 	}
@@ -219,7 +190,7 @@ var Stat = React.createClass({
 		return (
 			<tr>
 				<td>{this.props.statValue}</td>
-				<td>{this.props.teamName}</td>
+				<td>{this.props.stats[this.props.displayField]}</td>
 			</tr>
 		);
 	}
@@ -241,9 +212,10 @@ var StatsHeader = React.createClass({
 var StatsList = React.createClass({
 	render: function() {
 		var statCategory = this.props.stat;
+		var displayField = this.props.displayField;
 		var statNodes = this.props.statData.map(function(statline) {
 			return (
-				<Stat key={statline.team_id} teamName={statline.team_name} owner={statline.owner_name} statValue={statline[statCategory]} />
+				<Stat displayField={displayField} stats={statline} key={statline.team_id} teamName={statline.team_name} owner={statline.owner_name} statValue={statline[statCategory]} />
 			);
 		})
 		return (
@@ -262,19 +234,29 @@ var StatBox = React.createClass({
 				<thead>
 					<StatsHeader stat={this.props.stat} />
 				</thead>
-				<StatsList statData={this.props.statData} stat={this.props.stat}/>
+				<StatsList statData={this.props.statData} stat={this.props.stat} displayField={this.props.displayField} />
 			</table>
 		);
 	}
 });
 
 ReactDOM.render(
-	<TeamBattersStatsBox />,
+	<TeamStatsBox url="/stats" categories={['R', 'HR', 'RBI', 'SB', 'OBP']} displayField="team_name" />,
 	document.getElementById('teamBattersStatsBox')
 );
 
 ReactDOM.render(
-	<TeamPitchersStatsBox />,
+	<TeamStatsBox url="/stats" categories={['K', 'W', 'SV', 'ERA', 'WHIP']} displayField="team_name" />,
 	document.getElementById('teamPitchersStatsBox')
+);
+
+ReactDOM.render(
+	<TeamStatsBox url="/weeklyPlayerStats" categories={['R', 'HR', 'RBI', 'SB', 'OBP']} displayField="player_name" />,
+	document.getElementById('weeklyBattersStatsBox')
+);
+
+ReactDOM.render(
+	<TeamStatsBox url="/weeklyPlayerStats" categories={['K', 'W', 'SV', 'ERA', 'WHIP']} displayField="player_name" />,
+	document.getElementById('weeklyPitchersStatsBox')
 );
 

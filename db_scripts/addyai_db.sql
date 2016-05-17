@@ -94,6 +94,7 @@ CREATE TABLE `player_stats` (
   `league_id` int(40) NOT NULL,
   `season_id` int(40) NOT NULL,
   `scoring_period_id` int(40) NOT NULL,
+  `week` int(10) NOT NULL,
   `player_id` int(70) NOT NULL,
   `player_name` varchar(70) NOT NULL,
   `player_team` varchar(10) NOT NULL,
@@ -119,3 +120,8 @@ CREATE TABLE `player_stats` (
   `PH` int(10) DEFAULT 0,
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`team_id`,`league_id`,`season_id`,`scoring_period_id`,`player_id`));
+  
+CREATE OR REPLACE VIEW weekly_player_statv AS
+SELECT  teams.team_name, teams.owner_name, player_stats.*
+	FROM teams, player_stats
+	WHERE teams.team_id = player_stats.team_id;

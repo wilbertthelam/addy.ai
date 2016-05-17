@@ -51,6 +51,7 @@ for teamId in range(1, teamNum + 1):
         batter['season_id'] = seasonId
         batter['team_id'] = teamId
         batter['scoring_period_id'] = scoringPeriodId
+        batter['week'] = int(sys.argv[1])
         batter['league_id'] = leagueId
 
         # get player information
@@ -100,6 +101,7 @@ for teamId in range(1, teamNum + 1):
         pitcher['team_id'] = teamId
         pitcher['scoring_period_id'] = scoringPeriodId
         pitcher['league_id'] = leagueId
+        pitcher['week'] = int(sys.argv[1])
 
         # get player information
         playerInfo = player.find('a', {'class': 'flexpop'})

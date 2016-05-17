@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon ./bin/www"
+    "start": "nodemon --ignore /public --ignore /views ./bin/www"
   },
   "dependencies": {
     "async": "^1.5.2",

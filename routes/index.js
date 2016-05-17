@@ -10,7 +10,7 @@ var async = require('async');
 var PythonShell = require('python-shell');
 
 // current week MANUALLY SET FOR NOW
-var currentWeek = 6;
+var currentWeek = 7;
 
 // league information
 var leagueId = 44067;
@@ -36,8 +36,7 @@ router.get('/teams', function(req, res) {
 
 /* GET current week stats information. */
 router.get('/stats', function(req, res) {
-	var stat = req.query.stat;
-	var statement = 'SELECT * FROM statv WHERE week = ? AND league_id = ? AND year = ? ORDER BY ' + stat + ' DESC;';
+	var statement = 'SELECT * FROM statv WHERE week = ? AND league_id = ? AND year = ?;';
 	connection.query(statement, [currentWeek, leagueId, seasonId], function(err, results) {
 		if (err) {
 			return res.json({ execSuccess: false, message: 'Cannot get stats.', error: err});
@@ -55,6 +54,18 @@ router.get('/cumulativeStats', function(req, res) {
 			return res.json({ execSuccess: false, message: 'Cannot get cumulative stats.', error: err});
 		} else {
 			return res.json({ execSuccess: true, message: 'Cumulative stats successfully retrieved.', data: results});
+		}
+	});
+});
+
+/* GET current player week stats information. */
+router.get('/weeklyPlayerStats', function(req, res) {
+	var statement = 'SELECT * FROM weekly_player_statv WHERE week = ? AND league_id = ? AND season_id = ?;';
+	connection.query(statement, [currentWeek, leagueId, seasonId], function(err, results) {
+		if (err) {
+			return res.json({ execSuccess: false, message: 'Cannot get stats.', error: err});
+		} else {
+			return res.json({ execSuccess: true, message: 'Stats successfully retrieved.', data: results});
 		}
 	});
 });
