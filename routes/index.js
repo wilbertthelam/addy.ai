@@ -19,7 +19,17 @@ var totalTeams = 8;
 
 /* GET home page. */
 router.get('/', function(req, res) {
-	res.render('index', { title: 'Addy.AI' });
+	res.render('index', { title: 'addy.ai' });
+});
+
+/* GET news page. */
+router.get('/news', function(req, res) {
+	res.render('news', { title: 'news | addy.ai'});
+});
+
+/* GET editor page. */
+router.get('/editor', function(req, res) {
+	res.render('editor', { title: 'editor | addy.ai'});
 });
 
 /* GET team information. */

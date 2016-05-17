@@ -9,7 +9,7 @@ const PATHS = {
 module.exports = {
 	context: __dirname,
 	entry: [
-		PATHS.app, path.join(__dirname, 'public/scripts/leaderboards.js'), 'webpack-hot-middleware/client'
+		PATHS.app, path.join(__dirname, 'public/scripts/leaderboards.js'), path.join(__dirname, 'public/scripts/editor.js'), 'webpack-hot-middleware/client'
 	],
 	output: {
 		path: PATHS.build,
