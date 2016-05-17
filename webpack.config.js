@@ -1,35 +1,54 @@
-var webpack = require('webpack');
+const webpack = require('webpack');
 const path = require('path');
 
 const PATHS = {
 	app: path.join(__dirname, 'public/scripts/index.js'),
+	leaderboards: path.join(__dirname, 'public/scripts/leaderboards.js'),
+	editor: path.join(__dirname, 'public/scripts/editor.js'),
+	news: path.join(__dirname, 'public/scripts/news.js'),
+	hotload: 'webpack-hot-middleware/client',
 	build: path.join(__dirname, '/build')
 };
 
 module.exports = {
 	context: __dirname,
-	entry: [
-		PATHS.app, path.join(__dirname, 'public/scripts/leaderboards.js'), path.join(__dirname, 'public/scripts/editor.js'), 'webpack-hot-middleware/client'
-	],
+	entry: {
+		index: [
+			PATHS.app,
+			PATHS.hotload
+		],
+		leaderboards: [
+			PATHS.leaderboards,
+			PATHS.hotload
+		],
+		editor: [
+			PATHS.editor,
+			PATHS.hotload
+		],
+		news: [
+			PATHS.news,
+			PATHS.hotload
+		],
+	},
 	output: {
 		path: PATHS.build,
 		publicPath: '/build',
-		filename: 'bundle.js'
+		filename: '[name]_bundle.js'
 	},
 	devtool: '#source-map',
 	plugins: [
 		new webpack.optimize.OccurenceOrderPlugin(),
-    	new webpack.HotModuleReplacementPlugin(),
-    	new webpack.NoErrorsPlugin()
+		new webpack.HotModuleReplacementPlugin(),
+		new webpack.NoErrorsPlugin()
 	],
 	module: {
 		loaders: [
-	        {
-	            test: /\.js$/,
-	            exclude: /node_modules/,
-	            include: [path.join(__dirname, 'public/scripts/')],
-	            loader: 'babel',
-	        }
-    	],
+			{
+				test: /\.js$/,
+				exclude: /node_modules/,
+				include: [path.join(__dirname, 'public/scripts/')],
+				loader: 'babel',
+			}
+		],
 	}
 };

@@ -9,22 +9,68 @@ Contains components for the editor
 import React from 'react';
 import ReactDOM from 'react-dom';
 import $ from 'jquery';
-var ReactQuill = require('react-quill');
+import ReactQuill from 'react-quill';
 
-var Editor = React.createClass({
-	getInitialState: function() {
-		return{ text: ''};
+const Editor = React.createClass({
+	getInitialState: function () {
+		return { text: '' };
 	},
-	onTextChange: function(value) {
-		this.setState({ text:value });
+	onTextChange: function (value) {
+		this.setState({ text: value });
 	},
-	render: function() {
+	render: function () {
 		return (
-			<ReactQuill theme="snow" value={this.state.text} onChange={this.onTextChange} />
+			<div>
+				<ReactQuill
+					theme="snow"
+					value={this.state.text}
+					onChange={this.onTextChange}
+				/>
+				<Button
+					authorId="1"
+					author="Wilbert Lam"
+					title="Dae Ho Goes Buck Wild"
+					body={this.state.text}
+					url="/news/saveArticle"
+				/>
+			</div>
+		);
+	}
+});
+
+const Button = React.createClass({
+	propTypes: {
+		text: React.PropTypes.string,
+		url: React.PropTypes.string
+	},
+	save: function () {
+		// ajax call to update the articles
+		$.ajax({
+			url: this.props.url,
+			method: 'POST',
+			dataType: 'JSON',
+			data: {
+				author_id: this.props.authorId,
+				author: this.props.author,
+				title: this.props.title,
+				body: this.props.body,
+			},
+			success: function (data) {
+				console.log(data.data);
+			}.bind(this),
+			error: function (xhr, status, err) {
+				console.error(this.props.url, status, err.toString());
+			}.bind(this),
+		});
+	},
+	render: function () {
+		return (
+			<button className="pure-button" onClick={this.save} >Save</button>
 		);
 	}
 });
 
 ReactDOM.render(
 	<Editor />,
-	document.getElementById('quillContainer'));
+	document.getElementById('quillContainer')
+);

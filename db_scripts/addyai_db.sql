@@ -125,3 +125,19 @@ CREATE OR REPLACE VIEW weekly_player_statv AS
 SELECT  teams.team_name, teams.owner_name, player_stats.*
 	FROM teams, player_stats
 	WHERE teams.team_id = player_stats.team_id;
+    
+##################
+# ARTICLES TABLE #
+##################
+DROP TABLE IF EXISTS `articles`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+
+CREATE TABLE `articles` (
+  `article_id` int(10) NOT NULL AUTO_INCREMENT,
+  `author_id` int(10) NOT NULL,
+  `body` LONGTEXT NOT NULL,
+  `title` VARCHAR(100) NOT NULL,
+  `author` VARCHAR(100) NOT NULL,
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`article_id`));

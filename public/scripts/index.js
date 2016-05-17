@@ -1,1 +1,4 @@
-console.log('yo world!!!!!!!');
+import * as Leaderboards from './leaderboards';
+
+
+console.log('Entry point');
