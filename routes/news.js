@@ -6,8 +6,8 @@ var db = require('../db_conn.js');
 var connection = db;
 
 /* GET to return ALL articles. */
-router.get('/returnArticles', function (req, res) {
-	var statement = 'SELECT * FROM articles ORDER BY update_time DESC;';
+router.get('/returnArticlesList', function (req, res) {
+	var statement = 'SELECT articles.article_id, articles.title, articles.update_time FROM articles ORDER BY update_time DESC;';
 	connection.query(statement, function (err, results) {
 		if (err) {
 			return res.json({ execSuccess: false, message: 'Cannot get articles.', error: err });
