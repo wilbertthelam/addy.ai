@@ -39,7 +39,7 @@ const PRTeamListBox = React.createClass({
 	},
 	render: function () {
 		return (
-			<div className="teamListBox">
+			<div className="table-responsive-vertical shadow-z-1">
 				<PRTeamList data={this.state.data} />
 			</div>
 		);
@@ -60,7 +60,7 @@ const PRTeamList = React.createClass({
 		});
 
 		return (
-			<table className="pure-table pure-table-horizontal">
+			<table className="table table-hover table-mc-amber">
 				<thead>
 					<tr>
 						<th>PR Rating</th>
@@ -80,13 +80,13 @@ const PRTeam = React.createClass({
 	render: function () {
 		return (
 			<tr className="team">
-				<td>
+				<td data-title="PR Rating">
 					{this.props.prScore}
 				</td>
-				<td>
+				<td data-title="Owner">
 					{this.props.ownerName}
 				</td>
-				<td>
+				<td data-title="Team">
 					{this.props.teamName}
 				</td>
 			</tr>
@@ -157,11 +157,13 @@ const TeamStatsBox = React.createClass({
 					clickFunc={this.handleChildButtonClick}
 					statCategories={this.props.categories}
 				/>
-				<StatBox
-					statData={this.state.data}
-					stat={this.state.statCategory}
-					displayField={this.props.displayField}
-				/>
+				<div className="table-responsive-vertical shadow-z-1">
+					<StatBox
+						statData={this.state.data}
+						stat={this.state.statCategory}
+						displayField={this.props.displayField}
+					/>
+				</div>
 			</div>
 		);
 	}
@@ -198,7 +200,7 @@ const Button = React.createClass({
 	},
 	render: function () {
 		return (
-			<button onClick={this.handleClick} className="pure-button">
+			<button onClick={this.handleClick} className="btn btn-primary">
 				{this.props.statCategory}
 			</button>
 		);
@@ -210,8 +212,8 @@ const Stat = React.createClass({
 	render: function () {
 		return (
 			<tr>
-				<td>{this.props.statValue}</td>
-				<td>{this.props.stats[this.props.displayField]}</td>
+				<td data-title={this.props.statCategory}>{this.props.statValue}</td>
+				<td data-title="">{this.props.stats[this.props.displayField]}</td>
 			</tr>
 		);
 	}
@@ -239,6 +241,7 @@ const StatsList = React.createClass({
 				<Stat
 					displayField={displayField}
 					stats={statline}
+					statCategory={statCategory}
 					key={statline.team_id}
 					teamName={statline.team_name}
 					owner={statline.owner_name}
@@ -258,7 +261,7 @@ const StatsList = React.createClass({
 const StatBox = React.createClass({
 	render: function () {
 		return (
-			<table className="pure-table pure-table-horizontal">
+			 <table className="table table-hover table-mc-amber">
 				<thead>
 					<StatsHeader
 						stat={this.props.stat}

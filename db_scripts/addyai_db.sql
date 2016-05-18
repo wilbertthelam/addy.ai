@@ -139,5 +139,6 @@ CREATE TABLE `articles` (
   `body` LONGTEXT NOT NULL,
   `title` VARCHAR(100) NOT NULL,
   `author` VARCHAR(100) NOT NULL,
+  `publish_status` TINYINT(1) NOT NULL DEFAULT 0,
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`article_id`));

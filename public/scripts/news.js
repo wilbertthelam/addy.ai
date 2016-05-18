@@ -12,7 +12,7 @@ import $ from 'jquery';
 
 const NewsContainer = React.createClass({
 	getInitialState: function () {
-		return { articleId: '8' };
+		return { articleId: '1' };
 	},
 	openArticle: function (articleId) {
 		console.log(articleId);
@@ -22,7 +22,9 @@ const NewsContainer = React.createClass({
 		return (
 			<div className="pure-g">
 				<div className="pure-u-md-1-5">
-					<Sidebar url="/news/returnArticlesList" openArticle={this.openArticle} />
+					<div className="newsNavBar">
+						<Sidebar url="/news/returnArticlesList" openArticle={this.openArticle} />
+					</div>
 				</div>
 				<div className="pure-u-md-4-5">
 					<Article url="/news/returnArticleById?articleId=" articleId={this.state.articleId} />
@@ -105,14 +107,16 @@ const Article = React.createClass({
 		};
 	},
 	componentDidMount: function () {
-		this.loadArticle();
+		this.loadArticle(this.props.url, this.props.articleId);
 	},
-	componentWillUpdate: function () {
-		this.loadArticle();
+	componentWillReceiveProps: function (nextProps) {
+		// console.log('URL: ' + nextProps.url);
+		// console.log('articleId: ' + nextProps.articleId);
+		this.loadArticle(nextProps.url, nextProps.articleId);
 	},
-	loadArticle: function () {
+	loadArticle: function (url, articleId) {
 		$.ajax({
-			url: this.props.url + this.props.articleId,
+			url: url + articleId,
 			dataType: 'json',
 			method: 'GET',
 			cache: false,
@@ -121,8 +125,8 @@ const Article = React.createClass({
 				this.setState({ data: data.data });
 			}.bind(this),
 			error: function (xhr, status, err) {
-				console.error(this.props.url, status, err.toString());
-			}.bind(this),
+				console.error(status, err.toString());
+			},
 		});
 	},
 	render: function () {
@@ -130,7 +134,8 @@ const Article = React.createClass({
 		return (
 			<div>
 				<h1>{s.title}</h1>
-				<h3>{s.author}</h3>
+				<div> {s.update_time} </div>
+				<h3>by {s.author}</h3>
 				<div dangerouslySetInnerHTML={{ __html: s.body }}></div>
 			</div>
 		);

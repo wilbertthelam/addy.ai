@@ -21,6 +21,13 @@ const Editor = React.createClass({
 	render: function () {
 		return (
 			<div>
+				<Button
+					authorId="1"
+					author="Wilbert Lam"
+					title="Dae Ho Goes Buck Wild"
+					body={this.state.text}
+					url="/news/saveArticle"
+				/>
 				<ReactQuill
 					theme="snow"
 					value={this.state.text}

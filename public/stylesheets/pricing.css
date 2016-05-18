@@ -11,7 +11,21 @@ p {
     line-height: 1.6em;
 }
 
+h2 {
+    font-size: 1.5em;
+}
 
+.articleNav {
+    margin: 5px;
+    padding: 5px;
+    cursor: pointer;
+    background-color: white;
+}
+
+.newsNavBar {
+    background-color: #F9F9F9;
+    margin: ;
+}
 
 
 /*
@@ -26,6 +40,12 @@ p {
 #container {
     margin: 50px;
 
+}
+
+#quillContainer {
+    width: 800px;
+    margin-left: auto ;
+    margin-right: auto ;
 }
 
 /*

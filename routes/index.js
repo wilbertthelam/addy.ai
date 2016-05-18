@@ -9,6 +9,10 @@ var async = require('async');
 // create Python shell to allow us to run web scraper
 var PythonShell = require('python-shell');
 
+// cronjob to update the database
+var CronJob = require('cron').CronJob;
+var request = require('request');
+
 // current week MANUALLY SET FOR NOW
 var currentWeek = 7;
 
@@ -119,12 +123,52 @@ router.get('/powerRankings', function (req, res) {
 			teamResults[i]['pr_score'] = powerRankings[i+1];
 		}
 		teamResults.sort(function(b,a) {return (a.pr_score > b.pr_score) ? 1 : ((b.pr_score > a.pr_score) ? -1 : 0);} );
-		res.json({execSuccess: true, data: teamResults});
+		return res.json({execSuccess: true, data: teamResults});
 	});
 });
 
 /* Populate all the old stats prior to a certain week */
 router.get('/populatePastStats', function (req, res) {
+	return populatePastStats(req, res);
+});
+
+/* Populate all the current week's stats */
+router.get('/populateCurrentStats', function (req, res) {
+	return populateCurrentStats(req, res);
+});
+
+/* Populate all the current weeks player stats */
+router.get('/populateCurrentPlayerStats', function (req, res) {
+	return populateCurrentPlayerStats(req, res);
+});
+
+// CRONjob to automatically run route updates every X interval
+// currently set to every 4-11:30 in 30 minute increments
+var job = new CronJob('00 00,30 16-23 * * 0-6', function() {
+	
+   		console.log("running current player cron");
+		request('http://localhost:3000/populateCurrentPlayerStats', function (error, response, body) {
+			if (!error && response.statusCode === 200) {
+				console.log(body);
+			} else {
+				console.log(error);
+			}
+		});
+
+		console.log("running current stat cron");
+		request('http://localhost:3000/populateCurrentStats', function (error, response, body) {
+			if (!error && response.statusCode === 200) {
+				console.log(body);
+			} else {
+				console.log(error);
+			}
+		});
+	},
+	false,
+	'America/Seattle'
+);
+
+function populatePastStats(req, res) {
 	// run python web scraper and return data as JSON
 	var listOfStats;
 	
@@ -135,7 +179,7 @@ router.get('/populatePastStats', function (req, res) {
 					throw err;
 				}
 
-				//console.log(JSON.stringify(results[0]));
+				console.log(JSON.stringify(results[0]));
 				listOfStats = results[0];
 				cb0(null, null);
 			});
@@ -144,15 +188,15 @@ router.get('/populatePastStats', function (req, res) {
 		updateDb : function(cb1) {
 			console.log(listOfStats);
 
-			connection.beginTransaction(function(err){
+			connection.beginTransaction(function(err) {
 				if (err) {
 					return res.json({ execSuccess: false, message: 'Cannot begin transaction.', error: err});
 				}
 			});
-			
-			var statement = 'INSERT INTO baseball_stats SET ?';
+
+			var statement = 'REPLACE INTO baseball_stats SET ?';
 			async.each(listOfStats, function(teamStatLine, callback) {
-				console.log(teamStatLine);
+				// console.log(teamStatLine);
 				connection.query(statement, teamStatLine, function(err) {
 					if (err) {
 						connection.rollback();
@@ -175,12 +219,11 @@ router.get('/populatePastStats', function (req, res) {
 		if (err) {
 			throw err;
 		}
-		res.json({execSuccess: true, message: 'Successfully updated database.'});
+		return res.json({execSuccess: true, message: 'Successfully updated database.'});
 	});
-});
+}
 
-/* Populate all the current week's stats */
-router.get('/populateCurrentStats', function (req, res) {
+function populateCurrentStats(req, res) {
 	// run python web scraper and return data as JSON
 	var listOfStats;
 	
@@ -205,7 +248,7 @@ router.get('/populateCurrentStats', function (req, res) {
 				}
 			});
 
-			var statement = 'INSERT INTO baseball_stats SET ?';
+			var statement = 'REPLACE INTO baseball_stats SET ?';
 			async.each(listOfStats, function(teamStatLine, callback) {
 				console.log(teamStatLine);
 				connection.query(statement, teamStatLine, function(err) {
@@ -232,11 +275,10 @@ router.get('/populateCurrentStats', function (req, res) {
 		}
 		return res.json({execSuccess: true, message: 'Successfully updated database.'});
 	});
+}
 
-});
-
-/* Populate all the current weeks player stats */
-router.get('/populateCurrentPlayerStats', function (req, res) {
+// Populate function for current players statistics
+function populateCurrentPlayerStats(req, res) {
 	// run python web scraper and return data as JSON
 	var listOfStats;
 	
@@ -253,7 +295,7 @@ router.get('/populateCurrentPlayerStats', function (req, res) {
 		}, 
 
 		updateDb : function(cb1) {
-			//console.log(listOfStats);
+			console.log(listOfStats);
 			
 			connection.beginTransaction(function(err){
 				if (err) {
@@ -261,7 +303,7 @@ router.get('/populateCurrentPlayerStats', function (req, res) {
 				}
 			});
 
-			var statement = 'INSERT INTO player_stats SET ?';
+			var statement = 'REPLACE INTO player_stats SET ?';
 			async.each(listOfStats, function(statLine, callback) {
 				console.log(statLine);
 				connection.query(statement, statLine, function(err) {
@@ -288,7 +330,7 @@ router.get('/populateCurrentPlayerStats', function (req, res) {
 		}
 		return res.json({execSuccess: true, message: 'Successfully updated database.'});
 	});
-});
+}
 
 
 
