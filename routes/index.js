@@ -145,7 +145,6 @@ router.get('/populateCurrentPlayerStats', function (req, res) {
 // CRONjob to automatically run route updates every X interval
 // currently set to every 4-11:30 in 30 minute increments
 var job = new CronJob('00 00,30 16-23 * * 0-6', function() {
-	
    		console.log("running current player cron");
 		request('http://localhost:3000/populateCurrentPlayerStats', function (error, response, body) {
 			if (!error && response.statusCode === 200) {

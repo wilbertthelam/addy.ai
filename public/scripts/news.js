@@ -20,13 +20,13 @@ const NewsContainer = React.createClass({
 	},
 	render: function () {
 		return (
-			<div className="pure-g">
-				<div className="pure-u-md-1-5">
-					<div className="newsNavBar">
+			<div className="container">
+				<div className="col-sm-3">
+					<div id="sidebar-wrapper" className="sidebar-toggle">
 						<Sidebar url="/news/returnArticlesList" openArticle={this.openArticle} />
 					</div>
 				</div>
-				<div className="pure-u-md-4-5">
+				<div className="col-sm-9">
 					<Article url="/news/returnArticleById?articleId=" articleId={this.state.articleId} />
 				</div>
 			</div>
@@ -72,7 +72,10 @@ const Sidebar = React.createClass({
 			);
 		});
 		return (
-			<div>
+			<div className="newsNavBar shadow-z-1">
+				<div className="header articleNav">
+					Most recent stories
+				</div>
 				{ArticleNavNodes}
 			</div>
 		);
@@ -132,11 +135,11 @@ const Article = React.createClass({
 	render: function () {
 		const s = this.state.data[0];
 		return (
-			<div>
+			<div className="articleContainer" >
 				<h1>{s.title}</h1>
-				<div> {s.update_time} </div>
-				<h3>by {s.author}</h3>
-				<div dangerouslySetInnerHTML={{ __html: s.body }}></div>
+				<span> {s.update_time} </span>
+				<div id="article_author">by {s.author}</div>
+				<div id="article_body" dangerouslySetInnerHTML={{ __html: s.body }}></div>
 			</div>
 		);
 	}
