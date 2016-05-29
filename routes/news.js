@@ -7,7 +7,7 @@ var connection = db;
 
 /* GET to return ALL articles. */
 router.get('/returnArticlesList', function (req, res) {
-	var statement = 'SELECT articles.article_id, articles.title, articles.update_time FROM articles ORDER BY update_time DESC;';
+	var statement = 'SELECT articles.article_id, articles.title, articles.update_time FROM articles WHERE publish_status = 1 ORDER BY update_time DESC;';
 	connection.query(statement, function (err, results) {
 		if (err) {
 			return res.json({ execSuccess: false, message: 'Cannot get articles.', error: err });
@@ -33,11 +33,24 @@ router.get('/returnArticleById', function (req, res) {
 router.post('/saveArticle', function (req, res) {
 	var article = req.body;
 	var statement = 'INSERT INTO articles SET ?';
-	connection.query(statement, article, function(err, results) {
+	connection.query(statement, article, function (err, results) {
 		if (err) {
 			return res.json({ execSuccess: false, message: 'Cannot save articles.', error: err });
 		} else {
 			return res.json({ execSuccess: true, message: 'Article saved.', data: results });
+		}
+	});
+});
+
+/* POST to publish article, updates publish_status */
+router.post('/publishArticle', function (req, res) {
+	var articleId = req.body.articleId;
+	var statement = 'UPDATE articles SET publish_status = 1 WHERE article_id = ?;';
+	connection.query(statement, [articleId], function (err, results) {
+		if (err) {
+			return res.json({ execSuccess: false, message: 'Cannot publsh article.', error: err });
+		} else {
+			return res.json({ execSuccess: true, message: 'Article published.', data: results });
 		}
 	});
 });

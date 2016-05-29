@@ -14,7 +14,7 @@ var CronJob = require('cron').CronJob;
 var request = require('request');
 
 // current week MANUALLY SET FOR NOW
-var currentWeek = 7;
+var currentWeek = 8;
 
 // league information
 var leagueId = 44067;

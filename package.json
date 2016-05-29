@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon --ignore /public --ignore /views ./bin/www"
+    "start": "node ./bin/www"
   },
   "dependencies": {
     "async": "^1.5.2",
@@ -20,6 +20,7 @@
     "react-addons-shallow-compare": "^15.0.2",
     "react-dom": "^15.0.2",
     "react-quill": "^0.4.1",
+    "react-router": "^2.4.1",
     "react-vis": "^0.3.4",
     "request": "^2.72.0",
     "serve-favicon": "~2.3.0",

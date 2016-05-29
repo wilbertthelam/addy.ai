@@ -17,7 +17,7 @@ else:
 # totalTeams = 8 # pass in with sys.args
 # currentWeek = 5 - 1 # pass in with sys.args
 totalTeams = int(sys.argv[1])
-currentWeek = int(sys.argv[2]) - 1
+currentWeek = int(sys.argv[2])
 
 totalCat = []
 totalStats = []
@@ -39,8 +39,8 @@ for i in range(0, currentWeek):
         SBData.append(jData[i*totalTeams + j]['SB'])
         RBIData.append(jData[i*totalTeams + j]['RBI'])
         OBPData.append(jData[i*totalTeams + j]['OBP'])
-        WHIPData.append(jData[i*totalTeams + j]['WHIP'] * -1) # MUST BE NEGATIZED TO ACCOUNT FOR LOWER WHIP
-        ERAData.append(jData[i*totalTeams + j]['ERA'] * -1) # MUST BE NEGATIZED TO ACCOUNT FOR LOWER ERA
+        WHIPData.append(jData[i*totalTeams + j]['WHIP'] * -1) # MUST BE NEGATED TO ACCOUNT FOR LOWER WHIP
+        ERAData.append(jData[i*totalTeams + j]['ERA'] * -1) # MUST BE NEGATED TO ACCOUNT FOR LOWER ERA
         SVData.append(jData[i*totalTeams + j]['SV'])
         WData.append(jData[i*totalTeams + j]['W'])
         KData.append(jData[i*totalTeams + j]['K'])
@@ -77,7 +77,7 @@ def calcIndvScore(data, stat_median, stat_std, norm_factor):
 # return 
 def normFactor(i):
     factor = np.log(((np.exp(1)-1)*(i * 1.0 / currentWeek)) + 1)
-    return 1
+    return factor
         
 def createRankingScore():
     #print totalCat
