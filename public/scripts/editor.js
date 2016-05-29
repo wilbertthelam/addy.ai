@@ -13,7 +13,7 @@ import ReactQuill from 'react-quill';
 
 const Editor = React.createClass({
 	getInitialState: function () {
-		return { 
+		return {
 			text: '',
 			title: '',
 			author: ''
@@ -103,7 +103,7 @@ const Button = React.createClass({
 			},
 			success: function (data) {
 				console.log(data.data);
-			}.bind(this),
+			},
 			error: function (xhr, status, err) {
 				console.error(this.props.url, status, err.toString());
 			}.bind(this),

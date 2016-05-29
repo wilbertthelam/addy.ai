@@ -29,7 +29,7 @@ const PRTeamListBox = React.createClass({
 			dataType: 'json',
 			cache: false,
 			success: function (data) {
-				console.log(data.data);
+				// console.log(data.data);
 				this.setState({ data: data.data });
 			}.bind(this),
 			error: function (xhr, status, err) {
@@ -236,6 +236,7 @@ const StatsList = React.createClass({
 	render: function () {
 		const statCategory = this.props.stat;
 		const displayField = this.props.displayField;
+		console.log(JSON.stringify(this.props.statData));
 		const statNodes = this.props.statData.map(function (statline) {
 			return (
 				<Stat
@@ -261,7 +262,7 @@ const StatsList = React.createClass({
 const StatBox = React.createClass({
 	render: function () {
 		return (
-			 <table className="table table-hover table-mc-amber">
+			<table className="table table-hover table-mc-amber">
 				<thead>
 					<StatsHeader
 						stat={this.props.stat}
