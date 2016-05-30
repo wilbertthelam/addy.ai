@@ -6,7 +6,7 @@ import sys
 import requests
 import json
 
-url = "http://localhost:3000/cumulativeStats"
+url = "https://addyai.herokuapp.com/cumulativeStats"
 myResponse = requests.get(url)
 if (myResponse.ok):
     jData = (json.loads(myResponse.content))['data']
