@@ -84,48 +84,48 @@ router.get('/weeklyPlayerStats', function(req, res) {
 	});
 });
 
-/* Calculate power rankings*/
-router.get('/powerRankings', function (req, res) {
-	// run python web scraper and return data as JSON
-	var powerRankings;
-	var teamResults;
-	async.series({
-		runPyScript : function(cb0) {
-			PythonShell.run('./pralgo.py', {mode: 'json', args: [totalTeams, currentWeek] }, function(err, results) {
-				if (err) {
-					throw err;
-				}
+// /* Calculate power rankings*/
+// router.get('/powerRankings', function (req, res) {
+// 	// run python web scraper and return data as JSON
+// 	var powerRankings;
+// 	var teamResults;
+// 	async.series({
+// 		runPyScript : function(cb0) {
+// 			PythonShell.run('./pralgo.py', {mode: 'json', args: [totalTeams, currentWeek] }, function(err, results) {
+// 				if (err) {
+// 					throw err;
+// 				}
 
-				//console.log(JSON.stringify(results[0]));
-				powerRankings = results[0];
-				cb0(null, null);
-			});
-		},
+// 				//console.log(JSON.stringify(results[0]));
+// 				powerRankings = results[0];
+// 				cb0(null, null);
+// 			});
+// 		},
 
-		getTeams: function(cb1) {
-			var statement = 'SELECT * FROM teams ORDER BY team_id;';
-			connection.query(statement, function(err, results) {
-				if (err) {
-					return res.json({ execSuccess: false, message: 'Cannot get teams.', error: err});
-				} else {
-					teamResults = results;
-					cb1(null, null);
-				}
-			});
-		},
+// 		getTeams: function(cb1) {
+// 			var statement = 'SELECT * FROM teams ORDER BY team_id;';
+// 			connection.query(statement, function(err, results) {
+// 				if (err) {
+// 					return res.json({ execSuccess: false, message: 'Cannot get teams.', error: err});
+// 				} else {
+// 					teamResults = results;
+// 					cb1(null, null);
+// 				}
+// 			});
+// 		},
 
 
-	}, function(err) {
-		if (err) {
-			throw err;
-		}
-		for (var i = 0; i < teamResults.length; i++) {
-			teamResults[i]['pr_score'] = powerRankings[i+1];
-		}
-		teamResults.sort(function(b,a) {return (a.pr_score > b.pr_score) ? 1 : ((b.pr_score > a.pr_score) ? -1 : 0);} );
-		return res.json({execSuccess: true, data: teamResults});
-	});
-});
+// 	}, function(err) {
+// 		if (err) {
+// 			throw err;
+// 		}
+// 		for (var i = 0; i < teamResults.length; i++) {
+// 			teamResults[i]['pr_score'] = powerRankings[i+1];
+// 		}
+// 		teamResults.sort(function(b,a) {return (a.pr_score > b.pr_score) ? 1 : ((b.pr_score > a.pr_score) ? -1 : 0);} );
+// 		return res.json({execSuccess: true, data: teamResults});
+// 	});
+// });
 
 /* Populate all the old stats prior to a certain week */
 router.get('/populatePastStats', function (req, res) {
