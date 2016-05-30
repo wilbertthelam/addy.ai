@@ -19,7 +19,7 @@ app.set('view engine', 'ejs');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-if (app.get('env') === 'production') {
+if (app.get('env') === 'development') {
     app.use(require('webpack-dev-middleware')(compiler, {
         noInfo: true,
         publicPath: webpackConfig.output.publicPath
