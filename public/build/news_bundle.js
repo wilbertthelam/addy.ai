@@ -65,7 +65,7 @@
 /******/ 	}
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "ddb95a52956c35520b18"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "7ccc94523148024781cc"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -37888,7 +37888,10 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var _components = {
-		_component: {}
+		_component: {},
+		_component2: {},
+		_component3: {},
+		_component4: {}
 	};
 	
 	var _reactTransformHmr2 = (0, _reactTransformHmr4.default)({
@@ -37917,11 +37920,46 @@
 	  
 	  */
 	
-	var Article = _wrapComponent('_component')(_react3.default.createClass({
-		displayName: 'Article',
+	var NewsContainer = _wrapComponent('_component')(_react3.default.createClass({
+		displayName: 'NewsContainer',
 	
 		getInitialState: function getInitialState() {
-			return { data: [] };
+			return { articleId: '1' };
+		},
+		openArticle: function openArticle(articleId) {
+			console.log(articleId);
+			this.setState({ articleId: articleId });
+		},
+		render: function render() {
+			return _react3.default.createElement(
+				'div',
+				{ className: 'container' },
+				_react3.default.createElement(
+					'div',
+					{ className: 'col-sm-3' },
+					_react3.default.createElement(
+						'div',
+						{ id: 'sidebar-wrapper', className: 'sidebar-toggle' },
+						_react3.default.createElement(Sidebar, { url: '/news/returnArticlesList', openArticle: this.openArticle })
+					)
+				),
+				_react3.default.createElement(
+					'div',
+					{ className: 'col-sm-9' },
+					_react3.default.createElement(Article, { url: '/news/returnArticleById?articleId=', articleId: this.state.articleId })
+				)
+			);
+		}
+	}));
+	
+	var Sidebar = _wrapComponent('_component2')(_react3.default.createClass({
+		displayName: 'Sidebar',
+	
+		getInitialState: function getInitialState() {
+			return { data: [{
+					article_id: 0,
+					title: ''
+				}] };
 		},
 		componentDidMount: function componentDidMount() {
 			this.loadArticle();
@@ -37933,7 +37971,6 @@
 				method: 'GET',
 				cache: false,
 				success: function (data) {
-					console.log(data.data);
 					this.setState({ data: data.data });
 				}.bind(this),
 				error: function (xhr, status, err) {
@@ -37942,15 +37979,113 @@
 			});
 		},
 		render: function render() {
+			var that = this;
+			var ArticleNavNodes = this.state.data.map(function (article) {
+				return _react3.default.createElement(ArticleNav, {
+					key: article.article_id,
+					title: article.title,
+					articleId: article.article_id,
+					openArticle: that.props.openArticle
+				});
+			});
 			return _react3.default.createElement(
 				'div',
-				null,
-				this.state.data
+				{ className: 'newsNavBar shadow-z-1' },
+				_react3.default.createElement(
+					'div',
+					{ className: 'header articleNav' },
+					'Most recent stories'
+				),
+				ArticleNavNodes
 			);
 		}
 	}));
 	
-	_reactDom2.default.render(_react3.default.createElement(Article, { url: '/news/returnArticleById?articleId=1' }), document.getElementById('newsArticleContainer'));
+	var ArticleNav = _wrapComponent('_component3')(_react3.default.createClass({
+		displayName: 'ArticleNav',
+	
+		propTypes: {
+			title: _react3.default.PropTypes.string,
+			articleId: _react3.default.PropTypes.number
+		},
+		click: function click() {
+			this.props.openArticle(this.props.articleId);
+		},
+		render: function render() {
+			return _react3.default.createElement(
+				'div',
+				{ className: 'articleNav', onClick: this.click },
+				this.props.title,
+				' ',
+				this.props.articleId
+			);
+		}
+	}));
+	
+	var Article = _wrapComponent('_component4')(_react3.default.createClass({
+		displayName: 'Article',
+	
+		getInitialState: function getInitialState() {
+			return {
+				data: [{
+					title: '',
+					author: '',
+					body: ''
+				}]
+			};
+		},
+		componentDidMount: function componentDidMount() {
+			this.loadArticle(this.props.url, this.props.articleId);
+		},
+		componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+			// console.log('URL: ' + nextProps.url);
+			// console.log('articleId: ' + nextProps.articleId);
+			this.loadArticle(nextProps.url, nextProps.articleId);
+		},
+		loadArticle: function loadArticle(url, articleId) {
+			_jquery2.default.ajax({
+				url: url + articleId,
+				dataType: 'json',
+				method: 'GET',
+				cache: false,
+				success: function (data) {
+					console.log(data.data);
+					this.setState({ data: data.data });
+				}.bind(this),
+				error: function error(xhr, status, err) {
+					console.error(status, err.toString());
+				}
+			});
+		},
+		render: function render() {
+			var s = this.state.data[0];
+			return _react3.default.createElement(
+				'div',
+				{ className: 'articleContainer' },
+				_react3.default.createElement(
+					'h1',
+					null,
+					s.title
+				),
+				_react3.default.createElement(
+					'span',
+					null,
+					' ',
+					s.update_time,
+					' '
+				),
+				_react3.default.createElement(
+					'div',
+					{ id: 'article_author' },
+					'by ',
+					s.author
+				),
+				_react3.default.createElement('div', { id: 'article_body', dangerouslySetInnerHTML: { __html: s.body } })
+			);
+		}
+	}));
+	
+	_reactDom2.default.render(_react3.default.createElement(NewsContainer, null), document.getElementById('newsArticleContainer'));
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(74)(module)))
 
 /***/ }

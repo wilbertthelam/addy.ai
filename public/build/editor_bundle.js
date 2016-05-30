@@ -65,7 +65,7 @@
 /******/ 	}
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "ddb95a52956c35520b18"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "7ccc94523148024781cc"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -38193,15 +38193,74 @@
 		displayName: 'Editor',
 	
 		getInitialState: function getInitialState() {
-			return { text: '' };
+			return {
+				text: '',
+				title: '',
+				author: ''
+			};
 		},
 		onTextChange: function onTextChange(value) {
 			this.setState({ text: value });
+		},
+		onTitleChange: function onTitleChange(event) {
+			this.setState({ title: event.target.value });
+		},
+		onAuthorChange: function onAuthorChange(event) {
+			this.setState({ author: event.target.value });
 		},
 		render: function render() {
 			return _react3.default.createElement(
 				'div',
 				null,
+				_react3.default.createElement(Button, {
+					authorId: '1',
+					author: this.state.author,
+					title: this.state.title,
+					body: this.state.text,
+					url: '/news/saveArticle'
+				}),
+				_react3.default.createElement(
+					'div',
+					{ className: 'editorInfo' },
+					_react3.default.createElement(
+						'form',
+						null,
+						_react3.default.createElement(
+							'div',
+							{ className: 'form-group' },
+							_react3.default.createElement(
+								'label',
+								{ htmlFor: 'articleTitle' },
+								'Article title'
+							),
+							_react3.default.createElement('input', {
+								type: 'text',
+								className: 'form-control',
+								id: 'articleTitle',
+								placeholder: 'Article title',
+								value: this.state.title,
+								onChange: this.onTitleChange
+							})
+						),
+						_react3.default.createElement(
+							'div',
+							{ className: 'form-group' },
+							_react3.default.createElement(
+								'label',
+								{ htmlFor: 'articleAuthor' },
+								'Author'
+							),
+							_react3.default.createElement('input', {
+								type: 'text',
+								className: 'form-control',
+								id: 'articleAuthor',
+								placeholder: 'Author name',
+								value: this.state.author,
+								onChange: this.onAuthorChange
+							})
+						)
+					)
+				),
 				_react3.default.createElement(_reactQuill2.default, {
 					theme: 'snow',
 					value: this.state.text,
@@ -38209,8 +38268,8 @@
 				}),
 				_react3.default.createElement(Button, {
 					authorId: '1',
-					author: 'Wilbert Lam',
-					title: 'Dae Ho Goes Buck Wild',
+					author: this.state.author,
+					title: this.state.title,
 					body: this.state.text,
 					url: '/news/saveArticle'
 				})
@@ -38223,7 +38282,10 @@
 	
 		propTypes: {
 			text: _react3.default.PropTypes.string,
-			url: _react3.default.PropTypes.string
+			url: _react3.default.PropTypes.string,
+			authorId: _react3.default.PropTypes.number,
+			author: _react3.default.PropTypes.string,
+			title: _react3.default.PropTypes.string
 		},
 		save: function save() {
 			// ajax call to update the articles
@@ -38237,9 +38299,9 @@
 					title: this.props.title,
 					body: this.props.body
 				},
-				success: function (data) {
+				success: function success(data) {
 					console.log(data.data);
-				}.bind(this),
+				},
 				error: function (xhr, status, err) {
 					console.error(this.props.url, status, err.toString());
 				}.bind(this)
@@ -38248,7 +38310,7 @@
 		render: function render() {
 			return _react3.default.createElement(
 				'button',
-				{ className: 'pure-button', onClick: this.save },
+				{ className: 'btn btn-primary', onClick: this.save },
 				'Save'
 			);
 		}

@@ -65,7 +65,7 @@
 /******/ 	}
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "ddb95a52956c35520b18"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "7ccc94523148024781cc"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -37942,7 +37942,7 @@
 				dataType: 'json',
 				cache: false,
 				success: function (data) {
-					console.log(data.data);
+					// console.log(data.data);
 					this.setState({ data: data.data });
 				}.bind(this),
 				error: function (xhr, status, err) {
@@ -37953,7 +37953,7 @@
 		render: function render() {
 			return _react3.default.createElement(
 				'div',
-				{ className: 'teamListBox' },
+				{ className: 'table-responsive-vertical shadow-z-1' },
 				_react3.default.createElement(PRTeamList, { data: this.state.data })
 			);
 		}
@@ -37974,7 +37974,7 @@
 	
 			return _react3.default.createElement(
 				'table',
-				{ className: 'pure-table pure-table-horizontal' },
+				{ className: 'table table-hover table-mc-amber' },
 				_react3.default.createElement(
 					'thead',
 					null,
@@ -38008,17 +38008,17 @@
 				{ className: 'team' },
 				_react3.default.createElement(
 					'td',
-					null,
+					{ 'data-title': 'PR Rating' },
 					this.props.prScore
 				),
 				_react3.default.createElement(
 					'td',
-					null,
+					{ 'data-title': 'Owner' },
 					this.props.ownerName
 				),
 				_react3.default.createElement(
 					'td',
-					null,
+					{ 'data-title': 'Team' },
 					this.props.teamName
 				)
 			);
@@ -38086,11 +38086,15 @@
 					clickFunc: this.handleChildButtonClick,
 					statCategories: this.props.categories
 				}),
-				_react3.default.createElement(StatBox, {
-					statData: this.state.data,
-					stat: this.state.statCategory,
-					displayField: this.props.displayField
-				})
+				_react3.default.createElement(
+					'div',
+					{ className: 'table-responsive-vertical shadow-z-1' },
+					_react3.default.createElement(StatBox, {
+						statData: this.state.data,
+						stat: this.state.statCategory,
+						displayField: this.props.displayField
+					})
+				)
 			);
 		}
 	}));
@@ -38129,7 +38133,7 @@
 		render: function render() {
 			return _react3.default.createElement(
 				'button',
-				{ onClick: this.handleClick, className: 'pure-button' },
+				{ onClick: this.handleClick, className: 'btn btn-primary' },
 				this.props.statCategory
 			);
 		}
@@ -38145,12 +38149,12 @@
 				null,
 				_react3.default.createElement(
 					'td',
-					null,
+					{ 'data-title': this.props.statCategory },
 					this.props.statValue
 				),
 				_react3.default.createElement(
 					'td',
-					null,
+					{ 'data-title': '' },
 					this.props.stats[this.props.displayField]
 				)
 			);
@@ -38182,10 +38186,12 @@
 		render: function render() {
 			var statCategory = this.props.stat;
 			var displayField = this.props.displayField;
+			console.log(JSON.stringify(this.props.statData));
 			var statNodes = this.props.statData.map(function (statline) {
 				return _react3.default.createElement(Stat, {
 					displayField: displayField,
 					stats: statline,
+					statCategory: statCategory,
 					key: statline.team_id,
 					teamName: statline.team_name,
 					owner: statline.owner_name,
@@ -38207,7 +38213,7 @@
 		render: function render() {
 			return _react3.default.createElement(
 				'table',
-				{ className: 'pure-table pure-table-horizontal' },
+				{ className: 'table table-hover table-mc-amber' },
 				_react3.default.createElement(
 					'thead',
 					null,
