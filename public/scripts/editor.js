@@ -116,7 +116,6 @@ const Button = React.createClass({
 	}
 });
 
-ReactDOM.render(
-	<Editor />,
-	document.getElementById('quillContainer')
-);
+module.exports = {
+	Editor: Editor
+};

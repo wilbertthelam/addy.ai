@@ -7,7 +7,6 @@ Contains components for the news
 */
 
 import React from 'react';
-import ReactDOM from 'react-dom';
 import $ from 'jquery';
 
 const NewsContainer = React.createClass({
@@ -40,7 +39,8 @@ const Sidebar = React.createClass({
 			{
 				article_id: 0,
 				title: '',
-			}] };
+			}]
+		};
 	},
 	componentDidMount: function () {
 		this.loadArticle();
@@ -145,7 +145,6 @@ const Article = React.createClass({
 	}
 });
 
-ReactDOM.render(
-	<NewsContainer />,
-	document.getElementById('newsArticleContainer')
-);
+module.exports = {
+	NewsContainer: NewsContainer
+};

@@ -7,9 +7,7 @@ Contains components for the leaderboards
 */
 
 import React from 'react';
-import ReactDOM from 'react-dom';
 import $ from 'jquery';
-// import {XYPlot, XAxis, YAxis, HorizontalGridLines, LineSeries} from 'react-vis';
 
 //--------------------------
 // PowerRankingsTeamsBox information
@@ -96,11 +94,6 @@ const PRTeam = React.createClass({
 		);
 	},
 });
-
-ReactDOM.render(
-	<PRTeamListBox url="/powerRankings" pollInterval={5000} />,
-	document.getElementById('teamListContent'));
-
 
 //--------------------------
 // TeamStatsBox information
@@ -286,41 +279,10 @@ const StatBox = React.createClass({
 	},
 });
 
-ReactDOM.render(
-	<TeamStatsBox
-		url="/stats"
-		categories={['R', 'HR', 'RBI', 'SB', 'OBP']}
-		displayField="team_name"
-	/>,
-	document.getElementById('teamBattersStatsBox')
-);
-
-ReactDOM.render(
-	<TeamStatsBox
-		url="/stats"
-		categories={['K', 'W', 'SV', 'ERA', 'WHIP']}
-		displayField="team_name"
-	/>,
-	document.getElementById('teamPitchersStatsBox')
-);
-
-ReactDOM.render(
-	<TeamStatsBox
-		url="/weeklyPlayerStats"
-		categories={['R', 'HR', 'RBI', 'SB', 'OBP']}
-		displayField="player_name"
-	/>,
-	document.getElementById('weeklyBattersStatsBox')
-);
-
-ReactDOM.render(
-	<TeamStatsBox
-		url="/weeklyPlayerStats"
-		categories={['K', 'W', 'SV', 'ERA', 'WHIP']}
-		displayField="player_name"
-	/>,
-	document.getElementById('weeklyPitchersStatsBox')
-);
+module.exports = {
+	TeamStatsBox: TeamStatsBox,
+	PRTeamListBox: PRTeamListBox
+};
 
 
 
