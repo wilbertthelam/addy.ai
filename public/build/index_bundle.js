@@ -65,7 +65,7 @@
 /******/ 	}
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "7ccc94523148024781cc"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "1c80bfbfd71a7dea5d1d"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -37963,12 +37963,15 @@
 		displayName: 'PRTeamList',
 	
 		render: function render() {
+			var i = 0;
 			var teamNodes = this.props.data.map(function (data) {
+				i++;
 				return _react3.default.createElement(PRTeam, {
 					teamName: data.team_name,
 					ownerName: data.owner_name,
 					prScore: data.pr_score,
-					key: data.team_id
+					id: data.team_id,
+					key: i
 				});
 			});
 	
@@ -38105,9 +38108,11 @@
 	
 		render: function render() {
 			var that = this;
+			var i = 0;
 			var buttonNodes = this.props.statCategories.map(function (stat) {
+				i++;
 				return _react3.default.createElement(Button, {
-					key: stat,
+					key: i,
 					statCategory: stat,
 					clickFunc: that.props.clickFunc
 				});
@@ -38187,12 +38192,15 @@
 			var statCategory = this.props.stat;
 			var displayField = this.props.displayField;
 			console.log(JSON.stringify(this.props.statData));
+			var i = 0;
 			var statNodes = this.props.statData.map(function (statline) {
+				i++;
 				return _react3.default.createElement(Stat, {
+					key: i,
 					displayField: displayField,
 					stats: statline,
 					statCategory: statCategory,
-					key: statline.team_id,
+					id: statline.team_id,
 					teamName: statline.team_name,
 					owner: statline.owner_name,
 					statValue: statline[statCategory]

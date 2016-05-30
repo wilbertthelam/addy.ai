@@ -48,13 +48,16 @@ const PRTeamListBox = React.createClass({
 
 const PRTeamList = React.createClass({
 	render: function () {
+		let i = 0;
 		const teamNodes = this.props.data.map(function (data) {
+			i++;
 			return (
 				<PRTeam
 					teamName={data.team_name}
 					ownerName={data.owner_name}
 					prScore={data.pr_score}
-					key={data.team_id}
+					id={data.team_id}
+					key={i}
 				/>
 			);
 		});
@@ -173,10 +176,12 @@ const TeamStatsBox = React.createClass({
 const ButtonsList = React.createClass({
 	render: function () {
 		const that = this;
+		let i = 0;
 		const buttonNodes = this.props.statCategories.map(function (stat) {
+			i++;
 			return (
 				<Button
-					key={stat}
+					key={i}
 					statCategory={stat}
 					clickFunc={that.props.clickFunc}
 				/>
@@ -237,13 +242,16 @@ const StatsList = React.createClass({
 		const statCategory = this.props.stat;
 		const displayField = this.props.displayField;
 		console.log(JSON.stringify(this.props.statData));
+		let i = 0;
 		const statNodes = this.props.statData.map(function (statline) {
+			i++;
 			return (
 				<Stat
+					key={i}
 					displayField={displayField}
 					stats={statline}
 					statCategory={statCategory}
-					key={statline.team_id}
+					id={statline.team_id}
 					teamName={statline.team_name}
 					owner={statline.owner_name}
 					statValue={statline[statCategory]}
