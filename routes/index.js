@@ -28,12 +28,12 @@ router.get('/', function(req, res) {
 
 /* GET news page. */
 router.get('/news', function(req, res) {
-	res.render('news', { title: 'news | addy.ai'});
+	res.render('index', { title: 'news | addy.ai' });
 });
 
 /* GET editor page. */
 router.get('/editor', function(req, res) {
-	res.render('editor', { title: 'editor | addy.ai'});
+	res.render('index', { title: 'editor | addy.ai' });
 });
 
 /* GET team information. */
