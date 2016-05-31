@@ -238,7 +238,8 @@ const StatsList = React.createClass({
 		let i = 0;
 		const statNodes = this.props.statData.map(function (statline) {
 			i++;
-			return (
+			if (i <= 20) {
+				return (
 				<Stat
 					key={i}
 					displayField={displayField}
@@ -250,6 +251,7 @@ const StatsList = React.createClass({
 					statValue={statline[statCategory]}
 				/>
 			);
+			}
 		});
 		return (
 			<tbody>

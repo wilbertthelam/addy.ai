@@ -65,7 +65,7 @@
 /******/ 	}
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "b8c0695f0d9d29ea2c15"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "200673d605791224c7ce"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -21809,16 +21809,18 @@
 			var i = 0;
 			var statNodes = this.props.statData.map(function (statline) {
 				i++;
-				return _react3.default.createElement(Stat, {
-					key: i,
-					displayField: displayField,
-					stats: statline,
-					statCategory: statCategory,
-					id: statline.team_id,
-					teamName: statline.team_name,
-					owner: statline.owner_name,
-					statValue: statline[statCategory]
-				});
+				if (i <= 20) {
+					return _react3.default.createElement(Stat, {
+						key: i,
+						displayField: displayField,
+						stats: statline,
+						statCategory: statCategory,
+						id: statline.team_id,
+						teamName: statline.team_name,
+						owner: statline.owner_name,
+						statValue: statline[statCategory]
+					});
+				}
 			});
 			return _react3.default.createElement(
 				'tbody',
