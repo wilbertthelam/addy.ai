@@ -65,7 +65,7 @@
 /******/ 	}
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "e7a92576492ed0eddbc8"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "d650fcbd44fcaf1b1ad6"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -21537,10 +21537,31 @@
 		displayName: 'NewsContainer',
 	
 		getInitialState: function getInitialState() {
-			return { articleId: '1' };
+			return { data: [],
+				articleId: 1
+			};
+		},
+		componentDidMount: function componentDidMount() {
+			this.loadArticle();
+		},
+		loadArticle: function loadArticle() {
+			_jquery2.default.ajax({
+				url: '/news/returnArticlesList',
+				dataType: 'json',
+				method: 'GET',
+				cache: false,
+				success: function (data) {
+					console.log('This is data; ' + JSON.stringify(data.data));
+					this.setState({ data: data.data });
+					this.setState({ articleId: data.data[0].article_id });
+				}.bind(this),
+				error: function error(xhr, status, err) {
+					console.error(err.toString());
+				}
+			});
 		},
 		openArticle: function openArticle(articleId) {
-			console.log(articleId);
+			console.log('open article' + articleId);
 			this.setState({ articleId: articleId });
 		},
 		render: function render() {
@@ -21553,13 +21574,16 @@
 					_react3.default.createElement(
 						'div',
 						{ id: 'sidebar-wrapper', className: 'sidebar-toggle' },
-						_react3.default.createElement(Sidebar, { url: '/news/returnArticlesList', openArticle: this.openArticle })
+						_react3.default.createElement(Sidebar, { articlesList: this.state.data, openArticle: this.openArticle })
 					)
 				),
 				_react3.default.createElement(
 					'div',
 					{ className: 'col-sm-9' },
-					_react3.default.createElement(Article, { url: '/news/returnArticleById?articleId=', articleId: this.state.articleId })
+					_react3.default.createElement(Article, {
+						url: '/news/returnArticleById?articleId=',
+						articleId: this.state.articleId
+					})
 				)
 			);
 		}
@@ -21575,26 +21599,9 @@
 				}]
 			};
 		},
-		componentDidMount: function componentDidMount() {
-			this.loadArticle();
-		},
-		loadArticle: function loadArticle() {
-			_jquery2.default.ajax({
-				url: this.props.url,
-				dataType: 'json',
-				method: 'GET',
-				cache: false,
-				success: function (data) {
-					this.setState({ data: data.data });
-				}.bind(this),
-				error: function (xhr, status, err) {
-					console.error(this.props.url, status, err.toString());
-				}.bind(this)
-			});
-		},
 		render: function render() {
 			var that = this;
-			var ArticleNavNodes = this.state.data.map(function (article) {
+			var ArticleNavNodes = this.props.articlesList.map(function (article) {
 				return _react3.default.createElement(ArticleNav, {
 					key: article.article_id,
 					title: article.title,
@@ -21649,6 +21656,7 @@
 			};
 		},
 		componentDidMount: function componentDidMount() {
+			console.log('this is what id shoudl be= ' + this.props.articleId);
 			this.loadArticle(this.props.url, this.props.articleId);
 		},
 		componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
