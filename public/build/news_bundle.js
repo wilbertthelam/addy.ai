@@ -65,7 +65,7 @@
 /******/ 	}
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "d650fcbd44fcaf1b1ad6"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "7d10777ab5ebe27b2201"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -21537,11 +21537,11 @@
 		displayName: 'NewsContainer',
 	
 		getInitialState: function getInitialState() {
-			return { data: [],
-				articleId: 1
+			return {
+				data: []
 			};
 		},
-		componentDidMount: function componentDidMount() {
+		componentWillMount: function componentWillMount() {
 			this.loadArticle();
 		},
 		loadArticle: function loadArticle() {
@@ -21580,7 +21580,7 @@
 				_react3.default.createElement(
 					'div',
 					{ className: 'col-sm-9' },
-					_react3.default.createElement(Article, {
+					this.state.data.length > 0 && _react3.default.createElement(Article, {
 						url: '/news/returnArticleById?articleId=',
 						articleId: this.state.articleId
 					})

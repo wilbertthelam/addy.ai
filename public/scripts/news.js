@@ -11,11 +11,11 @@ import $ from 'jquery';
 
 const NewsContainer = React.createClass({
 	getInitialState: function () {
-		return { data: [],
-			articleId: 1
+		return {
+			data: [],
 		};
 	},
-	componentDidMount: function () {
+	componentWillMount: function () {
 		this.loadArticle();
 	},
 	loadArticle: function () {
@@ -47,10 +47,12 @@ const NewsContainer = React.createClass({
 					</div>
 				</div>
 				<div className="col-sm-9">
-					<Article
-						url="/news/returnArticleById?articleId="
-						articleId={this.state.articleId}
-					/>
+					{this.state.data.length > 0 &&
+						<Article
+							url="/news/returnArticleById?articleId="
+							articleId={this.state.articleId}
+						/>
+					}
 				</div>
 			</div>
 		);
