@@ -65,7 +65,7 @@
 /******/ 	}
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "7d10777ab5ebe27b2201"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "b8c0695f0d9d29ea2c15"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -21538,7 +21538,13 @@
 	
 		getInitialState: function getInitialState() {
 			return {
-				data: []
+				data: [{
+					title: '',
+					update_time: '',
+					author: '',
+					body: ''
+				}],
+				articleId: ''
 			};
 		},
 		componentWillMount: function componentWillMount() {
@@ -21565,27 +21571,31 @@
 			this.setState({ articleId: articleId });
 		},
 		render: function render() {
-			return _react3.default.createElement(
-				'div',
-				{ className: 'container' },
-				_react3.default.createElement(
+			if (this.state.data.length > 0 && this.state.articleId !== '') {
+				return _react3.default.createElement(
 					'div',
-					{ className: 'col-sm-3' },
+					{ className: 'container' },
 					_react3.default.createElement(
 						'div',
-						{ id: 'sidebar-wrapper', className: 'sidebar-toggle' },
-						_react3.default.createElement(Sidebar, { articlesList: this.state.data, openArticle: this.openArticle })
+						{ className: 'col-sm-3' },
+						_react3.default.createElement(
+							'div',
+							{ id: 'sidebar-wrapper', className: 'sidebar-toggle' },
+							_react3.default.createElement(Sidebar, { articlesList: this.state.data, openArticle: this.openArticle })
+						)
+					),
+					_react3.default.createElement(
+						'div',
+						{ className: 'col-sm-9' },
+						_react3.default.createElement(Article, {
+							url: '/news/returnArticleById?articleId=',
+							articleId: this.state.articleId
+						})
 					)
-				),
-				_react3.default.createElement(
-					'div',
-					{ className: 'col-sm-9' },
-					this.state.data.length > 0 && _react3.default.createElement(Article, {
-						url: '/news/returnArticleById?articleId=',
-						articleId: this.state.articleId
-					})
-				)
-			);
+				);
+			} else {
+				return _react3.default.createElement('div', { className: 'container' });
+			}
 		}
 	}));
 	

@@ -12,7 +12,13 @@ import $ from 'jquery';
 const NewsContainer = React.createClass({
 	getInitialState: function () {
 		return {
-			data: [],
+			data: [{
+				title: '',
+				update_time: '',
+				author: '',
+				body: ''
+			}],
+			articleId: ''
 		};
 	},
 	componentWillMount: function () {
@@ -39,23 +45,25 @@ const NewsContainer = React.createClass({
 		this.setState({ articleId: articleId });
 	},
 	render: function () {
-		return (
-			<div className="container">
-				<div className="col-sm-3">
-					<div id="sidebar-wrapper" className="sidebar-toggle">
-						<Sidebar articlesList={this.state.data} openArticle={this.openArticle} />
+		if (this.state.data.length > 0 && this.state.articleId !== '') {
+			return (
+				<div className="container">
+					<div className="col-sm-3">
+						<div id="sidebar-wrapper" className="sidebar-toggle">
+							<Sidebar articlesList={this.state.data} openArticle={this.openArticle} />
+						</div>
 					</div>
-				</div>
-				<div className="col-sm-9">
-					{this.state.data.length > 0 &&
+					<div className="col-sm-9">
 						<Article
 							url="/news/returnArticleById?articleId="
 							articleId={this.state.articleId}
 						/>
-					}
+					</div>
 				</div>
-			</div>
-		);
+			);
+		} else {
+			return (<div className="container" />);
+		}
 	}
 });
 
