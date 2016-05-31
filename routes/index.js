@@ -73,6 +73,18 @@ router.get('/stats', function(req, res) {
 	});
 });
 
+/* GET given week stats information */
+router.get('/weeklyTeamStats', function (req, res) {
+	var statement = 'SELECT * FROM statv WHERE week = ? AND league_id = ? AND year = ?;';
+	connection.query(statement, [req.query.week, leagueId, seasonId], function(err, results) {
+		if (err) {
+			return res.json({ execSuccess: false, message: 'Cannot get stats.', error: err});
+		} else {
+			return res.json({ execSuccess: true, message: 'Stats successfully retrieved.', data: results});
+		}
+	});
+});
+
 /* GET cumulative stats information. */
 router.get('/cumulativeStats', function(req, res) {
 	var statement = 'SELECT * FROM statv WHERE league_id = ? AND year = ? ORDER BY week, team_id;';
