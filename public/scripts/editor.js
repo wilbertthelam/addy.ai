@@ -7,7 +7,6 @@ Contains components for the editor
 */
 
 import React from 'react';
-import ReactDOM from 'react-dom';
 import $ from 'jquery';
 import ReactQuill from 'react-quill';
 
@@ -16,8 +15,26 @@ const Editor = React.createClass({
 		return {
 			text: '',
 			title: '',
-			author: ''
+			author: '',
+			articleId: this.props.articleId
 		};
+	},
+	componentDidMount: function () {
+		$.ajax({
+			url: '/news/returnArticleById?articleId=' + this.state.articleId,
+			dataType: 'json',
+			cache: false,
+			success: function (data) {
+				// console.log('data:' + JSON.stringify(data.data[0]));
+				const body = data.data[0];
+				this.onTextChange(body.body);
+				this.setState({ title: body.title });
+				this.setState({ author: body.author });
+			}.bind(this),
+			error: function (xhr, status, err) {
+				console.error(this.state.statCategory, status, err.toString());
+			}.bind(this)
+		});
 	},
 	onTextChange: function (value) {
 		this.setState({ text: value });
@@ -33,10 +50,23 @@ const Editor = React.createClass({
 			<div>
 				<Button
 					authorId="1"
+					articleId={this.state.articleId}
 					author={this.state.author}
 					title={this.state.title}
 					body={this.state.text}
+					text="Save"
+					type="btn btn-primary"
 					url="/news/saveArticle"
+				/>
+				<Button
+					articleId={this.state.articleId}
+					authorId="1"
+					author={this.state.author}
+					title={this.state.title}
+					body={this.state.text}
+					text="Publish"
+					type="btn btn-success"
+					url="/news/publishArticle"
 				/>
 				<div className="editorInfo">
 					<form>
@@ -69,13 +99,6 @@ const Editor = React.createClass({
 					value={this.state.text}
 					onChange={this.onTextChange}
 				/>
-				<Button
-					authorId="1"
-					author={this.state.author}
-					title={this.state.title}
-					body={this.state.text}
-					url="/news/saveArticle"
-				/>
 			</div>
 		);
 	}
@@ -86,17 +109,20 @@ const Button = React.createClass({
 		text: React.PropTypes.string,
 		url: React.PropTypes.string,
 		authorId: React.PropTypes.number,
+		articleId: React.PropTypes.number,
 		author: React.PropTypes.string,
 		title: React.PropTypes.string
 	},
 	save: function () {
 		// ajax call to update the articles
+		console.log('ID THING: ' + this.props.articleId);
 		$.ajax({
 			url: this.props.url,
 			method: 'POST',
 			dataType: 'JSON',
 			data: {
 				author_id: this.props.authorId,
+				article_id: this.props.articleId,
 				author: this.props.author,
 				title: this.props.title,
 				body: this.props.body,
@@ -111,7 +137,7 @@ const Button = React.createClass({
 	},
 	render: function () {
 		return (
-			<button className="btn btn-primary" onClick={this.save} >Save</button>
+			<button className={this.props.type} onClick={this.save}>{this.props.text}</button>
 		);
 	}
 });

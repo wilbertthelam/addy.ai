@@ -22,18 +22,31 @@ var seasonId = 2016;
 var totalTeams = 8;
 
 /* GET home page. */
-router.get('/', function(req, res) {
+router.get('/', function (req, res) {
 	res.render('index', { title: 'addy.ai' });
 });
 
 /* GET news page. */
-router.get('/news', function(req, res) {
-	res.render('index', { title: 'news | addy.ai' });
+router.get('/news', function (req, res) {
+	res.render('index', { title: 'addy.ai' });
 });
 
-/* GET editor page. */
-router.get('/editor', function(req, res) {
-	res.render('index', { title: 'editor | addy.ai' });
+/* GET to create an editor. */
+router.get('/createEditor', function (req, res) {
+	// create article in db, then allow it to be edited
+	var statement = 'INSERT INTO articles SET ?;';
+	connection.query(statement, [{ author_id: 1 }], function (err, results) {
+		if (err) {
+			throw err;
+		} else {
+			console.log(results.insertId);
+			res.redirect('/editor?articleId=' + results.insertId);
+		}
+	});
+});
+
+router.get('/editor', function (req, res) {
+	res.render('index', { title: 'addy.ai' });
 });
 
 /* GET team information. */

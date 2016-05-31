@@ -11,10 +11,31 @@ import $ from 'jquery';
 
 const NewsContainer = React.createClass({
 	getInitialState: function () {
-		return { articleId: '1' };
+		return { data: [],
+			articleId: 1
+		};
+	},
+	componentDidMount: function () {
+		this.loadArticle();
+	},
+	loadArticle: function () {
+		$.ajax({
+			url: '/news/returnArticlesList',
+			dataType: 'json',
+			method: 'GET',
+			cache: false,
+			success: function (data) {
+				console.log('This is data; ' + JSON.stringify(data.data));
+				this.setState({ data: data.data });
+				this.setState({ articleId: data.data[0].article_id });
+			}.bind(this),
+			error: function (xhr, status, err) {
+				console.error(err.toString());
+			}
+		});
 	},
 	openArticle: function (articleId) {
-		console.log(articleId);
+		console.log('open article' + articleId);
 		this.setState({ articleId: articleId });
 	},
 	render: function () {
@@ -22,11 +43,14 @@ const NewsContainer = React.createClass({
 			<div className="container">
 				<div className="col-sm-3">
 					<div id="sidebar-wrapper" className="sidebar-toggle">
-						<Sidebar url="/news/returnArticlesList" openArticle={this.openArticle} />
+						<Sidebar articlesList={this.state.data} openArticle={this.openArticle} />
 					</div>
 				</div>
 				<div className="col-sm-9">
-					<Article url="/news/returnArticleById?articleId=" articleId={this.state.articleId} />
+					<Article
+						url="/news/returnArticleById?articleId="
+						articleId={this.state.articleId}
+					/>
 				</div>
 			</div>
 		);
@@ -42,26 +66,9 @@ const Sidebar = React.createClass({
 			}]
 		};
 	},
-	componentDidMount: function () {
-		this.loadArticle();
-	},
-	loadArticle: function () {
-		$.ajax({
-			url: this.props.url,
-			dataType: 'json',
-			method: 'GET',
-			cache: false,
-			success: function (data) {
-				this.setState({ data: data.data });
-			}.bind(this),
-			error: function (xhr, status, err) {
-				console.error(this.props.url, status, err.toString());
-			}.bind(this),
-		});
-	},
 	render: function () {
 		const that = this;
-		const ArticleNavNodes = this.state.data.map(function (article) {
+		const ArticleNavNodes = this.props.articlesList.map(function (article) {
 			return (
 				<ArticleNav
 					key={article.article_id}
@@ -110,6 +117,7 @@ const Article = React.createClass({
 		};
 	},
 	componentDidMount: function () {
+		console.log('this is what id shoudl be= ' + this.props.articleId)
 		this.loadArticle(this.props.url, this.props.articleId);
 	},
 	componentWillReceiveProps: function (nextProps) {

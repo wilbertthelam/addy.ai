@@ -135,10 +135,10 @@ DROP TABLE IF EXISTS `articles`;
 
 CREATE TABLE `articles` (
   `article_id` int(10) NOT NULL AUTO_INCREMENT,
-  `author_id` int(10) NOT NULL,
-  `body` LONGTEXT NOT NULL,
-  `title` VARCHAR(100) NOT NULL,
-  `author` VARCHAR(100) NOT NULL,
+  `author_id` int(10) NOT NULL DEFAULT 0,
+  `body` LONGTEXT NOT NULL DEFAULT '',
+  `title` VARCHAR(100) NOT NULL DEFAULT '',
+  `author` VARCHAR(100) NOT NULL DEFAULT '',
   `publish_status` TINYINT(1) NOT NULL DEFAULT 0,
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`article_id`));

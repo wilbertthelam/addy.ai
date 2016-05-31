@@ -17,11 +17,11 @@ const MainContainerPage = React.createClass({
 						<li className="pure-menu-item">
 							<Link to="/" className="pure-menu-link">Home</Link>
 						</li>
-						<li className="pure-menu-item pure-menu-selected">
+						<li className="pure-menu-item">
 							<Link to="/news" className="pure-menu-link">News</Link>
 						</li>
-						<li className="pure-menu-item pure-menu-selected">
-							<Link to="/editor" className="pure-menu-link">Editor</Link>
+						<li className="pure-menu-item">
+							<a href="/createEditor" className="pure-menu-link">Editor</a>
 						</li>
 						<li className="pure-menu-item">
 							<a href="#" className="pure-menu-link">Contact</a>
@@ -133,7 +133,7 @@ const EditorPage = React.createClass({
 				</div>
 
 				<div id="quillContainer">
-					<Editor.Editor />
+					<Editor.Editor articleId={this.props.location.query.articleId} />
 				</div>
 			</div>
 		);
