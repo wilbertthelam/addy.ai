@@ -50,7 +50,11 @@ const NewsContainer = React.createClass({
 				<div className="container">
 					<div className="col-sm-3">
 						<div id="sidebar-wrapper" className="sidebar-toggle">
-							<Sidebar articlesList={this.state.data} openArticle={this.openArticle} />
+							<Sidebar
+								currentArticleId={this.state.articleId}
+								articlesList={this.state.data}
+								openArticle={this.openArticle}
+							/>
 						</div>
 					</div>
 					<div className="col-sm-9">
@@ -61,9 +65,9 @@ const NewsContainer = React.createClass({
 					</div>
 				</div>
 			);
-		} else {
-			return (<div className="container" />);
 		}
+
+		return (<div className="container" />);
 	}
 });
 
@@ -71,20 +75,28 @@ const Sidebar = React.createClass({
 	getInitialState: function () {
 		return { data: [
 			{
-				article_id: 0,
+				article_id: this.props.currentArticleId,
 				title: '',
 			}]
 		};
 	},
 	render: function () {
 		const that = this;
+		let clickState = 'articleNav';
 		const ArticleNavNodes = this.props.articlesList.map(function (article) {
+			if (that.props.currentArticleId === article.article_id) {
+				clickState = 'articleNav navSelected';
+			} else {
+				clickState = 'articleNav';
+			}
+			console.log('current click state= ' + clickState);
 			return (
 				<ArticleNav
 					key={article.article_id}
 					title={article.title}
 					articleId={article.article_id}
 					openArticle={that.props.openArticle}
+					clickState={clickState}
 				/>
 			);
 		});
@@ -109,7 +121,7 @@ const ArticleNav = React.createClass({
 	},
 	render: function () {
 		return (
-			<div className="articleNav" onClick={this.click}>
+			<div className={this.props.clickState} onClick={this.click}>
 				{this.props.title} {this.props.articleId}
 			</div>
 		);

@@ -65,7 +65,7 @@
 /******/ 	}
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "200673d605791224c7ce"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "3a95ddcdbde5294edad7"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -30640,7 +30640,11 @@
 						_react3.default.createElement(
 							'div',
 							{ id: 'sidebar-wrapper', className: 'sidebar-toggle' },
-							_react3.default.createElement(Sidebar, { articlesList: this.state.data, openArticle: this.openArticle })
+							_react3.default.createElement(Sidebar, {
+								currentArticleId: this.state.articleId,
+								articlesList: this.state.data,
+								openArticle: this.openArticle
+							})
 						)
 					),
 					_react3.default.createElement(
@@ -30652,9 +30656,9 @@
 						})
 					)
 				);
-			} else {
-				return _react3.default.createElement('div', { className: 'container' });
 			}
+	
+			return _react3.default.createElement('div', { className: 'container' });
 		}
 	}));
 	
@@ -30663,19 +30667,27 @@
 	
 		getInitialState: function getInitialState() {
 			return { data: [{
-					article_id: 0,
+					article_id: this.props.currentArticleId,
 					title: ''
 				}]
 			};
 		},
 		render: function render() {
 			var that = this;
+			var clickState = 'articleNav';
 			var ArticleNavNodes = this.props.articlesList.map(function (article) {
+				if (that.props.currentArticleId === article.article_id) {
+					clickState = 'articleNav navSelected';
+				} else {
+					clickState = 'articleNav';
+				}
+				console.log('current click state= ' + clickState);
 				return _react3.default.createElement(ArticleNav, {
 					key: article.article_id,
 					title: article.title,
 					articleId: article.article_id,
-					openArticle: that.props.openArticle
+					openArticle: that.props.openArticle,
+					clickState: clickState
 				});
 			});
 			return _react3.default.createElement(
@@ -30704,7 +30716,7 @@
 		render: function render() {
 			return _react3.default.createElement(
 				'div',
-				{ className: 'articleNav', onClick: this.click },
+				{ className: this.props.clickState, onClick: this.click },
 				this.props.title,
 				' ',
 				this.props.articleId

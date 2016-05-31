@@ -240,17 +240,17 @@ const StatsList = React.createClass({
 			i++;
 			if (i <= 20) {
 				return (
-				<Stat
-					key={i}
-					displayField={displayField}
-					stats={statline}
-					statCategory={statCategory}
-					id={statline.team_id}
-					teamName={statline.team_name}
-					owner={statline.owner_name}
-					statValue={statline[statCategory]}
-				/>
-			);
+					<Stat
+						key={i}
+						displayField={displayField}
+						stats={statline}
+						statCategory={statCategory}
+						id={statline.team_id}
+						teamName={statline.team_name}
+						owner={statline.owner_name}
+						statValue={statline[statCategory]}
+					/>
+				);
 			}
 		});
 		return (
