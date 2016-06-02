@@ -65,7 +65,7 @@
 /******/ 	}
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "8ee59b1d741e4c134bc6"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "9083a6de787254ba718a"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -53321,7 +53321,7 @@
 				{ className: 'innerMainContainer' },
 				_react3.default.createElement(
 					'div',
-					{ className: 'pure-menu pure-menu-horizontal' },
+					{ className: 'pure-menu pure-menu-horizontal fixedBannerContainer' },
 					_react3.default.createElement(
 						'a',
 						{ href: '#', className: 'pure-menu-heading' },
