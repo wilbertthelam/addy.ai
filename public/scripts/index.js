@@ -12,7 +12,7 @@ const MainContainerPage = React.createClass({
 	render: function () {
 		return (
 			<div className="innerMainContainer">
-				<div className="pure-menu pure-menu-horizontal">
+				<div className="pure-menu pure-menu-horizontal fixedBannerContainer">
 					<a href="#" className="pure-menu-heading">addy.ai</a>
 					<ul className="pure-menu-list">
 						<li className="pure-menu-item">
