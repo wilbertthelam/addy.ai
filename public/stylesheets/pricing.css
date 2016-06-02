@@ -16,6 +16,10 @@ h2 {
     font-weight: bold;
 }
 
+#mainContainer {
+    margin: 0px;
+}
+
 #article_author {
     font-weight: bold;
 }
@@ -28,11 +32,12 @@ h2 {
 .articleContainer {
     padding-right: 30px;
     padding-left: 30px;
-    padding-top: 16px;
+    padding-top: 0px;
+    margin-top: -25px;
 }
 
 #article_body {
-    margin-top: 16px;
+    margin-top: 0px;
     font-size: 1.3em;
     font-weight: lighter;
 }
@@ -86,6 +91,10 @@ h2 {
 
 }
 
+.container {
+    margin: 0px;
+}
+
 #quillContainer {
     width: 800px;
     margin-left: auto ;
@@ -94,6 +103,11 @@ h2 {
 
 /* SIDEBAR
 */
+
+.sidebar {
+    margin-top: -50px;
+    margin-left: -80px;
+}
 
 
 /*
@@ -107,7 +121,7 @@ h2 {
     background: #510000;
     text-align: center;
     background-size: cover;
-    height: 100px;
+    height: 70px;
     width: 100%;
     margin-bottom: 3em;
     display: table;
@@ -117,7 +131,7 @@ h2 {
     display: table-cell;
     vertical-align: middle;
     margin-bottom: 0;
-    font-size: 2em;
+    font-size: 1.8em;
     color: white;
     font-weight: 500;
     text-shadow: 0 1px 1px black;
@@ -132,7 +146,6 @@ h2 {
 .banner-head #subtitle {
     color: white;
     padding: 6px;
-}
 }
 
 

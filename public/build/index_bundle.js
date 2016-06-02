@@ -65,7 +65,7 @@
 /******/ 	}
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "3a95ddcdbde5294edad7"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "8ee59b1d741e4c134bc6"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -6148,492 +6148,6 @@
 
 /***/ },
 /* 85 */
-/***/ function(module, exports) {
-
-	'use strict';
-	
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-	
-	var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = catchErrors;
-	function catchErrors(_ref) {
-	  var filename = _ref.filename;
-	  var components = _ref.components;
-	  var imports = _ref.imports;
-	
-	  var _imports = _slicedToArray(imports, 3);
-	
-	  var React = _imports[0];
-	  var ErrorReporter = _imports[1];
-	  var reporterOptions = _imports[2];
-	
-	  if (!React || !React.Component) {
-	    throw new Error('imports[0] for react-transform-catch-errors does not look like React.');
-	  }
-	  if (typeof ErrorReporter !== 'function') {
-	    throw new Error('imports[1] for react-transform-catch-errors does not look like a React component.');
-	  }
-	
-	  return function wrapToCatchErrors(ReactClass, componentId) {
-	    var originalRender = ReactClass.prototype.render;
-	
-	    ReactClass.prototype.render = function tryRender() {
-	      try {
-	        return originalRender.apply(this, arguments);
-	      } catch (err) {
-	        setTimeout(function () {
-	          if (typeof console.reportErrorsAsExceptions !== 'undefined') {
-	            var prevReportErrorAsExceptions = console.reportErrorsAsExceptions;
-	            // We're in React Native. Don't throw.
-	            // Stop react-native from triggering its own error handler
-	            console.reportErrorsAsExceptions = false;
-	            // Log an error
-	            console.error(err);
-	            // Reactivate it so other errors are still handled
-	            console.reportErrorsAsExceptions = prevReportErrorAsExceptions;
-	          } else {
-	            throw err;
-	          }
-	        });
-	
-	        return React.createElement(ErrorReporter, _extends({
-	          error: err,
-	          filename: filename
-	        }, reporterOptions));
-	      }
-	    };
-	
-	    return ReactClass;
-	  };
-	}
-
-/***/ },
-/* 86 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, '__esModule', {
-	  value: true
-	});
-	
-	var _slicedToArray = (function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i['return']) _i['return'](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError('Invalid attempt to destructure non-iterable instance'); } }; })();
-	
-	exports['default'] = proxyReactComponents;
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-	
-	var _reactProxy = __webpack_require__(192);
-	
-	var _globalWindow = __webpack_require__(103);
-	
-	var _globalWindow2 = _interopRequireDefault(_globalWindow);
-	
-	var componentProxies = undefined;
-	if (_globalWindow2['default'].__reactComponentProxies) {
-	  componentProxies = _globalWindow2['default'].__reactComponentProxies;
-	} else {
-	  componentProxies = {};
-	  Object.defineProperty(_globalWindow2['default'], '__reactComponentProxies', {
-	    configurable: true,
-	    enumerable: false,
-	    writable: false,
-	    value: componentProxies
-	  });
-	}
-	
-	function proxyReactComponents(_ref) {
-	  var filename = _ref.filename;
-	  var components = _ref.components;
-	  var imports = _ref.imports;
-	  var locals = _ref.locals;
-	
-	  var _imports = _slicedToArray(imports, 1);
-	
-	  var React = _imports[0];
-	
-	  var _locals = _slicedToArray(locals, 1);
-	
-	  var hot = _locals[0].hot;
-	
-	  if (!React.Component) {
-	    throw new Error('imports[0] for react-transform-hmr does not look like React.');
-	  }
-	
-	  if (!hot || typeof hot.accept !== 'function') {
-	    throw new Error('locals[0] does not appear to be a `module` object with Hot Module ' + 'replacement API enabled. You should disable react-transform-hmr in ' + 'production by using `env` section in Babel configuration. See the ' + 'example in README: https://github.com/gaearon/react-transform-hmr');
-	  }
-	
-	  if (Object.keys(components).some(function (key) {
-	    return !components[key].isInFunction;
-	  })) {
-	    hot.accept(function (err) {
-	      if (err) {
-	        console.warn('[React Transform HMR] There was an error updating ' + filename + ':');
-	        console.error(err);
-	      }
-	    });
-	  }
-	
-	  var forceUpdate = (0, _reactProxy.getForceUpdate)(React);
-	
-	  return function wrapWithProxy(ReactClass, uniqueId) {
-	    var _components$uniqueId = components[uniqueId];
-	    var _components$uniqueId$isInFunction = _components$uniqueId.isInFunction;
-	    var isInFunction = _components$uniqueId$isInFunction === undefined ? false : _components$uniqueId$isInFunction;
-	    var _components$uniqueId$displayName = _components$uniqueId.displayName;
-	    var displayName = _components$uniqueId$displayName === undefined ? uniqueId : _components$uniqueId$displayName;
-	
-	    if (isInFunction) {
-	      return ReactClass;
-	    }
-	
-	    var globalUniqueId = filename + '$' + uniqueId;
-	    if (componentProxies[globalUniqueId]) {
-	      (function () {
-	        console.info('[React Transform HMR] Patching ' + displayName);
-	        var instances = componentProxies[globalUniqueId].update(ReactClass);
-	        setTimeout(function () {
-	          return instances.forEach(forceUpdate);
-	        });
-	      })();
-	    } else {
-	      componentProxies[globalUniqueId] = (0, _reactProxy.createProxy)(ReactClass);
-	    }
-	
-	    return componentProxies[globalUniqueId].get();
-	  };
-	}
-	
-	module.exports = exports['default'];
-
-/***/ },
-/* 87 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	exports.__esModule = true;
-	
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	var _react = __webpack_require__(9);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _styleJs = __webpack_require__(218);
-	
-	var _styleJs2 = _interopRequireDefault(_styleJs);
-	
-	var _errorStackParser = __webpack_require__(101);
-	
-	var _errorStackParser2 = _interopRequireDefault(_errorStackParser);
-	
-	var _objectAssign = __webpack_require__(4);
-	
-	var _objectAssign2 = _interopRequireDefault(_objectAssign);
-	
-	var _lib = __webpack_require__(217);
-	
-	var __$Getters__ = [];
-	var __$Setters__ = [];
-	var __$Resetters__ = [];
-	
-	function __GetDependency__(name) {
-	  return __$Getters__[name]();
-	}
-	
-	function __Rewire__(name, value) {
-	  __$Setters__[name](value);
-	}
-	
-	function __ResetDependency__(name) {
-	  __$Resetters__[name]();
-	}
-	
-	var __RewireAPI__ = {
-	  '__GetDependency__': __GetDependency__,
-	  '__get__': __GetDependency__,
-	  '__Rewire__': __Rewire__,
-	  '__set__': __Rewire__,
-	  '__ResetDependency__': __ResetDependency__
-	};
-	var React = _react2['default'];
-	var Component = _react.Component;
-	var PropTypes = _react.PropTypes;
-	
-	__$Getters__['React'] = function () {
-	  return React;
-	};
-	
-	__$Setters__['React'] = function (value) {
-	  React = value;
-	};
-	
-	__$Resetters__['React'] = function () {
-	  React = _react2['default'];
-	};
-	
-	__$Getters__['Component'] = function () {
-	  return Component;
-	};
-	
-	__$Setters__['Component'] = function (value) {
-	  Component = value;
-	};
-	
-	__$Resetters__['Component'] = function () {
-	  Component = _react.Component;
-	};
-	
-	__$Getters__['PropTypes'] = function () {
-	  return PropTypes;
-	};
-	
-	__$Setters__['PropTypes'] = function (value) {
-	  PropTypes = value;
-	};
-	
-	__$Resetters__['PropTypes'] = function () {
-	  PropTypes = _react.PropTypes;
-	};
-	
-	var style = _styleJs2['default'];
-	
-	__$Getters__['style'] = function () {
-	  return style;
-	};
-	
-	__$Setters__['style'] = function (value) {
-	  style = value;
-	};
-	
-	__$Resetters__['style'] = function () {
-	  style = _styleJs2['default'];
-	};
-	
-	var ErrorStackParser = _errorStackParser2['default'];
-	
-	__$Getters__['ErrorStackParser'] = function () {
-	  return ErrorStackParser;
-	};
-	
-	__$Setters__['ErrorStackParser'] = function (value) {
-	  ErrorStackParser = value;
-	};
-	
-	__$Resetters__['ErrorStackParser'] = function () {
-	  ErrorStackParser = _errorStackParser2['default'];
-	};
-	
-	var assign = _objectAssign2['default'];
-	
-	__$Getters__['assign'] = function () {
-	  return assign;
-	};
-	
-	__$Setters__['assign'] = function (value) {
-	  assign = value;
-	};
-	
-	__$Resetters__['assign'] = function () {
-	  assign = _objectAssign2['default'];
-	};
-	
-	var isFilenameAbsolute = _lib.isFilenameAbsolute;
-	var makeUrl = _lib.makeUrl;
-	var makeLinkText = _lib.makeLinkText;
-	
-	__$Getters__['isFilenameAbsolute'] = function () {
-	  return isFilenameAbsolute;
-	};
-	
-	__$Setters__['isFilenameAbsolute'] = function (value) {
-	  isFilenameAbsolute = value;
-	};
-	
-	__$Resetters__['isFilenameAbsolute'] = function () {
-	  isFilenameAbsolute = _lib.isFilenameAbsolute;
-	};
-	
-	__$Getters__['makeUrl'] = function () {
-	  return makeUrl;
-	};
-	
-	__$Setters__['makeUrl'] = function (value) {
-	  makeUrl = value;
-	};
-	
-	__$Resetters__['makeUrl'] = function () {
-	  makeUrl = _lib.makeUrl;
-	};
-	
-	__$Getters__['makeLinkText'] = function () {
-	  return makeLinkText;
-	};
-	
-	__$Setters__['makeLinkText'] = function (value) {
-	  makeLinkText = value;
-	};
-	
-	__$Resetters__['makeLinkText'] = function () {
-	  makeLinkText = _lib.makeLinkText;
-	};
-	
-	var RedBox = (function (_Component) {
-	  _inherits(RedBox, _Component);
-	
-	  function RedBox() {
-	    _classCallCheck(this, RedBox);
-	
-	    _Component.apply(this, arguments);
-	  }
-	
-	  RedBox.prototype.render = function render() {
-	    var _props = this.props;
-	    var error = _props.error;
-	    var filename = _props.filename;
-	    var editorScheme = _props.editorScheme;
-	    var useLines = _props.useLines;
-	    var useColumns = _props.useColumns;
-	
-	    var _assign = assign({}, style, this.props.style);
-	
-	    var redbox = _assign.redbox;
-	    var message = _assign.message;
-	    var stack = _assign.stack;
-	    var frame = _assign.frame;
-	    var file = _assign.file;
-	    var linkToFile = _assign.linkToFile;
-	
-	    var frames = ErrorStackParser.parse(error).map(function (f, index) {
-	      var text = undefined;
-	      var url = undefined;
-	
-	      if (index === 0 && filename && !isFilenameAbsolute(f.fileName)) {
-	        url = makeUrl(filename, editorScheme);
-	        text = makeLinkText(filename);
-	      } else {
-	        var lines = useLines ? f.lineNumber : null;
-	        var columns = useColumns ? f.columnNumber : null;
-	        url = makeUrl(f.fileName, editorScheme, lines, columns);
-	        text = makeLinkText(f.fileName, lines, columns);
-	      }
-	
-	      return React.createElement(
-	        'div',
-	        { style: frame, key: index },
-	        React.createElement(
-	          'div',
-	          null,
-	          f.functionName
-	        ),
-	        React.createElement(
-	          'div',
-	          { style: file },
-	          React.createElement(
-	            'a',
-	            { href: url, style: linkToFile },
-	            text
-	          )
-	        )
-	      );
-	    });
-	    return React.createElement(
-	      'div',
-	      { style: redbox },
-	      React.createElement(
-	        'div',
-	        { style: message },
-	        error.name,
-	        ': ',
-	        error.message
-	      ),
-	      React.createElement(
-	        'div',
-	        { style: stack },
-	        frames
-	      )
-	    );
-	  };
-	
-	  _createClass(RedBox, null, [{
-	    key: 'propTypes',
-	    value: {
-	      error: PropTypes.instanceOf(Error).isRequired,
-	      filename: PropTypes.string,
-	      editorScheme: PropTypes.string,
-	      useLines: PropTypes.bool,
-	      useColumns: PropTypes.bool,
-	      style: PropTypes.object
-	    },
-	    enumerable: true
-	  }, {
-	    key: 'displayName',
-	    value: 'RedBox',
-	    enumerable: true
-	  }, {
-	    key: 'defaultProps',
-	    value: {
-	      useLines: true,
-	      useColumns: true
-	    },
-	    enumerable: true
-	  }]);
-	
-	  return RedBox;
-	})(Component);
-	
-	var _defaultExport = RedBox;
-	
-	if (typeof _defaultExport === 'object' || typeof _defaultExport === 'function') {
-	  Object.defineProperty(_defaultExport, '__Rewire__', {
-	    'value': __Rewire__,
-	    'enumberable': false
-	  });
-	  Object.defineProperty(_defaultExport, '__set__', {
-	    'value': __Rewire__,
-	    'enumberable': false
-	  });
-	  Object.defineProperty(_defaultExport, '__ResetDependency__', {
-	    'value': __ResetDependency__,
-	    'enumberable': false
-	  });
-	  Object.defineProperty(_defaultExport, '__GetDependency__', {
-	    'value': __GetDependency__,
-	    'enumberable': false
-	  });
-	  Object.defineProperty(_defaultExport, '__get__', {
-	    'value': __GetDependency__,
-	    'enumberable': false
-	  });
-	  Object.defineProperty(_defaultExport, '__RewireAPI__', {
-	    'value': __RewireAPI__,
-	    'enumberable': false
-	  });
-	}
-	
-	exports['default'] = _defaultExport;
-	exports.__GetDependency__ = __GetDependency__;
-	exports.__get__ = __GetDependency__;
-	exports.__Rewire__ = __Rewire__;
-	exports.__set__ = __Rewire__;
-	exports.__ResetDependency__ = __ResetDependency__;
-	exports.__RewireAPI__ = __RewireAPI__;
-	module.exports = exports['default'];
-
-/***/ },
-/* 88 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -16479,6 +15993,492 @@
 	return jQuery;
 	}));
 
+
+/***/ },
+/* 86 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	
+	var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = catchErrors;
+	function catchErrors(_ref) {
+	  var filename = _ref.filename;
+	  var components = _ref.components;
+	  var imports = _ref.imports;
+	
+	  var _imports = _slicedToArray(imports, 3);
+	
+	  var React = _imports[0];
+	  var ErrorReporter = _imports[1];
+	  var reporterOptions = _imports[2];
+	
+	  if (!React || !React.Component) {
+	    throw new Error('imports[0] for react-transform-catch-errors does not look like React.');
+	  }
+	  if (typeof ErrorReporter !== 'function') {
+	    throw new Error('imports[1] for react-transform-catch-errors does not look like a React component.');
+	  }
+	
+	  return function wrapToCatchErrors(ReactClass, componentId) {
+	    var originalRender = ReactClass.prototype.render;
+	
+	    ReactClass.prototype.render = function tryRender() {
+	      try {
+	        return originalRender.apply(this, arguments);
+	      } catch (err) {
+	        setTimeout(function () {
+	          if (typeof console.reportErrorsAsExceptions !== 'undefined') {
+	            var prevReportErrorAsExceptions = console.reportErrorsAsExceptions;
+	            // We're in React Native. Don't throw.
+	            // Stop react-native from triggering its own error handler
+	            console.reportErrorsAsExceptions = false;
+	            // Log an error
+	            console.error(err);
+	            // Reactivate it so other errors are still handled
+	            console.reportErrorsAsExceptions = prevReportErrorAsExceptions;
+	          } else {
+	            throw err;
+	          }
+	        });
+	
+	        return React.createElement(ErrorReporter, _extends({
+	          error: err,
+	          filename: filename
+	        }, reporterOptions));
+	      }
+	    };
+	
+	    return ReactClass;
+	  };
+	}
+
+/***/ },
+/* 87 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+	
+	var _slicedToArray = (function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i['return']) _i['return'](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError('Invalid attempt to destructure non-iterable instance'); } }; })();
+	
+	exports['default'] = proxyReactComponents;
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+	
+	var _reactProxy = __webpack_require__(192);
+	
+	var _globalWindow = __webpack_require__(103);
+	
+	var _globalWindow2 = _interopRequireDefault(_globalWindow);
+	
+	var componentProxies = undefined;
+	if (_globalWindow2['default'].__reactComponentProxies) {
+	  componentProxies = _globalWindow2['default'].__reactComponentProxies;
+	} else {
+	  componentProxies = {};
+	  Object.defineProperty(_globalWindow2['default'], '__reactComponentProxies', {
+	    configurable: true,
+	    enumerable: false,
+	    writable: false,
+	    value: componentProxies
+	  });
+	}
+	
+	function proxyReactComponents(_ref) {
+	  var filename = _ref.filename;
+	  var components = _ref.components;
+	  var imports = _ref.imports;
+	  var locals = _ref.locals;
+	
+	  var _imports = _slicedToArray(imports, 1);
+	
+	  var React = _imports[0];
+	
+	  var _locals = _slicedToArray(locals, 1);
+	
+	  var hot = _locals[0].hot;
+	
+	  if (!React.Component) {
+	    throw new Error('imports[0] for react-transform-hmr does not look like React.');
+	  }
+	
+	  if (!hot || typeof hot.accept !== 'function') {
+	    throw new Error('locals[0] does not appear to be a `module` object with Hot Module ' + 'replacement API enabled. You should disable react-transform-hmr in ' + 'production by using `env` section in Babel configuration. See the ' + 'example in README: https://github.com/gaearon/react-transform-hmr');
+	  }
+	
+	  if (Object.keys(components).some(function (key) {
+	    return !components[key].isInFunction;
+	  })) {
+	    hot.accept(function (err) {
+	      if (err) {
+	        console.warn('[React Transform HMR] There was an error updating ' + filename + ':');
+	        console.error(err);
+	      }
+	    });
+	  }
+	
+	  var forceUpdate = (0, _reactProxy.getForceUpdate)(React);
+	
+	  return function wrapWithProxy(ReactClass, uniqueId) {
+	    var _components$uniqueId = components[uniqueId];
+	    var _components$uniqueId$isInFunction = _components$uniqueId.isInFunction;
+	    var isInFunction = _components$uniqueId$isInFunction === undefined ? false : _components$uniqueId$isInFunction;
+	    var _components$uniqueId$displayName = _components$uniqueId.displayName;
+	    var displayName = _components$uniqueId$displayName === undefined ? uniqueId : _components$uniqueId$displayName;
+	
+	    if (isInFunction) {
+	      return ReactClass;
+	    }
+	
+	    var globalUniqueId = filename + '$' + uniqueId;
+	    if (componentProxies[globalUniqueId]) {
+	      (function () {
+	        console.info('[React Transform HMR] Patching ' + displayName);
+	        var instances = componentProxies[globalUniqueId].update(ReactClass);
+	        setTimeout(function () {
+	          return instances.forEach(forceUpdate);
+	        });
+	      })();
+	    } else {
+	      componentProxies[globalUniqueId] = (0, _reactProxy.createProxy)(ReactClass);
+	    }
+	
+	    return componentProxies[globalUniqueId].get();
+	  };
+	}
+	
+	module.exports = exports['default'];
+
+/***/ },
+/* 88 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	exports.__esModule = true;
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var _react = __webpack_require__(9);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _styleJs = __webpack_require__(218);
+	
+	var _styleJs2 = _interopRequireDefault(_styleJs);
+	
+	var _errorStackParser = __webpack_require__(101);
+	
+	var _errorStackParser2 = _interopRequireDefault(_errorStackParser);
+	
+	var _objectAssign = __webpack_require__(4);
+	
+	var _objectAssign2 = _interopRequireDefault(_objectAssign);
+	
+	var _lib = __webpack_require__(217);
+	
+	var __$Getters__ = [];
+	var __$Setters__ = [];
+	var __$Resetters__ = [];
+	
+	function __GetDependency__(name) {
+	  return __$Getters__[name]();
+	}
+	
+	function __Rewire__(name, value) {
+	  __$Setters__[name](value);
+	}
+	
+	function __ResetDependency__(name) {
+	  __$Resetters__[name]();
+	}
+	
+	var __RewireAPI__ = {
+	  '__GetDependency__': __GetDependency__,
+	  '__get__': __GetDependency__,
+	  '__Rewire__': __Rewire__,
+	  '__set__': __Rewire__,
+	  '__ResetDependency__': __ResetDependency__
+	};
+	var React = _react2['default'];
+	var Component = _react.Component;
+	var PropTypes = _react.PropTypes;
+	
+	__$Getters__['React'] = function () {
+	  return React;
+	};
+	
+	__$Setters__['React'] = function (value) {
+	  React = value;
+	};
+	
+	__$Resetters__['React'] = function () {
+	  React = _react2['default'];
+	};
+	
+	__$Getters__['Component'] = function () {
+	  return Component;
+	};
+	
+	__$Setters__['Component'] = function (value) {
+	  Component = value;
+	};
+	
+	__$Resetters__['Component'] = function () {
+	  Component = _react.Component;
+	};
+	
+	__$Getters__['PropTypes'] = function () {
+	  return PropTypes;
+	};
+	
+	__$Setters__['PropTypes'] = function (value) {
+	  PropTypes = value;
+	};
+	
+	__$Resetters__['PropTypes'] = function () {
+	  PropTypes = _react.PropTypes;
+	};
+	
+	var style = _styleJs2['default'];
+	
+	__$Getters__['style'] = function () {
+	  return style;
+	};
+	
+	__$Setters__['style'] = function (value) {
+	  style = value;
+	};
+	
+	__$Resetters__['style'] = function () {
+	  style = _styleJs2['default'];
+	};
+	
+	var ErrorStackParser = _errorStackParser2['default'];
+	
+	__$Getters__['ErrorStackParser'] = function () {
+	  return ErrorStackParser;
+	};
+	
+	__$Setters__['ErrorStackParser'] = function (value) {
+	  ErrorStackParser = value;
+	};
+	
+	__$Resetters__['ErrorStackParser'] = function () {
+	  ErrorStackParser = _errorStackParser2['default'];
+	};
+	
+	var assign = _objectAssign2['default'];
+	
+	__$Getters__['assign'] = function () {
+	  return assign;
+	};
+	
+	__$Setters__['assign'] = function (value) {
+	  assign = value;
+	};
+	
+	__$Resetters__['assign'] = function () {
+	  assign = _objectAssign2['default'];
+	};
+	
+	var isFilenameAbsolute = _lib.isFilenameAbsolute;
+	var makeUrl = _lib.makeUrl;
+	var makeLinkText = _lib.makeLinkText;
+	
+	__$Getters__['isFilenameAbsolute'] = function () {
+	  return isFilenameAbsolute;
+	};
+	
+	__$Setters__['isFilenameAbsolute'] = function (value) {
+	  isFilenameAbsolute = value;
+	};
+	
+	__$Resetters__['isFilenameAbsolute'] = function () {
+	  isFilenameAbsolute = _lib.isFilenameAbsolute;
+	};
+	
+	__$Getters__['makeUrl'] = function () {
+	  return makeUrl;
+	};
+	
+	__$Setters__['makeUrl'] = function (value) {
+	  makeUrl = value;
+	};
+	
+	__$Resetters__['makeUrl'] = function () {
+	  makeUrl = _lib.makeUrl;
+	};
+	
+	__$Getters__['makeLinkText'] = function () {
+	  return makeLinkText;
+	};
+	
+	__$Setters__['makeLinkText'] = function (value) {
+	  makeLinkText = value;
+	};
+	
+	__$Resetters__['makeLinkText'] = function () {
+	  makeLinkText = _lib.makeLinkText;
+	};
+	
+	var RedBox = (function (_Component) {
+	  _inherits(RedBox, _Component);
+	
+	  function RedBox() {
+	    _classCallCheck(this, RedBox);
+	
+	    _Component.apply(this, arguments);
+	  }
+	
+	  RedBox.prototype.render = function render() {
+	    var _props = this.props;
+	    var error = _props.error;
+	    var filename = _props.filename;
+	    var editorScheme = _props.editorScheme;
+	    var useLines = _props.useLines;
+	    var useColumns = _props.useColumns;
+	
+	    var _assign = assign({}, style, this.props.style);
+	
+	    var redbox = _assign.redbox;
+	    var message = _assign.message;
+	    var stack = _assign.stack;
+	    var frame = _assign.frame;
+	    var file = _assign.file;
+	    var linkToFile = _assign.linkToFile;
+	
+	    var frames = ErrorStackParser.parse(error).map(function (f, index) {
+	      var text = undefined;
+	      var url = undefined;
+	
+	      if (index === 0 && filename && !isFilenameAbsolute(f.fileName)) {
+	        url = makeUrl(filename, editorScheme);
+	        text = makeLinkText(filename);
+	      } else {
+	        var lines = useLines ? f.lineNumber : null;
+	        var columns = useColumns ? f.columnNumber : null;
+	        url = makeUrl(f.fileName, editorScheme, lines, columns);
+	        text = makeLinkText(f.fileName, lines, columns);
+	      }
+	
+	      return React.createElement(
+	        'div',
+	        { style: frame, key: index },
+	        React.createElement(
+	          'div',
+	          null,
+	          f.functionName
+	        ),
+	        React.createElement(
+	          'div',
+	          { style: file },
+	          React.createElement(
+	            'a',
+	            { href: url, style: linkToFile },
+	            text
+	          )
+	        )
+	      );
+	    });
+	    return React.createElement(
+	      'div',
+	      { style: redbox },
+	      React.createElement(
+	        'div',
+	        { style: message },
+	        error.name,
+	        ': ',
+	        error.message
+	      ),
+	      React.createElement(
+	        'div',
+	        { style: stack },
+	        frames
+	      )
+	    );
+	  };
+	
+	  _createClass(RedBox, null, [{
+	    key: 'propTypes',
+	    value: {
+	      error: PropTypes.instanceOf(Error).isRequired,
+	      filename: PropTypes.string,
+	      editorScheme: PropTypes.string,
+	      useLines: PropTypes.bool,
+	      useColumns: PropTypes.bool,
+	      style: PropTypes.object
+	    },
+	    enumerable: true
+	  }, {
+	    key: 'displayName',
+	    value: 'RedBox',
+	    enumerable: true
+	  }, {
+	    key: 'defaultProps',
+	    value: {
+	      useLines: true,
+	      useColumns: true
+	    },
+	    enumerable: true
+	  }]);
+	
+	  return RedBox;
+	})(Component);
+	
+	var _defaultExport = RedBox;
+	
+	if (typeof _defaultExport === 'object' || typeof _defaultExport === 'function') {
+	  Object.defineProperty(_defaultExport, '__Rewire__', {
+	    'value': __Rewire__,
+	    'enumberable': false
+	  });
+	  Object.defineProperty(_defaultExport, '__set__', {
+	    'value': __Rewire__,
+	    'enumberable': false
+	  });
+	  Object.defineProperty(_defaultExport, '__ResetDependency__', {
+	    'value': __ResetDependency__,
+	    'enumberable': false
+	  });
+	  Object.defineProperty(_defaultExport, '__GetDependency__', {
+	    'value': __GetDependency__,
+	    'enumberable': false
+	  });
+	  Object.defineProperty(_defaultExport, '__get__', {
+	    'value': __GetDependency__,
+	    'enumberable': false
+	  });
+	  Object.defineProperty(_defaultExport, '__RewireAPI__', {
+	    'value': __RewireAPI__,
+	    'enumberable': false
+	  });
+	}
+	
+	exports['default'] = _defaultExport;
+	exports.__GetDependency__ = __GetDependency__;
+	exports.__get__ = __GetDependency__;
+	exports.__Rewire__ = __Rewire__;
+	exports.__set__ = __Rewire__;
+	exports.__ResetDependency__ = __ResetDependency__;
+	exports.__RewireAPI__ = __RewireAPI__;
+	module.exports = exports['default'];
 
 /***/ },
 /* 89 */
@@ -29926,11 +29926,11 @@
 
 	/* WEBPACK VAR INJECTION */(function(module) {'use strict';
 	
-	var _redboxReact2 = __webpack_require__(87);
+	var _redboxReact2 = __webpack_require__(88);
 	
 	var _redboxReact3 = _interopRequireDefault(_redboxReact2);
 	
-	var _reactTransformCatchErrors3 = __webpack_require__(85);
+	var _reactTransformCatchErrors3 = __webpack_require__(86);
 	
 	var _reactTransformCatchErrors4 = _interopRequireDefault(_reactTransformCatchErrors3);
 	
@@ -29938,11 +29938,11 @@
 	
 	var _react3 = _interopRequireDefault(_react2);
 	
-	var _reactTransformHmr3 = __webpack_require__(86);
+	var _reactTransformHmr3 = __webpack_require__(87);
 	
 	var _reactTransformHmr4 = _interopRequireDefault(_reactTransformHmr3);
 	
-	var _jquery = __webpack_require__(88);
+	var _jquery = __webpack_require__(85);
 	
 	var _jquery2 = _interopRequireDefault(_jquery);
 	
@@ -30148,11 +30148,11 @@
 
 	/* WEBPACK VAR INJECTION */(function(module) {'use strict';
 	
-	var _redboxReact2 = __webpack_require__(87);
+	var _redboxReact2 = __webpack_require__(88);
 	
 	var _redboxReact3 = _interopRequireDefault(_redboxReact2);
 	
-	var _reactTransformCatchErrors3 = __webpack_require__(85);
+	var _reactTransformCatchErrors3 = __webpack_require__(86);
 	
 	var _reactTransformCatchErrors4 = _interopRequireDefault(_reactTransformCatchErrors3);
 	
@@ -30160,11 +30160,11 @@
 	
 	var _react3 = _interopRequireDefault(_react2);
 	
-	var _reactTransformHmr3 = __webpack_require__(86);
+	var _reactTransformHmr3 = __webpack_require__(87);
 	
 	var _reactTransformHmr4 = _interopRequireDefault(_reactTransformHmr3);
 	
-	var _jquery = __webpack_require__(88);
+	var _jquery = __webpack_require__(85);
 	
 	var _jquery2 = _interopRequireDefault(_jquery);
 	
@@ -30329,6 +30329,12 @@
 	var TeamStatsBox = _wrapComponent('_component4')(_react3.default.createClass({
 		displayName: 'TeamStatsBox',
 	
+		propTypes: {
+			url: _react3.default.PropTypes.string,
+			week: _react3.default.PropTypes.number,
+			displayField: _react3.default.PropTypes.string,
+			categories: _react3.default.PropTypes.array
+		},
 		getInitialState: function getInitialState() {
 			return {
 				data: [],
@@ -30341,7 +30347,7 @@
 		},
 		getStats: function getStats() {
 			_jquery2.default.ajax({
-				url: this.props.url,
+				url: this.props.url + '?week=' + this.props.week,
 				dataType: 'json',
 				cache: false,
 				success: function (data) {
@@ -30537,11 +30543,11 @@
 
 	/* WEBPACK VAR INJECTION */(function(module) {'use strict';
 	
-	var _redboxReact2 = __webpack_require__(87);
+	var _redboxReact2 = __webpack_require__(88);
 	
 	var _redboxReact3 = _interopRequireDefault(_redboxReact2);
 	
-	var _reactTransformCatchErrors3 = __webpack_require__(85);
+	var _reactTransformCatchErrors3 = __webpack_require__(86);
 	
 	var _reactTransformCatchErrors4 = _interopRequireDefault(_reactTransformCatchErrors3);
 	
@@ -30549,11 +30555,11 @@
 	
 	var _react3 = _interopRequireDefault(_react2);
 	
-	var _reactTransformHmr3 = __webpack_require__(86);
+	var _reactTransformHmr3 = __webpack_require__(87);
 	
 	var _reactTransformHmr4 = _interopRequireDefault(_reactTransformHmr3);
 	
-	var _jquery = __webpack_require__(88);
+	var _jquery = __webpack_require__(85);
 	
 	var _jquery2 = _interopRequireDefault(_jquery);
 	
@@ -30636,7 +30642,7 @@
 					{ className: 'container' },
 					_react3.default.createElement(
 						'div',
-						{ className: 'col-sm-3' },
+						{ className: 'col-sm-4 sidebar' },
 						_react3.default.createElement(
 							'div',
 							{ id: 'sidebar-wrapper', className: 'sidebar-toggle' },
@@ -30649,7 +30655,7 @@
 					),
 					_react3.default.createElement(
 						'div',
-						{ className: 'col-sm-9' },
+						{ className: 'col-sm-8' },
 						_react3.default.createElement(Article, {
 							url: '/news/returnArticleById?articleId=',
 							articleId: this.state.articleId
@@ -53235,11 +53241,11 @@
 
 	/* WEBPACK VAR INJECTION */(function(module) {'use strict';
 	
-	var _redboxReact2 = __webpack_require__(87);
+	var _redboxReact2 = __webpack_require__(88);
 	
 	var _redboxReact3 = _interopRequireDefault(_redboxReact2);
 	
-	var _reactTransformCatchErrors3 = __webpack_require__(85);
+	var _reactTransformCatchErrors3 = __webpack_require__(86);
 	
 	var _reactTransformCatchErrors4 = _interopRequireDefault(_reactTransformCatchErrors3);
 	
@@ -53247,7 +53253,7 @@
 	
 	var _react3 = _interopRequireDefault(_react2);
 	
-	var _reactTransformHmr3 = __webpack_require__(86);
+	var _reactTransformHmr3 = __webpack_require__(87);
 	
 	var _reactTransformHmr4 = _interopRequireDefault(_reactTransformHmr3);
 	
@@ -53266,6 +53272,10 @@
 	var _reactDom = __webpack_require__(257);
 	
 	var _reactDom2 = _interopRequireDefault(_reactDom);
+	
+	var _jquery = __webpack_require__(85);
+	
+	var _jquery2 = _interopRequireDefault(_jquery);
 	
 	var _reactRouter = __webpack_require__(381);
 	
@@ -53366,147 +53376,171 @@
 	var LeaderboardPage = _wrapComponent('_component2')(_react3.default.createClass({
 		displayName: 'LeaderboardPage',
 	
+	
+		componentWillMount: function componentWillMount() {
+			this.getCurrentWeek();
+		},
+		getCurrentWeek: function getCurrentWeek() {
+			_jquery2.default.ajax({
+				url: '/currentWeek',
+				dataType: 'json',
+				cache: false,
+				success: function (data) {
+					this.setState({ week: data.data.week });
+				}.bind(this),
+				error: function (xhr, status, err) {
+					console.error(this.state.week, status, err.toString());
+				}.bind(this)
+			});
+		},
 		render: function render() {
-			return _react3.default.createElement(
-				'div',
-				{ className: 'main' },
-				_react3.default.createElement(
+			if (this.state.week !== null) {
+				return _react3.default.createElement(
 					'div',
-					{ className: 'banner' },
-					_react3.default.createElement(
-						'h1',
-						{ className: 'banner-head' },
-						_react3.default.createElement(
-							'span',
-							{ id: 'title' },
-							'addy.ai'
-						),
-						_react3.default.createElement(
-							'span',
-							{ id: 'subtitle' },
-							' baseball'
-						)
-					)
-				),
-				_react3.default.createElement(
-					'div',
-					{ id: 'container' },
+					{ className: 'main' },
 					_react3.default.createElement(
 						'div',
-						{ className: 'container' },
+						{ className: 'banner' },
 						_react3.default.createElement(
-							'div',
-							{ className: 'col-sm-3' },
+							'h1',
+							{ className: 'banner-head' },
 							_react3.default.createElement(
-								'h2',
-								null,
-								'Batting leaders'
+								'span',
+								{ id: 'title' },
+								'addy.ai'
 							),
-							_react3.default.createElement(Leaderboards.TeamStatsBox, {
-								url: '/weeklyPlayerStats',
-								categories: ['R', 'HR', 'RBI', 'SB', 'OBP'],
-								displayField: 'player_name'
-							})
-						),
-						_react3.default.createElement(
-							'div',
-							{ className: 'col-sm-3' },
 							_react3.default.createElement(
-								'h2',
-								null,
-								'Pitching leaders'
-							),
-							_react3.default.createElement(Leaderboards.TeamStatsBox, {
-								url: '/weeklyPlayerStats',
-								categories: ['K', 'W', 'SV', 'ERA', 'WHIP'],
-								displayField: 'player_name'
-							})
-						),
+								'span',
+								{ id: 'subtitle' },
+								' baseball'
+							)
+						)
+					),
+					_react3.default.createElement(
+						'div',
+						{ id: 'container' },
 						_react3.default.createElement(
 							'div',
-							{ className: 'col-md-6' },
+							{ className: 'container' },
 							_react3.default.createElement(
 								'div',
-								{ className: 'col-sm-6' },
+								{ className: 'col-sm-3' },
 								_react3.default.createElement(
 									'h2',
 									null,
-									'Team batting'
+									'Batting leaders'
 								),
 								_react3.default.createElement(Leaderboards.TeamStatsBox, {
-									url: '/stats',
+									url: '/weeklyPlayerStats',
+									week: this.state.week,
 									categories: ['R', 'HR', 'RBI', 'SB', 'OBP'],
-									displayField: 'team_name'
+									displayField: 'player_name'
 								})
 							),
 							_react3.default.createElement(
 								'div',
-								{ className: 'col-sm-6' },
+								{ className: 'col-sm-3' },
 								_react3.default.createElement(
 									'h2',
 									null,
-									'Team pitching'
+									'Pitching leaders'
 								),
 								_react3.default.createElement(Leaderboards.TeamStatsBox, {
-									url: '/stats',
+									url: '/weeklyPlayerStats',
+									week: this.state.week,
 									categories: ['K', 'W', 'SV', 'ERA', 'WHIP'],
-									displayField: 'team_name'
+									displayField: 'player_name'
 								})
 							),
 							_react3.default.createElement(
 								'div',
-								{ className: 'col-sm-12' },
+								{ className: 'col-md-6' },
 								_react3.default.createElement(
-									'h2',
-									null,
-									'Power rankings'
-								),
-								_react3.default.createElement(Leaderboards.PRTeamListBox, { url: '/powerRankings', pollInterval: 5000 })
-							),
-							_react3.default.createElement(
-								'div',
-								{ className: 'col-sm-12' },
-								_react3.default.createElement(
-									'h2',
-									null,
-									'Admin tools'
-								),
-								_react3.default.createElement(
-									'ul',
-									null,
+									'div',
+									{ className: 'col-sm-6' },
 									_react3.default.createElement(
-										'li',
+										'h2',
 										null,
-										_react3.default.createElement(
-											'a',
-											{ href: '/populatePastStats' },
-											'populate past stats'
-										)
+										'Team batting'
+									),
+									_react3.default.createElement(Leaderboards.TeamStatsBox, {
+										url: '/weeklyTeamStats',
+										week: this.state.week,
+										categories: ['R', 'HR', 'RBI', 'SB', 'OBP'],
+										displayField: 'team_name'
+									})
+								),
+								_react3.default.createElement(
+									'div',
+									{ className: 'col-sm-6' },
+									_react3.default.createElement(
+										'h2',
+										null,
+										'Team pitching'
+									),
+									_react3.default.createElement(Leaderboards.TeamStatsBox, {
+										url: '/weeklyTeamStats',
+										week: this.state.week,
+										categories: ['K', 'W', 'SV', 'ERA', 'WHIP'],
+										displayField: 'team_name'
+									})
+								),
+								_react3.default.createElement(
+									'div',
+									{ className: 'col-sm-12' },
+									_react3.default.createElement(
+										'h2',
+										null,
+										'Power rankings'
+									),
+									_react3.default.createElement(Leaderboards.PRTeamListBox, { url: '/powerRankings', pollInterval: 5000 })
+								),
+								_react3.default.createElement(
+									'div',
+									{ className: 'col-sm-12' },
+									_react3.default.createElement(
+										'h2',
+										null,
+										'Admin tools'
 									),
 									_react3.default.createElement(
-										'li',
+										'ul',
 										null,
 										_react3.default.createElement(
-											'a',
-											{ href: '/populateCurrentStats' },
-											'populate current stats'
-										)
-									),
-									_react3.default.createElement(
-										'li',
-										null,
+											'li',
+											null,
+											_react3.default.createElement(
+												'a',
+												{ href: '/populatePastStats' },
+												'populate past stats'
+											)
+										),
 										_react3.default.createElement(
-											'a',
-											{ href: '/populateCurrentPlayerStats' },
-											'populate current player stats'
+											'li',
+											null,
+											_react3.default.createElement(
+												'a',
+												{ href: '/populateCurrentStats' },
+												'populate current stats'
+											)
+										),
+										_react3.default.createElement(
+											'li',
+											null,
+											_react3.default.createElement(
+												'a',
+												{ href: '/populateCurrentPlayerStats' },
+												'populate current player stats'
+											)
 										)
 									)
 								)
 							)
 						)
 					)
-				)
-			);
+				);
+			}
+			return _react3.default.createElement('div', { className: 'main' });
 		}
 	}));
 	

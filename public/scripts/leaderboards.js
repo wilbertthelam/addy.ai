@@ -107,6 +107,12 @@ function sortGenerator(statCategory) {
 
 // Overarching TeamBattersStat Container
 const TeamStatsBox = React.createClass({
+	propTypes: {
+		url: React.PropTypes.string,
+		week: React.PropTypes.number,
+		displayField: React.PropTypes.string,
+		categories: React.PropTypes.array
+	},
 	getInitialState: function () {
 		return (
 			{
@@ -121,7 +127,7 @@ const TeamStatsBox = React.createClass({
 	},
 	getStats: function () {
 		$.ajax({
-			url: this.props.url,
+			url: this.props.url + '?week=' + this.props.week,
 			dataType: 'json',
 			cache: false,
 			success: function (data) {

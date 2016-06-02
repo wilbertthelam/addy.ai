@@ -48,7 +48,7 @@ const NewsContainer = React.createClass({
 		if (this.state.data.length > 0 && this.state.articleId !== '') {
 			return (
 				<div className="container">
-					<div className="col-sm-3">
+					<div className="col-sm-4 sidebar">
 						<div id="sidebar-wrapper" className="sidebar-toggle">
 							<Sidebar
 								currentArticleId={this.state.articleId}
@@ -57,7 +57,7 @@ const NewsContainer = React.createClass({
 							/>
 						</div>
 					</div>
-					<div className="col-sm-9">
+					<div className="col-sm-8">
 						<Article
 							url="/news/returnArticleById?articleId="
 							articleId={this.state.articleId}

@@ -49,6 +49,11 @@ router.get('/editor', function (req, res) {
 	res.render('index', { title: 'addy.ai' });
 });
 
+/* GET current week variable from server */
+router.get('/currentWeek', function (req, res) {
+	return res.json({ execSuccess: true, data: { week: currentWeek } });
+});
+
 /* GET team information. */
 router.get('/teams', function(req, res) {
 	var statement = 'SELECT * FROM teams ORDER BY team_id;';
@@ -100,7 +105,7 @@ router.get('/cumulativeStats', function(req, res) {
 /* GET current player week stats information. */
 router.get('/weeklyPlayerStats', function(req, res) {
 	var statement = 'SELECT * FROM weekly_player_statv WHERE week = ? AND league_id = ? AND season_id = ?;';
-	connection.query(statement, [currentWeek, leagueId, seasonId], function(err, results) {
+	connection.query(statement, [req.query.week, leagueId, seasonId], function(err, results) {
 		if (err) {
 			return res.json({ execSuccess: false, message: 'Cannot get stats.', error: err});
 		} else {
@@ -285,7 +290,7 @@ function populateCurrentStats(req, res) {
 				});
 			}, function(err) {
 				if (err) {
-					return res.json({ execSuccess: false, message: 'Cannot close transaction.', error: err});
+					return res.json({ execSuccess: false, message: 'Cannot close transaction.', error: err });
 				} else {
 					connection.commit();
 					cb1(null, null);
