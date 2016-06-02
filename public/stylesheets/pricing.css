@@ -17,7 +17,7 @@ h2 {
 }
 
 #mainContainer {
-    margin: 0px;
+    margin-top: 36px;
 }
 
 #article_author {
@@ -148,6 +148,13 @@ h2 {
     padding: 6px;
 }
 
+.fixedBannerContainer {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    background: white;
+    z-index: 100;
+}
 
 
 
