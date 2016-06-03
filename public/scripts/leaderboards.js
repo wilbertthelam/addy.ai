@@ -216,7 +216,7 @@ const Stat = React.createClass({
 	render: function () {
 		return (
 			<tr>
-				<td data-title={this.props.statCategory}>{this.props.statValue}</td>
+				<td className="statValue" data-title={this.props.statCategory}>{this.props.statValue}</td>
 				<td data-title="">{this.props.stats[this.props.displayField]}</td>
 			</tr>
 		);

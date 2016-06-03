@@ -102,7 +102,7 @@ const Sidebar = React.createClass({
 		});
 		return (
 			<div className="newsNavBar shadow-z-1">
-				<div className="header articleNav">
+				<div className="articleNavHeader">
 					Most recent stories
 				</div>
 				{ArticleNavNodes}
@@ -139,7 +139,7 @@ const Article = React.createClass({
 		};
 	},
 	componentDidMount: function () {
-		console.log('this is what id shoudl be= ' + this.props.articleId)
+		console.log('this is what id shoudl be= ' + this.props.articleId);
 		this.loadArticle(this.props.url, this.props.articleId);
 	},
 	componentWillReceiveProps: function (nextProps) {

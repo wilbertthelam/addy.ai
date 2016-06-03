@@ -23,6 +23,8 @@ h2 {
 
 #article_author {
     font-weight: bold;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 .articleContainer h1 {
@@ -48,6 +50,14 @@ h2 {
     cursor: pointer;
     background-color: white;
 }
+.articleNavHeader {
+    margin-bottom:1px;
+    padding: 26px;
+    cursor: pointer;
+    font-weight: 700;
+    color: white;
+    background-color: #660066;
+}
 
 .navSelected {
     background-color: #C7C7C7;
@@ -71,10 +81,10 @@ h2 {
     border-left: 2px #C7C7C7 solid;*/
 }
 
-.header {
-    font-weight: bold;
-    color: white;
-    background-color: #660066;
+
+/* Leadeboard styles */
+tr .statValue {
+    font-weight: 600;
 }
 
 
