@@ -122,12 +122,15 @@ const TeamStatsBox = React.createClass({
 		);
 	},
 	componentDidMount: function () {
-		this.getStats();
+		this.getStats(this.props.week);
 		// setInterval(this.loadTeamsFromServer, this.props.pollInterval);
 	},
-	getStats: function () {
+	componentWillReceiveProps: function (nextProps) {
+		this.getStats(nextProps.week);
+	},
+	getStats: function (week) {
 		$.ajax({
-			url: this.props.url + '?week=' + this.props.week,
+			url: this.props.url + '?week=' + week,
 			dataType: 'json',
 			cache: false,
 			success: function (data) {
@@ -158,6 +161,7 @@ const TeamStatsBox = React.createClass({
 				<ButtonsList
 					clickFunc={this.handleChildButtonClick}
 					statCategories={this.props.categories}
+					activeStat={this.state.statCategory}
 				/>
 				<div className="table-responsive-vertical shadow-z-1">
 					<StatBox
@@ -178,10 +182,16 @@ const ButtonsList = React.createClass({
 		let i = 0;
 		const buttonNodes = this.props.statCategories.map(function (stat) {
 			i++;
+			let activeStatus = '';
+			if (stat === that.props.activeStat) {
+				console.log(stat + 'set as active');
+				activeStatus = 'active';
+			}
 			return (
 				<Button
 					key={i}
 					statCategory={stat}
+					activeStatus={activeStatus}
 					clickFunc={that.props.clickFunc}
 				/>
 			);
@@ -189,7 +199,9 @@ const ButtonsList = React.createClass({
 
 		return (
 			<span>
-				{buttonNodes}
+				<div className="btn-group" role="group" aria-label="Basic example">
+					{buttonNodes}
+				</div>
 			</span>
 		);
 	}
@@ -199,12 +211,12 @@ const ButtonsList = React.createClass({
 const Button = React.createClass({
 	handleClick: function () {
 		const statLookup = this.props.statCategory;
-		console.log(statLookup);
+		// console.log(statLookup);
 		this.props.clickFunc(statLookup);
 	},
 	render: function () {
 		return (
-			<button onClick={this.handleClick} className="btn btn-primary">
+			<button onClick={this.handleClick} type="button" className={'btn btn-primary ' + this.props.activeStatus}>
 				{this.props.statCategory}
 			</button>
 		);
@@ -240,7 +252,7 @@ const StatsList = React.createClass({
 	render: function () {
 		const statCategory = this.props.stat;
 		const displayField = this.props.displayField;
-		console.log(JSON.stringify(this.props.statData));
+		// console.log(JSON.stringify(this.props.statData));
 		let i = 0;
 		const statNodes = this.props.statData.map(function (statline) {
 			i++;
@@ -272,11 +284,6 @@ const StatBox = React.createClass({
 	render: function () {
 		return (
 			<table className="table table-hover table-mc-amber">
-				<thead>
-					<StatsHeader
-						stat={this.props.stat}
-					/>
-				</thead>
 				<StatsList
 					statData={this.props.statData}
 					stat={this.props.stat}

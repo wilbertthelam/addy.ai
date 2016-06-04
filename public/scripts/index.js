@@ -4,6 +4,7 @@ import * as Editor from './editor.js';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import $ from 'jquery';
+import { DropdownButton, MenuItem } from 'react-bootstrap';
 import { Router, Route, Link, browserHistory } from 'react-router';
 
 console.log('Entry point');
@@ -36,7 +37,13 @@ const MainContainerPage = React.createClass({
 });
 
 const LeaderboardPage = React.createClass({
-
+	getInitialState: function () {
+		return (
+			{
+				week: null
+			}
+		);
+	},
 	componentWillMount: function () {
 		this.getCurrentWeek();
 	},
@@ -47,85 +54,113 @@ const LeaderboardPage = React.createClass({
 			cache: false,
 			success: function (data) {
 				this.setState({ week: data.data.week });
+				this.menuWeeksGetter(data.data.week);
 			}.bind(this),
 			error: function (xhr, status, err) {
 				console.error(this.state.week, status, err.toString());
 			}.bind(this)
 		});
 	},
+	changeWeek: function (week) {
+		// console.log('week changed to : ' + week);
+		this.setState({ week: week });
+	},
+	menuWeeksGetter: function (currentWeek) {
+		const weeks = [];
+		// console.log('current week= ' + currentWeek);
+		for (let i = currentWeek; i > 0; i--) {
+			weeks.push(<MenuItem eventKey={i} onSelect={this.changeWeek}>Week {i}</MenuItem>);
+		}
+		console.log(weeks);
+		this.setState({ menuWeeks: weeks });
+	},
 	render: function () {
-		if (this.state.week !== null) {
-			return (
-				<div className="main">
-					<div className="banner">
-						<h1 className="banner-head">
-							<span id="title">addy.ai</span><span id="subtitle"> baseball</span>
-						</h1>
-					</div>
+		if (this.state.menuWeeks !== undefined) {
+			const menuWeeksNodes = this.state.menuWeeks.map(function (menuItem) {
+				return menuItem;
+			});
+			if (this.state.week !== null) {
+				return (
+					<div className="main">
+						<div className="banner">
+							<h1 className="banner-head">
+								<span id="title">addy.ai</span><span id="subtitle"> baseball</span>
+							</h1>
+						</div>
 
-					<div id="container">
-						<div className="container">
-							<div className="col-sm-3">
-								<h2>Batting leaders</h2>
-								<Leaderboards.TeamStatsBox
-									url="/weeklyPlayerStats"
-									week={this.state.week}
-									categories={['R', 'HR', 'RBI', 'SB', 'OBP']}
-									displayField="player_name"
-								/>
-							</div>
-
-							<div className="col-sm-3">
-								<h2>Pitching leaders</h2>
-								<Leaderboards.TeamStatsBox
-									url="/weeklyPlayerStats"
-									week={this.state.week}
-									categories={['K', 'W', 'SV', 'ERA', 'WHIP']}
-									displayField="player_name"
-								/>
-							</div>
-
-							<div className="col-md-6">
-								<div className="col-sm-6">
-									<h2>Team batting</h2>
+						<div id="container">
+							<div className="container">
+								<div className="col-md-12 topRowOptions">
+									<DropdownButton
+										bsStyle="default"
+										title={'Week ' + this.state.week}
+										key="1"
+									>
+										{menuWeeksNodes}
+									</DropdownButton>
+								</div>
+								<div className="col-sm-3">
+									<h2>Batting leaders</h2>
 									<Leaderboards.TeamStatsBox
-										url="/weeklyTeamStats"
+										url="/weeklyPlayerStats"
 										week={this.state.week}
 										categories={['R', 'HR', 'RBI', 'SB', 'OBP']}
-										displayField="team_name"
+										displayField="player_name"
 									/>
 								</div>
 
-								<div className="col-sm-6">
-									<h2>Team pitching</h2>
+								<div className="col-sm-3">
+									<h2>Pitching leaders</h2>
 									<Leaderboards.TeamStatsBox
-										url="/weeklyTeamStats"
+										url="/weeklyPlayerStats"
 										week={this.state.week}
 										categories={['K', 'W', 'SV', 'ERA', 'WHIP']}
-										displayField="team_name"
+										displayField="player_name"
 									/>
 								</div>
 
-								<div className="col-sm-12">
-									<h2>Power rankings</h2>
-									<Leaderboards.PRTeamListBox url="/powerRankings" pollInterval={5000} />
-								</div>
+								<div className="col-md-6">
+									<div className="col-sm-6">
+										<h2>Team batting</h2>
+										<Leaderboards.TeamStatsBox
+											url="/weeklyTeamStats"
+											week={this.state.week}
+											categories={['R', 'HR', 'RBI', 'SB', 'OBP']}
+											displayField="team_name"
+										/>
+									</div>
 
-								<div className="col-sm-12">
-									<h2>Admin tools</h2>
-									<ul>
-										<li><a href="/populatePastStats">populate past stats</a></li>
-										<li><a href="/populateCurrentStats">populate current stats</a></li>
-										<li><a href="/populateCurrentPlayerStats">populate current player stats</a></li>
-									</ul>
+									<div className="col-sm-6">
+										<h2>Team pitching</h2>
+										<Leaderboards.TeamStatsBox
+											url="/weeklyTeamStats"
+											week={this.state.week}
+											categories={['K', 'W', 'SV', 'ERA', 'WHIP']}
+											displayField="team_name"
+										/>
+									</div>
+
+									<div className="col-sm-12">
+										<h2>Power rankings</h2>
+										<Leaderboards.PRTeamListBox url="/powerRankings" pollInterval={5000} />
+									</div>
+
+									<div className="col-sm-12">
+										<h2>Admin tools</h2>
+										<ul>
+											<li><a href="/populatePastStats">populate past stats</a></li>
+											<li><a href="/populateCurrentStats">populate current stats</a></li>
+											<li><a href="/populateCurrentPlayerStats">populate current player stats</a></li>
+										</ul>
+									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-				</div>
-			);
+				);
+			}
 		}
-		return  (
+		return (
 			<div className="main" />
 		);
 	}

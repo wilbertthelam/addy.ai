@@ -164,10 +164,12 @@ const Article = React.createClass({
 	},
 	render: function () {
 		const s = this.state.data[0];
+		const date = new Date(s.update_time);
+		const formattedDate = date.toDateString();
 		return (
 			<div className="articleContainer" >
 				<h1>{s.title}</h1>
-				<span> {s.update_time} </span>
+				<span> {formattedDate} </span>
 				<div id="article_author">by {s.author}</div>
 				<div id="article_body" dangerouslySetInnerHTML={{ __html: s.body }}></div>
 			</div>
