@@ -21,9 +21,15 @@ var leagueId = 44067;
 var seasonId = 2016;
 var totalTeams = 8;
 
+//=====================
 // localcache variables
+//=====================
 var scoreboard = null;
 var powerRankings = null;
+ // intended to be stored in form {'batters': {xxx}, 'pitchers': {xxx}}
+var topPlayersCache = [];
+
+
 /* GET home page. */
 router.get('/', function (req, res) {
 	res.render('index', { title: 'addy.ai' });
@@ -134,41 +140,55 @@ router.get('/topWeeklyPlayerStats', function (req, res) {
 
 
 // /* Get top player and store in cache */
-// function cacheTopPlayers(week, leagueId, seasonId, position, category, callback) {
-// 	var topPlayers;
-// 	PythonShell.run('./topplayeralgo.py',
-// 		{ mode: 'json', args: [week, leagueId, seasonId, position, category] }, function (err, results) {
-// 		if (err) {
-// 			topPlayers = { execSuccess: false, message: 'Failed to retrieve top players', data: {} };
-// 		} else {
-// 			topPlayers = { execSuccess: true, message: 'Successfully retrieved top players', data: results[0] };
-// 		}
-// 		callback();
-// 	});
-// }
-
-// /* Calculate top player */
-// router.get('/topPlayers', function (req, res) {
-// 	if (topPlayers === null) {
-// 		cacheTopPlayers(req.query.week, leagueId, seasonId, req.query.position, req.query.category, function () {
-// 			return res.json(topPlayers);
-// 		});
-// 	} else {
-// 		return res.json(topPlayers);
-// 	}
-// });
+function cacheTopPlayers(type, week, leagueId, seasonId, position, category, callback) {
+	// since this cache needs to store both top batters and top pitchers, need to make sure we assign
+	// to correct cache variable
+	PythonShell.run('./topplayeralgo.py',
+		{ mode: 'json', args: [week, leagueId, seasonId, position, category] }, function (err, results) {
+		// type is either 'batters' or 'pitchers'
+		if (err) {
+			topPlayersCache[week][type] = { execSuccess: false, message: 'Failed to retrieve batters players', data: {} };
+		} else {
+			topPlayersCache[week][type] = { execSuccess: true, message: 'Successfully retrieved top players', data: results[0] };
+		}
+		callback();
+	});
+}
 
 /* Calculate top player */
 router.get('/topPlayers', function (req, res) {
-	PythonShell.run('./topplayeralgo.py',
-		{ mode: 'json', args: [req.query.week, leagueId, seasonId, req.query.position, req.query.category] }, function (err, results) {
-		if (err) {
-			return res.json({ execSuccess: false, message: 'Failed to retrieve top players', data: {} });
-		} else {
-			return res.json({ execSuccess: true, message: 'Successfully retrieved top players', data: results[0] });
+	var position = req.query.position;
+	var week = Number(req.query.week);
+	var type = 'batters';
+	if (position.toLowerCase() === 'rp' || position.toLowerCase() === 'sp') {
+		type = 'pitchers';
+	}
+
+	if (!topPlayersCache[week] || !topPlayersCache[week][type]) {
+		if (!topPlayersCache[week]) {
+			topPlayersCache[week] = {};
 		}
-	});
+		console.log('create cache for batter & pithcer MVP');
+		cacheTopPlayers(type, week, leagueId, seasonId, position, req.query.category, function () {
+			return res.json(topPlayersCache[week][type]);
+		});
+	} else {
+		console.log('get cache for batter & pithcer MVP');
+		return res.json(topPlayersCache[week][type]);
+	}
 });
+
+// /* Calculate top player */
+// router.get('/topPlayers', function (req, res) {
+// 	PythonShell.run('./topplayeralgo.py',
+// 		{ mode: 'json', args: [req.query.week, leagueId, seasonId, req.query.position, req.query.category] }, function (err, results) {
+// 		if (err) {
+// 			return res.json({ execSuccess: false, message: 'Failed to retrieve top players', data: {} });
+// 		} else {
+// 			return res.json({ execSuccess: true, message: 'Successfully retrieved top players', data: results[0] });
+// 		}
+// 	});
+// });
 
 
 /* Get scoreboard ticker scores and store in cache */
@@ -462,7 +482,5 @@ function populateCurrentPlayerStats(req, res) {
 		return res.json({execSuccess: true, message: 'Successfully updated database.'});
 	});
 }
-
-
 
 module.exports = router;

@@ -17,8 +17,8 @@ const MainContainerPage = React.createClass({
 				<div>
 					<div className="pure-menu pure-menu-horizontal fixedBannerContainer">
 						<div id="menuContainer">
-							<ul className="pure-menu-list">
-								
+							<ul className="pure-menu-list nav">
+
 								<li className="pure-menu-item">
 									<Link to="/" className="pure-menu-link">Home</Link>
 								</li>

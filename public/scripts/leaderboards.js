@@ -301,7 +301,7 @@ const StatBox = React.createClass({
 const TopPlayersBox = React.createClass({
 	render: function () {
 		return (
-			<div className="table-responsive-vertical shadow-z-1 col-md-12">
+			<div className="table-responsive-vertical shadow-z-1 col-md-12 topPlayerBox">
 				<TopPlayersDisplay
 					baseUrl={this.props.baseUrl}
 					position={this.props.position}

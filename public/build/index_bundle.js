@@ -65,7 +65,7 @@
 /******/ 	}
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "3afa2972e303b6353276"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "dd4377ffff5a091be878"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -32904,7 +32904,7 @@
 		render: function render() {
 			return _react3.default.createElement(
 				'div',
-				{ className: 'table-responsive-vertical shadow-z-1 col-md-12' },
+				{ className: 'table-responsive-vertical shadow-z-1 col-md-12 topPlayerBox' },
 				_react3.default.createElement(TopPlayersDisplay, {
 					baseUrl: this.props.baseUrl,
 					position: this.props.position,
@@ -33529,7 +33529,7 @@
 					{ className: this.props.aLeader },
 					_react3.default.createElement(
 						'span',
-						null,
+						{ className: 'score' },
 						this.props.aResult,
 						' '
 					),
@@ -33545,7 +33545,7 @@
 					{ className: this.props.bLeader },
 					_react3.default.createElement(
 						'span',
-						null,
+						{ className: 'score' },
 						this.props.bResult,
 						' '
 					),
@@ -61256,7 +61256,7 @@
 							{ id: 'menuContainer' },
 							_react3.default.createElement(
 								'ul',
-								{ className: 'pure-menu-list' },
+								{ className: 'pure-menu-list nav' },
 								_react3.default.createElement(
 									'li',
 									{ className: 'pure-menu-item' },

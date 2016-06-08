@@ -65,7 +65,7 @@
 /******/ 	}
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "3afa2972e303b6353276"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "dd4377ffff5a091be878"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -21787,7 +21787,7 @@
 					{ className: this.props.aLeader },
 					_react3.default.createElement(
 						'span',
-						null,
+						{ className: 'score' },
 						this.props.aResult,
 						' '
 					),
@@ -21803,7 +21803,7 @@
 					{ className: this.props.bLeader },
 					_react3.default.createElement(
 						'span',
-						null,
+						{ className: 'score' },
 						this.props.bResult,
 						' '
 					),

@@ -67,11 +67,11 @@ const ScoreNode = React.createClass({
 		return (
 			<li className="pure-menu-item scoreNode">
 				<div className={this.props.aLeader}>
-					<span>{this.props.aResult} </span>
+					<span className="score">{this.props.aResult} </span>
 					<span>{this.props.aTeamName} </span>
 				</div>
 				<div className={this.props.bLeader}>
-					<span>{this.props.bResult} </span>
+					<span className="score">{this.props.bResult} </span>
 					<span>{this.props.bTeamName} </span>
 				</div>
 			</li>
