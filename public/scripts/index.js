@@ -16,23 +16,25 @@ const MainContainerPage = React.createClass({
 			<div className="innerMainContainer">
 				<div>
 					<div className="pure-menu pure-menu-horizontal fixedBannerContainer">
-						<ul className="pure-menu-list">
-							
-							<li className="pure-menu-item">
-								<Link to="/" className="pure-menu-link">Home</Link>
-							</li>
-							<li className="pure-menu-item">
-								<Link to="/news" className="pure-menu-link">News</Link>
-							</li>
-							<li className="pure-menu-item">
-								<a href="/createEditor" className="pure-menu-link">Editor</a>
-							</li>
-							<li className="pure-menu-item">
-								<a href="#" className="pure-menu-link">Contact</a>
-							</li>
-						</ul>
+						<div id="menuContainer">
+							<ul className="pure-menu-list">
+								
+								<li className="pure-menu-item">
+									<Link to="/" className="pure-menu-link">Home</Link>
+								</li>
+								<li className="pure-menu-item">
+									<Link to="/news" className="pure-menu-link">News</Link>
+								</li>
+								<li className="pure-menu-item">
+									<a href="/createEditor" className="pure-menu-link">Editor</a>
+								</li>
+								<li className="pure-menu-item">
+									<a href="#" className="pure-menu-link">Contact</a>
+								</li>
+							</ul>
 
-						<Scoreticker.ScoreTicker />
+							<Scoreticker.ScoreTicker />
+						</div>
 					</div>
 				</div>
 

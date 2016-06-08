@@ -118,6 +118,10 @@ tr .statValue {
     max-width: 1300px;
 }
 
+.innerMainContainer {
+
+}
+
 #quillContainer {
     width: 800px;
     margin-left: auto ;
@@ -183,6 +187,12 @@ tr .statValue {
     padding-right: 20px;
     font-size: 0.9em;
     cursor: pointer;
+}
+
+#menuContainer {
+    margin-right: auto;
+    margin-left: auto;
+    max-width: 1100px;
 }
 
 

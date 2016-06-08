@@ -65,7 +65,7 @@
 /******/ 	}
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "e67f2bde427fdb3235fa"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "3afa2972e303b6353276"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -61252,46 +61252,50 @@
 						'div',
 						{ className: 'pure-menu pure-menu-horizontal fixedBannerContainer' },
 						_react3.default.createElement(
-							'ul',
-							{ className: 'pure-menu-list' },
+							'div',
+							{ id: 'menuContainer' },
 							_react3.default.createElement(
-								'li',
-								{ className: 'pure-menu-item' },
+								'ul',
+								{ className: 'pure-menu-list' },
 								_react3.default.createElement(
-									_reactRouter.Link,
-									{ to: '/', className: 'pure-menu-link' },
-									'Home'
+									'li',
+									{ className: 'pure-menu-item' },
+									_react3.default.createElement(
+										_reactRouter.Link,
+										{ to: '/', className: 'pure-menu-link' },
+										'Home'
+									)
+								),
+								_react3.default.createElement(
+									'li',
+									{ className: 'pure-menu-item' },
+									_react3.default.createElement(
+										_reactRouter.Link,
+										{ to: '/news', className: 'pure-menu-link' },
+										'News'
+									)
+								),
+								_react3.default.createElement(
+									'li',
+									{ className: 'pure-menu-item' },
+									_react3.default.createElement(
+										'a',
+										{ href: '/createEditor', className: 'pure-menu-link' },
+										'Editor'
+									)
+								),
+								_react3.default.createElement(
+									'li',
+									{ className: 'pure-menu-item' },
+									_react3.default.createElement(
+										'a',
+										{ href: '#', className: 'pure-menu-link' },
+										'Contact'
+									)
 								)
 							),
-							_react3.default.createElement(
-								'li',
-								{ className: 'pure-menu-item' },
-								_react3.default.createElement(
-									_reactRouter.Link,
-									{ to: '/news', className: 'pure-menu-link' },
-									'News'
-								)
-							),
-							_react3.default.createElement(
-								'li',
-								{ className: 'pure-menu-item' },
-								_react3.default.createElement(
-									'a',
-									{ href: '/createEditor', className: 'pure-menu-link' },
-									'Editor'
-								)
-							),
-							_react3.default.createElement(
-								'li',
-								{ className: 'pure-menu-item' },
-								_react3.default.createElement(
-									'a',
-									{ href: '#', className: 'pure-menu-link' },
-									'Contact'
-								)
-							)
-						),
-						_react3.default.createElement(Scoreticker.ScoreTicker, null)
+							_react3.default.createElement(Scoreticker.ScoreTicker, null)
+						)
 					)
 				),
 				this.props.children
