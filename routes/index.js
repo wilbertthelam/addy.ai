@@ -14,13 +14,16 @@ var CronJob = require('cron').CronJob;
 var request = require('request');
 
 // current week MANUALLY SET FOR NOW
-var currentWeek = 9;
+var currentWeek = 10;
 
 // league information
 var leagueId = 44067;
 var seasonId = 2016;
 var totalTeams = 8;
 
+// localcache variables
+var scoreboard = null;
+var powerRankings = null;
 /* GET home page. */
 router.get('/', function (req, res) {
 	res.render('index', { title: 'addy.ai' });
@@ -129,27 +132,77 @@ router.get('/topWeeklyPlayerStats', function (req, res) {
 	});
 });
 
+
+// /* Get top player and store in cache */
+// function cacheTopPlayers(week, leagueId, seasonId, position, category, callback) {
+// 	var topPlayers;
+// 	PythonShell.run('./topplayeralgo.py',
+// 		{ mode: 'json', args: [week, leagueId, seasonId, position, category] }, function (err, results) {
+// 		if (err) {
+// 			topPlayers = { execSuccess: false, message: 'Failed to retrieve top players', data: {} };
+// 		} else {
+// 			topPlayers = { execSuccess: true, message: 'Successfully retrieved top players', data: results[0] };
+// 		}
+// 		callback();
+// 	});
+// }
+
+// /* Calculate top player */
+// router.get('/topPlayers', function (req, res) {
+// 	if (topPlayers === null) {
+// 		cacheTopPlayers(req.query.week, leagueId, seasonId, req.query.position, req.query.category, function () {
+// 			return res.json(topPlayers);
+// 		});
+// 	} else {
+// 		return res.json(topPlayers);
+// 	}
+// });
+
 /* Calculate top player */
 router.get('/topPlayers', function (req, res) {
-	// take in req.query.position
-	//			req.query.category
-	var topPlayers;
 	PythonShell.run('./topplayeralgo.py',
 		{ mode: 'json', args: [req.query.week, leagueId, seasonId, req.query.position, req.query.category] }, function (err, results) {
 		if (err) {
 			return res.json({ execSuccess: false, message: 'Failed to retrieve top players', data: {} });
+		} else {
+			return res.json({ execSuccess: true, message: 'Successfully retrieved top players', data: results[0] });
 		}
-
-		//console.log(JSON.stringify(results[0]));
-		topPlayers = results[0];
-		return res.json({ execSuccess: true, message: 'Successfully retrieved top players', data: topPlayers });
 	});
 });
 
+
+/* Get scoreboard ticker scores and store in cache */
+function saveScoreboard(callback) {
+	// take in req.query.position
+	//			req.query.category
+	PythonShell.run('./scraper/liveMatchupScoreScraper.py',
+		{ mode: 'json', args: [currentWeek, leagueId, seasonId] }, function (err, results) {
+		if (err) {
+			scoreboard = { execSuccess: false, message: 'Failed to retrieve current scores', data: {} };
+		} else {
+			scoreboard = { execSuccess: true, message: 'Successfully retrieved current scores', data: results[0] };
+		}
+		callback();
+	});
+};
+
+/* GET scoreboard data */
+router.get('/scoreboard', function (req, res) {
+	if (scoreboard === null) {
+		saveScoreboard(function () {
+			return res.json(scoreboard);
+		});
+	} else {
+		return res.json(scoreboard);
+	}
+});
+
+
+
 /* Calculate power rankings*/
-router.get('/powerRankings', function (req, res) {
+function cachePowerRankings(totalTeams, currentWeek, callback) {
 	// run python web scraper and return data as JSON
-	var powerRankings;
+	var powerRankings2;
 	var teamResults;
 	async.series({
 		runPyScript : function(cb0) {
@@ -159,7 +212,7 @@ router.get('/powerRankings', function (req, res) {
 				}
 
 				//console.log(JSON.stringify(results[0]));
-				powerRankings = results[0];
+				powerRankings2 = results[0];
 				cb0(null, null);
 			});
 		},
@@ -168,7 +221,8 @@ router.get('/powerRankings', function (req, res) {
 			var statement = 'SELECT * FROM teams ORDER BY team_id;';
 			connection.query(statement, function(err, results) {
 				if (err) {
-					return res.json({ execSuccess: false, message: 'Cannot get teams.', error: err});
+					powerRankings = ({ execSuccess: false, message: 'Cannot get teams.', error: err});
+					return callback();
 				} else {
 					teamResults = results;
 					cb1(null, null);
@@ -182,12 +236,27 @@ router.get('/powerRankings', function (req, res) {
 			throw err;
 		}
 		for (var i = 0; i < teamResults.length; i++) {
-			teamResults[i]['pr_score'] = powerRankings[i+1];
+			teamResults[i]['pr_score'] = powerRankings2[i+1];
 		}
-		teamResults.sort(function(b,a) {return (a.pr_score > b.pr_score) ? 1 : ((b.pr_score > a.pr_score) ? -1 : 0);} );
-		return res.json({execSuccess: true, data: teamResults});
+		teamResults.sort(function (b,a) {
+			return (a.pr_score > b.pr_score) ? 1 : ((b.pr_score > a.pr_score) ? -1 : 0);
+		});
+		powerRankings = { execSuccess: true, data: teamResults };
+		return callback();
 	});
+}
+
+/* Calculate power rankings */
+router.get('/powerRankings', function (req, res) {
+	if (powerRankings === null) {
+		cachePowerRankings(totalTeams, currentWeek, function () {
+			return res.json(powerRankings);
+		});
+	} else {
+		return res.json(powerRankings);
+	}
 });
+
 
 /* Populate all the old stats prior to a certain week */
 router.get('/populatePastStats', function (req, res) {
@@ -195,7 +264,7 @@ router.get('/populatePastStats', function (req, res) {
 });
 
 /* Populate all the current week's stats */
-router.get('/populateCurrentStats', function (req, res) {
+router.get('/populateCurrentStats', function (req, res, next) {
 	return populateCurrentStats(req, res);
 });
 
@@ -334,6 +403,7 @@ function populateCurrentStats(req, res) {
 		if (err) {
 			throw err;
 		}
+		cachePowerRankings(totalTeams, currentWeek, function() {});
 		return res.json({execSuccess: true, message: 'Successfully updated database.'});
 	});
 }

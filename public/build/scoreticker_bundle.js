@@ -260,7 +260,7 @@
 /******/ 			hotSetStatus("prepare");
 /******/ 			hotCallback = callback;
 /******/ 			hotUpdate = {};
-/******/ 			var chunkId = 3;
+/******/ 			var chunkId = 2;
 /******/ 			{ // eslint-disable-line no-lone-blocks
 /******/ 				/*globals chunkId */
 /******/ 				hotEnsureUpdateChunk(chunkId);
@@ -583,7 +583,7 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(312);
+	__webpack_require__(313);
 	module.exports = __webpack_require__(219);
 
 
@@ -21663,7 +21663,8 @@
 /* 309 */,
 /* 310 */,
 /* 311 */,
-/* 312 */
+/* 312 */,
+/* 313 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(module) {'use strict';
@@ -21692,20 +21693,18 @@
 	
 	var _components = {
 		_component: {},
-		_component2: {},
-		_component3: {},
-		_component4: {}
+		_component2: {}
 	};
 	
 	var _reactTransformHmr2 = (0, _reactTransformHmr4.default)({
-		filename: 'C:/Users/Wilbert Lam/Projects/addy.ai/public/scripts/news.js',
+		filename: 'C:/Users/Wilbert Lam/Projects/addy.ai/public/scripts/scoreticker.js',
 		components: _components,
 		locals: [module],
 		imports: [_react3.default]
 	});
 	
 	var _reactTransformCatchErrors2 = (0, _reactTransformCatchErrors4.default)({
-		filename: 'C:/Users/Wilbert Lam/Projects/addy.ai/public/scripts/news.js',
+		filename: 'C:/Users/Wilbert Lam/Projects/addy.ai/public/scripts/scoreticker.js',
 		components: _components,
 		locals: [],
 		imports: [_react3.default, _redboxReact3.default]
@@ -21716,216 +21715,114 @@
 			return _reactTransformHmr2(_reactTransformCatchErrors2(Component, id), id);
 		};
 	} /* Wilbert Lam
-	  05/16/2016
-	  news.js
+	  06/07/2016
+	  scoreticker.js
 	  
-	  Contains components for the news
+	  Contains components for the score ticker
 	  
 	  */
 	
-	var NewsContainer = _wrapComponent('_component')(_react3.default.createClass({
-		displayName: 'NewsContainer',
+	//--------------------------
+	// ScoreTicker information
+	//--------------------------
+	
+	var ScoreTicker = _wrapComponent('_component')(_react3.default.createClass({
+		displayName: 'ScoreTicker',
 	
 		getInitialState: function getInitialState() {
-			return {
-				data: [{
-					title: '',
-					update_time: '',
-					author: '',
-					body: ''
-				}],
-				articleId: ''
-			};
-		},
-		componentWillMount: function componentWillMount() {
-			this.loadArticle();
-		},
-		loadArticle: function loadArticle() {
-			_jquery2.default.ajax({
-				url: '/news/returnArticlesList',
-				dataType: 'json',
-				method: 'GET',
-				cache: false,
-				success: function (data) {
-					console.log('This is data; ' + JSON.stringify(data.data));
-					this.setState({ data: data.data });
-					this.setState({ articleId: data.data[0].article_id });
-				}.bind(this),
-				error: function error(xhr, status, err) {
-					console.error(err.toString());
-				}
-			});
-		},
-		openArticle: function openArticle(articleId) {
-			console.log('open article' + articleId);
-			this.setState({ articleId: articleId });
-		},
-		render: function render() {
-			if (this.state.data.length > 0 && this.state.articleId !== '') {
-				return _react3.default.createElement(
-					'div',
-					{ className: 'container' },
-					_react3.default.createElement(
-						'div',
-						{ className: 'col-sm-4 sidebar' },
-						_react3.default.createElement(
-							'div',
-							{ id: 'sidebar-wrapper', className: 'sidebar-toggle' },
-							_react3.default.createElement(Sidebar, {
-								currentArticleId: this.state.articleId,
-								articlesList: this.state.data,
-								openArticle: this.openArticle
-							})
-						)
-					),
-					_react3.default.createElement(
-						'div',
-						{ className: 'col-sm-8' },
-						_react3.default.createElement(Article, {
-							url: '/news/returnArticleById?articleId=',
-							articleId: this.state.articleId
-						})
-					)
-				);
-			}
-	
-			return _react3.default.createElement('div', { className: 'container' });
-		}
-	}));
-	
-	var Sidebar = _wrapComponent('_component2')(_react3.default.createClass({
-		displayName: 'Sidebar',
-	
-		getInitialState: function getInitialState() {
-			return { data: [{
-					article_id: this.props.currentArticleId,
-					title: ''
-				}]
-			};
-		},
-		render: function render() {
-			var that = this;
-			var clickState = 'articleNav';
-			var ArticleNavNodes = this.props.articlesList.map(function (article) {
-				if (that.props.currentArticleId === article.article_id) {
-					clickState = 'articleNav navSelected';
-				} else {
-					clickState = 'articleNav';
-				}
-				console.log('current click state= ' + clickState);
-				return _react3.default.createElement(ArticleNav, {
-					key: article.article_id,
-					title: article.title,
-					articleId: article.article_id,
-					openArticle: that.props.openArticle,
-					clickState: clickState
-				});
-			});
-			return _react3.default.createElement(
-				'div',
-				{ className: 'newsNavBar shadow-z-1' },
-				_react3.default.createElement(
-					'div',
-					{ className: 'articleNavHeader' },
-					'Most recent stories'
-				),
-				ArticleNavNodes
-			);
-		}
-	}));
-	
-	var ArticleNav = _wrapComponent('_component3')(_react3.default.createClass({
-		displayName: 'ArticleNav',
-	
-		propTypes: {
-			title: _react3.default.PropTypes.string,
-			articleId: _react3.default.PropTypes.number
-		},
-		click: function click() {
-			this.props.openArticle(this.props.articleId);
-		},
-		render: function render() {
-			return _react3.default.createElement(
-				'div',
-				{ className: this.props.clickState, onClick: this.click },
-				this.props.title,
-				' ',
-				this.props.articleId
-			);
-		}
-	}));
-	
-	var Article = _wrapComponent('_component4')(_react3.default.createClass({
-		displayName: 'Article',
-	
-		getInitialState: function getInitialState() {
-			return {
-				data: [{
-					title: '',
-					author: '',
-					body: ''
-				}]
-			};
+			return { data: [] };
 		},
 		componentDidMount: function componentDidMount() {
-			console.log('this is what id shoudl be= ' + this.props.articleId);
-			this.loadArticle(this.props.url, this.props.articleId);
+			this.getScores();
+			// setInterval(this.loadTeamsFromServer, this.props.pollInterval);
 		},
-		componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
-			// console.log('URL: ' + nextProps.url);
-			// console.log('articleId: ' + nextProps.articleId);
-			this.loadArticle(nextProps.url, nextProps.articleId);
-		},
-		loadArticle: function loadArticle(url, articleId) {
+		getScores: function getScores() {
 			_jquery2.default.ajax({
-				url: url + articleId,
+				url: '/scoreboard',
 				dataType: 'json',
-				method: 'GET',
 				cache: false,
 				success: function (data) {
-					console.log(data.data);
 					this.setState({ data: data.data });
 				}.bind(this),
 				error: function error(xhr, status, err) {
-					console.error(status, err.toString());
+					console.error('scoreboard error', status, err.toString());
 				}
 			});
 		},
 		render: function render() {
-			var s = this.state.data[0];
-			var date = new Date(s.update_time);
-			var formattedDate = date.toDateString();
+			var i = -1;
+			var scoreNodes = this.state.data.map(function (score) {
+				i++;
+				return _react3.default.createElement(ScoreNode, {
+					key: i,
+					aTeamId: score.teamId_a,
+					bTeamId: score.teamId_b,
+					aTeamName: score.teamName_a,
+					bTeamName: score.teamName_b,
+					aResult: score.result_a,
+					bResult: score.result_b,
+					tieResult: score.result_tie,
+					aLeader: score.result_a >= score.result_b ? 'bold' : '',
+					bLeader: score.result_b >= score.result_a ? 'bold' : ''
+				});
+			});
+	
 			return _react3.default.createElement(
-				'div',
-				{ className: 'articleContainer' },
+				'ul',
+				{ className: 'pure-menu-list' },
+				scoreNodes
+			);
+		}
+	}));
+	
+	var ScoreNode = _wrapComponent('_component2')(_react3.default.createClass({
+		displayName: 'ScoreNode',
+	
+		render: function render() {
+			return _react3.default.createElement(
+				'li',
+				{ className: 'pure-menu-item scoreNode' },
 				_react3.default.createElement(
-					'h1',
-					null,
-					s.title
-				),
-				_react3.default.createElement(
-					'span',
-					null,
-					' ',
-					formattedDate,
-					' '
+					'div',
+					{ className: this.props.aLeader },
+					_react3.default.createElement(
+						'span',
+						null,
+						this.props.aResult,
+						' '
+					),
+					_react3.default.createElement(
+						'span',
+						null,
+						this.props.aTeamName,
+						' '
+					)
 				),
 				_react3.default.createElement(
 					'div',
-					{ id: 'article_author' },
-					'by ',
-					s.author
-				),
-				_react3.default.createElement('div', { id: 'article_body', dangerouslySetInnerHTML: { __html: s.body } })
+					{ className: this.props.bLeader },
+					_react3.default.createElement(
+						'span',
+						null,
+						this.props.bResult,
+						' '
+					),
+					_react3.default.createElement(
+						'span',
+						null,
+						this.props.bTeamName,
+						' '
+					)
+				)
 			);
 		}
 	}));
 	
 	module.exports = {
-		NewsContainer: NewsContainer
+		ScoreTicker: ScoreTicker
 	};
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(37)(module)))
 
 /***/ }
 /******/ ]);
-//# sourceMappingURL=news_bundle.js.map
+//# sourceMappingURL=scoreticker_bundle.js.map

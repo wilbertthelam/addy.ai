@@ -45,8 +45,8 @@ h2 {
 
 #article_body {
     margin-top: 0px;
-    font-size: 1.3em;
-    font-weight: lighter;
+    font-size: 1em;
+    font-weight: 400;
 }
 .articleNav {
     margin-bottom:1px;
@@ -67,6 +67,7 @@ h2 {
     background-color: #C7C7C7;
     color: black;
     border: #F9F9F9 1px solid;
+    font-weight: 600;
 }
 
 .articleNav:hover {
@@ -112,6 +113,9 @@ tr .statValue {
 
 .container {
     margin: 0px;
+    margin-right: auto;
+    margin-left: auto;
+    max-width: 1300px;
 }
 
 #quillContainer {
@@ -137,10 +141,10 @@ tr .statValue {
  */
 
 .banner {
-    background: #510000;
+    background: #820000;
     text-align: center;
     background-size: cover;
-    height: 70px;
+    height: 20px;
     width: 100%;
     margin-bottom: 0em;
     display: table;
@@ -149,17 +153,15 @@ tr .statValue {
 .banner-head {
     display: table-cell;
     vertical-align: middle;
-    margin-bottom: 0;
-    font-size: 1.8em;
-    color: white;
-    font-weight: 500;
-    text-shadow: 0 1px 1px black;
+    padding: 8px;
+    font-size: 1.2em;
+    color: #E31313;
+    font-weight: 600;
 }
 
-.banner-head #title {
-    border: 2px solid white;
-    padding: 6px;
-
+#title {
+    border: 2px solid #E31313;
+    padding: 5px;
 }
 
 .banner-head #subtitle {
@@ -173,6 +175,14 @@ tr .statValue {
     left: 0px;
     background: white;
     z-index: 100;
+}
+
+.scoreNode {
+    padding: 8px;
+    padding-left: 20px;
+    padding-right: 20px;
+    font-size: 0.9em;
+    cursor: pointer;
 }
 
 
