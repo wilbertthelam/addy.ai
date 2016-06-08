@@ -40,7 +40,7 @@ if (position in ['SP', 'RP']):
 for stat in lst:
     meanData[stat] = 0
     #url = "https://addyai.herokuapp.com/topWeeklyPlayerStats"
-    url = "http://localhost:3000/topWeeklyPlayerStats"
+    url = "http://addyai.herokuapp.com/topWeeklyPlayerStats"
     url += "?week=" + str(currentWeek) + "&leagueId=" + str(leagueId) + "&seasonId=" + str(seasonId) + "&position=" + position + "&category=" + stat
     myResponse = requests.get(url)
     if myResponse.ok:
