@@ -69,7 +69,7 @@ const LeaderboardPage = React.createClass({
 		const weeks = [];
 		// console.log('current week= ' + currentWeek);
 		for (let i = currentWeek; i > 0; i--) {
-			weeks.push(<MenuItem eventKey={i} onSelect={this.changeWeek}>Week {i}</MenuItem>);
+			weeks.push(<MenuItem eventKey={i} key={i} onSelect={this.changeWeek}>Week {i}</MenuItem>);
 		}
 		console.log(weeks);
 		this.setState({ menuWeeks: weeks });
@@ -99,24 +99,48 @@ const LeaderboardPage = React.createClass({
 										{menuWeeksNodes}
 									</DropdownButton>
 								</div>
-								<div className="col-sm-3">
-									<h2>Batting leaders</h2>
-									<Leaderboards.TeamStatsBox
-										url="/weeklyPlayerStats"
-										week={this.state.week}
-										categories={['R', 'HR', 'RBI', 'SB', 'OBP']}
-										displayField="player_name"
-									/>
-								</div>
 
-								<div className="col-sm-3">
-									<h2>Pitching leaders</h2>
-									<Leaderboards.TeamStatsBox
-										url="/weeklyPlayerStats"
-										week={this.state.week}
-										categories={['K', 'W', 'SV', 'ERA', 'WHIP']}
-										displayField="player_name"
-									/>
+								<div className="col-md-6">
+									<div className="col-md-6">
+										<h2>Batting MVP</h2>
+										<Leaderboards.TopPlayersBox
+											baseUrl="/topPlayers"
+											position="SS"
+											categories={['R', 'HR', 'RBI', 'SB', 'OBP']}
+											week={this.state.week}
+										/>
+									</div>
+
+									<div className="col-md-6">
+										<h2>Pitching MVP</h2>
+										<Leaderboards.TopPlayersBox
+											baseUrl="/topPlayers"
+											position="SP"
+											categories={['K', 'W', 'SV', 'ERA', 'WHIP']}
+											week={this.state.week}
+										/>
+									</div>
+
+									<div className="col-sm-6">
+										<h2>Batting leaders</h2>
+										<Leaderboards.TeamStatsBox
+											url="/weeklyPlayerStats"
+											week={this.state.week}
+											categories={['R', 'HR', 'RBI', 'SB', 'OBP']}
+											displayField="player_name"
+										/>
+									</div>
+
+									<div className="col-sm-6">
+										<h2>Pitching leaders</h2>
+										<Leaderboards.TeamStatsBox
+											url="/weeklyPlayerStats"
+											week={this.state.week}
+											categories={['K', 'W', 'SV', 'ERA', 'WHIP']}
+											displayField="player_name"
+										/>
+									</div>
+									
 								</div>
 
 								<div className="col-md-6">

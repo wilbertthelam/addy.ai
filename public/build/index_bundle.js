@@ -65,7 +65,7 @@
 /******/ 	}
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "62b40b804420cea1a580"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "9f17e3306092c52fa4e9"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -32294,7 +32294,14 @@
 		_component7: {},
 		_component8: {},
 		_component9: {},
-		_component10: {}
+		_component10: {},
+		_component11: {},
+		_component12: {},
+		_component13: {},
+		_component14: {},
+		_component15: {},
+		_component16: {},
+		_component17: {}
 	};
 	
 	var _reactTransformHmr2 = (0, _reactTransformHmr4.default)({
@@ -32557,7 +32564,11 @@
 		render: function render() {
 			return _react3.default.createElement(
 				'button',
-				{ onClick: this.handleClick, type: 'button', className: 'btn btn-primary ' + this.props.activeStatus },
+				{
+					onClick: this.handleClick,
+					type: 'button',
+					className: 'btn btn-primary ' + this.props.activeStatus
+				},
 				this.props.statCategory
 			);
 		}
@@ -32614,7 +32625,7 @@
 			var i = 0;
 			var statNodes = this.props.statData.map(function (statline) {
 				i++;
-				if (i <= 20) {
+				if (i <= 15) {
 					return _react3.default.createElement(Stat, {
 						key: i,
 						displayField: displayField,
@@ -32652,9 +32663,246 @@
 		}
 	}));
 	
+	var TopPlayersBox = _wrapComponent('_component11')(_react3.default.createClass({
+		displayName: 'TopPlayersBox',
+	
+		render: function render() {
+			return _react3.default.createElement(
+				'div',
+				{ className: 'table-responsive-vertical shadow-z-1 col-md-12' },
+				_react3.default.createElement(TopPlayersDisplay, {
+					baseUrl: this.props.baseUrl,
+					position: this.props.position,
+					categories: this.props.categories,
+					week: this.props.week
+				})
+			);
+		}
+	}));
+	
+	// const OptionsSelect = React.createClass({
+	// 	render: function () {
+	// 		return (
+	// 			<div>
+	// 				1B 2B SS 3B
+	// 			</div>
+	// 		);
+	// 	},
+	// });
+	
+	// Container for top players
+	var TopPlayersDisplay = _wrapComponent('_component12')(_react3.default.createClass({
+		displayName: 'TopPlayersDisplay',
+	
+		getInitialState: function getInitialState() {
+			return {
+				data: []
+			};
+		},
+		componentDidMount: function componentDidMount() {
+			this.getPlayerData(this.props.week);
+		},
+		componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+			this.getPlayerData(nextProps.week);
+		},
+		getPlayerData: function getPlayerData(week) {
+			console.log("current week= " + week);
+			_jquery2.default.ajax({
+				// add in leagueId, seasonId
+				url: this.props.baseUrl + '?position=' + this.props.position + '&week=' + week,
+				dataType: 'json',
+				cache: false,
+				success: function (data) {
+					console.log(JSON.stringify(data));
+					this.setState({ data: data.data });
+				}.bind(this),
+				error: function (xhr, status, err) {
+					console.error(this.props.baseUrl, status, err.toString());
+				}.bind(this)
+			});
+		},
+		render: function render() {
+			return _react3.default.createElement(PlayerInfo, {
+				data: this.state.data,
+				categories: this.props.categories
+			});
+		}
+	}));
+	
+	var Picture = _wrapComponent('_component13')(_react3.default.createClass({
+		displayName: 'Picture',
+	
+		// componentDidMount: function () {
+		// 	getPicture(this.props.pictureUrl);
+		// },
+		getPicture: function getPicture() {
+			// ajax get here
+		},
+		render: function render() {
+			return _react3.default.createElement('img', { src: 'http://newton.physics.uiowa.edu/~sbaalrud/empty_profile.gif', alt: 'profilePic', height: '60', width: '60' });
+		}
+	}));
+	
+	var PlayerInfo = _wrapComponent('_component14')(_react3.default.createClass({
+		displayName: 'PlayerInfo',
+	
+		propTypes: {
+			data: _react3.default.PropTypes.array
+		},
+		render: function render() {
+			var _this = this;
+	
+			var playerNodes = [];
+			if (this.props.data.length > 0) {
+				(function () {
+					var i = 1;
+					playerNodes = _this.props.data.splice(1, 4).map(function (player) {
+						i++;
+						return _react3.default.createElement(PlayerInfoList, {
+							key: player.player_id,
+							index: i,
+							playerName: player.player_name,
+							teamName: player.team_name,
+							ownerName: player.owner_name
+						});
+					});
+				})();
+			}
+			return _react3.default.createElement(
+				'div',
+				{ className: 'row' },
+				_react3.default.createElement(PlayerFirstNode, {
+					data: this.props.data[0],
+					categories: this.props.categories
+				})
+			);
+		}
+	}));
+	
+	var PlayerInfoList = _wrapComponent('_component15')(_react3.default.createClass({
+		displayName: 'PlayerInfoList',
+	
+		render: function render() {
+			return _react3.default.createElement(
+				'tr',
+				null,
+				_react3.default.createElement(
+					'td',
+					{ className: 'bold' },
+					this.props.index
+				),
+				_react3.default.createElement(
+					'td',
+					null,
+					this.props.playerName,
+					_react3.default.createElement('br', null),
+					this.props.teamName
+				)
+			);
+		}
+	}));
+	
+	var PlayerFirstNode = _wrapComponent('_component16')(_react3.default.createClass({
+		displayName: 'PlayerFirstNode',
+	
+		render: function render() {
+			if (this.props.data) {
+				return _react3.default.createElement(
+					'div',
+					{ className: 'row' },
+					_react3.default.createElement(
+						'div',
+						{ className: 'col-md-3' },
+						_react3.default.createElement(Picture, null)
+					),
+					_react3.default.createElement(
+						'div',
+						{ className: 'col-md-9' },
+						_react3.default.createElement(
+							'div',
+							null,
+							_react3.default.createElement(
+								'span',
+								{ className: 'bold' },
+								this.props.data.player_name
+							),
+							_react3.default.createElement(
+								'span',
+								null,
+								', ',
+								this.props.data.player_position
+							)
+						),
+						_react3.default.createElement(
+							'div',
+							null,
+							this.props.data.team_name
+						)
+					),
+					_react3.default.createElement(
+						'div',
+						{ className: 'col-md-12' },
+						_react3.default.createElement(PlayerStatLine, {
+							data: this.props.data,
+							categories: this.props.categories
+						})
+					)
+				);
+			}
+			return null;
+		}
+	}));
+	
+	var PlayerStatLine = _wrapComponent('_component17')(_react3.default.createClass({
+		displayName: 'PlayerStatLine',
+	
+		render: function render() {
+			var headers = this.props.categories.map(function (category) {
+				return _react3.default.createElement(
+					'th',
+					{ key: category },
+					category
+				);
+			});
+	
+			var that = this;
+			var stats = this.props.categories.map(function (category) {
+				return _react3.default.createElement(
+					'td',
+					{ key: category },
+					that.props.data[category]
+				);
+			});
+	
+			return _react3.default.createElement(
+				'table',
+				{ className: 'table table-hover table-mc-amber' },
+				_react3.default.createElement(
+					'thead',
+					null,
+					_react3.default.createElement(
+						'tr',
+						null,
+						headers
+					)
+				),
+				_react3.default.createElement(
+					'tbody',
+					null,
+					_react3.default.createElement(
+						'tr',
+						null,
+						stats
+					)
+				)
+			);
+		}
+	}));
+	
 	module.exports = {
 		TeamStatsBox: TeamStatsBox,
-		PRTeamListBox: PRTeamListBox
+		PRTeamListBox: PRTeamListBox,
+		TopPlayersBox: TopPlayersBox
 	};
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(41)(module)))
 
@@ -61326,7 +61574,7 @@
 			for (var i = currentWeek; i > 0; i--) {
 				weeks.push(_react3.default.createElement(
 					_reactBootstrap.MenuItem,
-					{ eventKey: i, onSelect: this.changeWeek },
+					{ eventKey: i, key: i, onSelect: this.changeWeek },
 					'Week ',
 					i
 				));
@@ -61382,33 +61630,67 @@
 								),
 								_react3.default.createElement(
 									'div',
-									{ className: 'col-sm-3' },
+									{ className: 'col-md-6' },
 									_react3.default.createElement(
-										'h2',
-										null,
-										'Batting leaders'
+										'div',
+										{ className: 'col-md-6' },
+										_react3.default.createElement(
+											'h2',
+											null,
+											'Batting MVP'
+										),
+										_react3.default.createElement(Leaderboards.TopPlayersBox, {
+											baseUrl: '/topPlayers',
+											position: 'SS',
+											categories: ['R', 'HR', 'RBI', 'SB', 'OBP'],
+											week: this.state.week
+										})
 									),
-									_react3.default.createElement(Leaderboards.TeamStatsBox, {
-										url: '/weeklyPlayerStats',
-										week: this.state.week,
-										categories: ['R', 'HR', 'RBI', 'SB', 'OBP'],
-										displayField: 'player_name'
-									})
-								),
-								_react3.default.createElement(
-									'div',
-									{ className: 'col-sm-3' },
 									_react3.default.createElement(
-										'h2',
-										null,
-										'Pitching leaders'
+										'div',
+										{ className: 'col-md-6' },
+										_react3.default.createElement(
+											'h2',
+											null,
+											'Pitching MVP'
+										),
+										_react3.default.createElement(Leaderboards.TopPlayersBox, {
+											baseUrl: '/topPlayers',
+											position: 'SP',
+											categories: ['K', 'W', 'SV', 'ERA', 'WHIP'],
+											week: this.state.week
+										})
 									),
-									_react3.default.createElement(Leaderboards.TeamStatsBox, {
-										url: '/weeklyPlayerStats',
-										week: this.state.week,
-										categories: ['K', 'W', 'SV', 'ERA', 'WHIP'],
-										displayField: 'player_name'
-									})
+									_react3.default.createElement(
+										'div',
+										{ className: 'col-sm-6' },
+										_react3.default.createElement(
+											'h2',
+											null,
+											'Batting leaders'
+										),
+										_react3.default.createElement(Leaderboards.TeamStatsBox, {
+											url: '/weeklyPlayerStats',
+											week: this.state.week,
+											categories: ['R', 'HR', 'RBI', 'SB', 'OBP'],
+											displayField: 'player_name'
+										})
+									),
+									_react3.default.createElement(
+										'div',
+										{ className: 'col-sm-6' },
+										_react3.default.createElement(
+											'h2',
+											null,
+											'Pitching leaders'
+										),
+										_react3.default.createElement(Leaderboards.TeamStatsBox, {
+											url: '/weeklyPlayerStats',
+											week: this.state.week,
+											categories: ['K', 'W', 'SV', 'ERA', 'WHIP'],
+											displayField: 'player_name'
+										})
+									)
 								),
 								_react3.default.createElement(
 									'div',

@@ -17,6 +17,10 @@ h2 {
     font-weight: 600;
 }
 
+.bold {
+    font-weight: 600;
+}
+
 #mainContainer {
     margin-top: 36px;
 }

@@ -103,7 +103,7 @@ router.get('/cumulativeStats', function(req, res) {
 });
 
 /* GET current player week stats information. */
-router.get('/weeklyPlayerStats', function(req, res) {
+router.get('/weeklyPlayerStats', function (req, res) {
 	var statement = 'SELECT * FROM weekly_player_statv WHERE week = ? AND league_id = ? AND season_id = ?;';
 	connection.query(statement, [req.query.week, leagueId, seasonId], function(err, results) {
 		if (err) {
@@ -114,7 +114,39 @@ router.get('/weeklyPlayerStats', function(req, res) {
 	});
 });
 
-// /* Calculate power rankings*/
+/* GET current player week stats information by position and stat category, limited to top 20. */
+router.get('/topWeeklyPlayerStats', function (req, res) {
+	var statement = 'SELECT * FROM weekly_player_statv WHERE week = ?'
+		+ ' AND league_id = ? AND season_id = ?'
+		// + ' AND (player_position = ? OR player_position2 = ? OR player_position3 = ?)'
+		+ ' ORDER BY ' + req.query.category + ' DESC LIMIT 20;';
+	connection.query(statement, [req.query.week, leagueId, seasonId, req.query.position, req.query.position, req.query.position], function(err, results) {
+		if (err) {
+			return res.json({ execSuccess: false, message: 'Cannot get top player stats.', error: err});
+		} else {
+			return res.json({ execSuccess: true, message: 'Top player stats successfully retrieved.', data: results});
+		}
+	});
+});
+
+/* Calculate top player */
+router.get('/topPlayers', function (req, res) {
+	// take in req.query.position
+	//			req.query.category
+	var topPlayers;
+	PythonShell.run('./topplayeralgo.py',
+		{ mode: 'json', args: [req.query.week, leagueId, seasonId, req.query.position, req.query.category] }, function (err, results) {
+		if (err) {
+			return res.json({ execSuccess: false, message: 'Failed to retrieve top players', data: {} });
+		}
+
+		//console.log(JSON.stringify(results[0]));
+		topPlayers = results[0];
+		return res.json({ execSuccess: true, message: 'Successfully retrieved top players', data: topPlayers });
+	});
+});
+
+/* Calculate power rankings*/
 router.get('/powerRankings', function (req, res) {
 	// run python web scraper and return data as JSON
 	var powerRankings;
@@ -174,28 +206,28 @@ router.get('/populateCurrentPlayerStats', function (req, res) {
 
 // CRONjob to automatically run route updates every X interval
 // currently set to every 4-11:30 in 30 minute increments
-var job = new CronJob('00 00,30 16-23 * * 0-6', function() {
-   		console.log("running current player cron");
-		request('http://localhost:3000/populateCurrentPlayerStats', function (error, response, body) {
-			if (!error && response.statusCode === 200) {
-				console.log(body);
-			} else {
-				console.log(error);
-			}
-		});
+// var job = new CronJob('00 00,30 16-23 * * 0-6', function() {
+//    		console.log("running current player cron");
+// 		request('http://localhost:3000/populateCurrentPlayerStats', function (error, response, body) {
+// 			if (!error && response.statusCode === 200) {
+// 				console.log(body);
+// 			} else {
+// 				console.log(error);
+// 			}
+// 		});
 
-		console.log("running current stat cron");
-		request('http://localhost:3000/populateCurrentStats', function (error, response, body) {
-			if (!error && response.statusCode === 200) {
-				console.log(body);
-			} else {
-				console.log(error);
-			}
-		});
-	},
-	false,
-	'America/Seattle'
-);
+// 		console.log("running current stat cron");
+// 		request('http://localhost:3000/populateCurrentStats', function (error, response, body) {
+// 			if (!error && response.statusCode === 200) {
+// 				console.log(body);
+// 			} else {
+// 				console.log(error);
+// 			}
+// 		});
+// 	},
+// 	false,
+// 	'America/Seattle'
+// );
 
 function populatePastStats(req, res) {
 	// run python web scraper and return data as JSON
