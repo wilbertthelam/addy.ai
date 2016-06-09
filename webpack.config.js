@@ -6,8 +6,9 @@ const PATHS = {
 	leaderboards: path.join(__dirname, 'public/scripts/leaderboards.js'),
 	editor: path.join(__dirname, 'public/scripts/editor.js'),
 	news: path.join(__dirname, 'public/scripts/news.js'),
+	scoreticker: path.join(__dirname, 'public/scripts/scoreticker.js'),
 	hotload: 'webpack-hot-middleware/client',
-	build: path.join(__dirname, '/build')
+	build: path.join(__dirname, '/public/build')
 };
 
 module.exports = {
@@ -29,6 +30,10 @@ module.exports = {
 			PATHS.news,
 			PATHS.hotload
 		],
+		scoreticker: [
+			PATHS.scoreticker,
+			PATHS.hotload
+		],
 	},
 	output: {
 		path: PATHS.build,
@@ -39,9 +44,16 @@ module.exports = {
 	plugins: [
 		new webpack.optimize.OccurenceOrderPlugin(),
 		new webpack.HotModuleReplacementPlugin(),
-		new webpack.NoErrorsPlugin()
+		new webpack.NoErrorsPlugin(),
+		new webpack.DefinePlugin({
+			'process.env': {
+			// This has effect on the react lib size
+				'NODE_ENV': JSON.stringify('production'),
+			}
+		}),
 	],
 	module: {
+		noParse: path.resolve('node_modules/react-quill/node_modules/quill/dist/quill.js'),
 		loaders: [
 			{
 				test: /\.js$/,

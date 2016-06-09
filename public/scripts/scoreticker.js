@@ -48,8 +48,8 @@ const ScoreTicker = React.createClass({
 					aResult={score.result_a}
 					bResult={score.result_b}
 					tieResult={score.result_tie}
-					aLeader={(score.result_a >= score.result_b) ? 'bold' : ''}
-					bLeader={(score.result_b >= score.result_a) ? 'bold' : ''}
+					aLeader={(score.result_a > score.result_b) ? 'bold' : ''}
+					bLeader={(score.result_b > score.result_a) ? 'bold' : ''}
 				/>
 			);
 		});

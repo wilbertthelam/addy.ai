@@ -65,7 +65,7 @@
 /******/ 	}
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "dd4377ffff5a091be878"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "ca8b2de821eed23fce79"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -33296,6 +33296,7 @@
 					key: article.article_id,
 					title: article.title,
 					articleId: article.article_id,
+					date: article.update_time,
 					openArticle: that.props.openArticle,
 					clickState: clickState
 				});
@@ -33324,9 +33325,20 @@
 			this.props.openArticle(this.props.articleId);
 		},
 		render: function render() {
+			var date = new Date(this.props.date);
+			var formattedDate = date.toDateString();
 			return _react3.default.createElement(
 				'div',
 				{ className: this.props.clickState, onClick: this.click },
+				_react3.default.createElement(
+					'div',
+					{ id: 'newsDateLabel' },
+					_react3.default.createElement(
+						'span',
+						{ className: 'label label-primary' },
+						formattedDate
+					)
+				),
 				this.props.title,
 				' ',
 				this.props.articleId
@@ -33504,8 +33516,8 @@
 					aResult: score.result_a,
 					bResult: score.result_b,
 					tieResult: score.result_tie,
-					aLeader: score.result_a >= score.result_b ? 'bold' : '',
-					bLeader: score.result_b >= score.result_a ? 'bold' : ''
+					aLeader: score.result_a > score.result_b ? 'bold' : '',
+					bLeader: score.result_b > score.result_a ? 'bold' : ''
 				});
 			});
 	
@@ -35410,14 +35422,14 @@
 
 /***/ },
 /* 337 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
-	var require;var require;/* WEBPACK VAR INJECTION */(function(global) {/*! Quill Editor v0.20.1
+	/*! Quill Editor v0.20.1
 	 *  https://quilljs.com/
 	 *  Copyright (c) 2014, Jason Chen
 	 *  Copyright (c) 2013, salesforce.com
 	 */
-	(function(f){if(true){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.Quill = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return require(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(_dereq_,module,exports){
+	(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.Quill = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(_dereq_,module,exports){
 	(function (global){
 	/**
 	 * @license
@@ -46161,7 +46173,6 @@
 	
 	},{"../../lib/color-picker":16,"../../lib/dom":17,"../../lib/picker":19,"../base":32,"lodash":1}]},{},[15])(15)
 	});
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
 /* 338 */

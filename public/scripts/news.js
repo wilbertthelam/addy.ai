@@ -95,6 +95,7 @@ const Sidebar = React.createClass({
 					key={article.article_id}
 					title={article.title}
 					articleId={article.article_id}
+					date={article.update_time}
 					openArticle={that.props.openArticle}
 					clickState={clickState}
 				/>
@@ -120,8 +121,13 @@ const ArticleNav = React.createClass({
 		this.props.openArticle(this.props.articleId);
 	},
 	render: function () {
+		const date = new Date(this.props.date);
+		const formattedDate = date.toDateString();
 		return (
 			<div className={this.props.clickState} onClick={this.click}>
+				<div id="newsDateLabel">
+					<span className="label label-primary">{formattedDate}</span>
+				</div>
 				{this.props.title} {this.props.articleId}
 			</div>
 		);

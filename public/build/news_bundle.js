@@ -65,7 +65,7 @@
 /******/ 	}
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "dd4377ffff5a091be878"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "ca8b2de821eed23fce79"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -21817,6 +21817,7 @@
 					key: article.article_id,
 					title: article.title,
 					articleId: article.article_id,
+					date: article.update_time,
 					openArticle: that.props.openArticle,
 					clickState: clickState
 				});
@@ -21845,9 +21846,20 @@
 			this.props.openArticle(this.props.articleId);
 		},
 		render: function render() {
+			var date = new Date(this.props.date);
+			var formattedDate = date.toDateString();
 			return _react3.default.createElement(
 				'div',
 				{ className: this.props.clickState, onClick: this.click },
+				_react3.default.createElement(
+					'div',
+					{ id: 'newsDateLabel' },
+					_react3.default.createElement(
+						'span',
+						{ className: 'label label-primary' },
+						formattedDate
+					)
+				),
 				this.props.title,
 				' ',
 				this.props.articleId

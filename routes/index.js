@@ -4,14 +4,11 @@ var router = express.Router();
 // pass connection for db
 var db = require('../db_conn.js');
 var connection = db;
+
 var async = require('async');
 
 // create Python shell to allow us to run web scraper
 var PythonShell = require('python-shell');
-
-// cronjob to update the database
-var CronJob = require('cron').CronJob;
-var request = require('request');
 
 // current week MANUALLY SET FOR NOW
 var currentWeek = 10;
@@ -178,18 +175,6 @@ router.get('/topPlayers', function (req, res) {
 	}
 });
 
-// /* Calculate top player */
-// router.get('/topPlayers', function (req, res) {
-// 	PythonShell.run('./topplayeralgo.py',
-// 		{ mode: 'json', args: [req.query.week, leagueId, seasonId, req.query.position, req.query.category] }, function (err, results) {
-// 		if (err) {
-// 			return res.json({ execSuccess: false, message: 'Failed to retrieve top players', data: {} });
-// 		} else {
-// 			return res.json({ execSuccess: true, message: 'Successfully retrieved top players', data: results[0] });
-// 		}
-// 	});
-// });
-
 
 /* Get scoreboard ticker scores and store in cache */
 function saveScoreboard(callback) {
@@ -225,8 +210,8 @@ function cachePowerRankings(totalTeams, currentWeek, callback) {
 	var powerRankings2;
 	var teamResults;
 	async.series({
-		runPyScript : function(cb0) {
-			PythonShell.run('./pralgo.py', {mode: 'json', args: [totalTeams, currentWeek] }, function(err, results) {
+		runPyScript: function(cb0) {
+			PythonShell.run('./pralgo.py', {mode: 'json', args: [totalTeams, currentWeek] }, function (err, results) {
 				if (err) {
 					throw err;
 				}
@@ -239,7 +224,7 @@ function cachePowerRankings(totalTeams, currentWeek, callback) {
 
 		getTeams: function(cb1) {
 			var statement = 'SELECT * FROM teams ORDER BY team_id;';
-			connection.query(statement, function(err, results) {
+			connection.query(statement, function (err, results) {
 				if (err) {
 					powerRankings = ({ execSuccess: false, message: 'Cannot get teams.', error: err});
 					return callback();
@@ -292,31 +277,6 @@ router.get('/populateCurrentStats', function (req, res, next) {
 router.get('/populateCurrentPlayerStats', function (req, res) {
 	return populateCurrentPlayerStats(req, res);
 });
-
-// CRONjob to automatically run route updates every X interval
-// currently set to every 4-11:30 in 30 minute increments
-// var job = new CronJob('00 00,30 16-23 * * 0-6', function() {
-//    		console.log("running current player cron");
-// 		request('http://localhost:3000/populateCurrentPlayerStats', function (error, response, body) {
-// 			if (!error && response.statusCode === 200) {
-// 				console.log(body);
-// 			} else {
-// 				console.log(error);
-// 			}
-// 		});
-
-// 		console.log("running current stat cron");
-// 		request('http://localhost:3000/populateCurrentStats', function (error, response, body) {
-// 			if (!error && response.statusCode === 200) {
-// 				console.log(body);
-// 			} else {
-// 				console.log(error);
-// 			}
-// 		});
-// 	},
-// 	false,
-// 	'America/Seattle'
-// );
 
 function populatePastStats(req, res) {
 	// run python web scraper and return data as JSON
