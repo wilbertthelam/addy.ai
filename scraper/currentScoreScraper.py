@@ -69,7 +69,7 @@ for t in teamInfo:
 	teamId = stripId(t_team[0]['href'])
 	teamName = t_team[0]['title']
 
-	t_stats = t.findAll('td', id=re.compile('^ls_tmTotalStat_'))
+	t_stats = t.findAll('td', attrs={'name': re.compile('^totalstat_')} )
 
 	teamNameDict[teamId] = teamName
 

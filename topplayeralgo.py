@@ -18,10 +18,11 @@ seasonId = int(sys.argv[3])
 position = sys.argv[4]
 category = sys.argv[5]
 
-# currentWeek = 9
+# currentWeek = 3
 # leagueId = 44067
 # seasonId = 2016
-# position = "SS"
+# position = "RP"
+# category = "SV"
 
 # make dict where key = stat and value = data retrieved from database
 playerDataScore = {}
@@ -31,6 +32,8 @@ playerData = {}
 finalResults = []
 
 def calcPlayerScore(score, mean, std_dev):
+    if (std_dev == 0):
+        return 0;
     return (score - mean) * 1.0 / std_dev
 
 lst = batterStats
@@ -55,7 +58,7 @@ for stat in lst:
             if row['player_id'] not in playerData:
                 playerData[row['player_id']] = row      
         meanData[stat] = np.mean(statList)
-        stdDevData[stat] = std_dev = np.std(statList, ddof=1)
+        stdDevData[stat] = np.std(statList, ddof=1)
     else:
         print "E - Couldn't get data for topWeeklyPlayerStats"
 

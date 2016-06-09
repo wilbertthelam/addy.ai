@@ -7,16 +7,37 @@ var connection = db;
 
 var async = require('async');
 
+var moment = require('moment');
+moment().format();
+
 // create Python shell to allow us to run web scraper
 var PythonShell = require('python-shell');
-
-// current week MANUALLY SET FOR NOW
-var currentWeek = 10;
 
 // league information
 var leagueId = 44067;
 var seasonId = 2016;
 var totalTeams = 8;
+
+// current week MANUALLY SET FOR NOW
+// var currentWeek = 10;
+var currentWeek = calculateWeek();
+
+// calculate current week of game
+function calculateWeek() {
+	var now = moment().valueOf();
+	var start = moment(seasonId + "-04-03").valueOf();
+
+	console.log("first time = " + now.valueOf());
+	console.log("second tiem = " + start.valueOf());
+
+	var oneWeek = 1000*60*60*24*7;
+
+	var diff = now - start;
+	console.log("wee= " + diff / oneWeek);
+	return Math.floor(diff / oneWeek) + 1; 
+};
+
+
 
 //=====================
 // localcache variables
@@ -165,12 +186,12 @@ router.get('/topPlayers', function (req, res) {
 		if (!topPlayersCache[week]) {
 			topPlayersCache[week] = {};
 		}
-		console.log('create cache for batter & pithcer MVP');
+		console.log('create cache for batter & pitcher MVP');
 		cacheTopPlayers(type, week, leagueId, seasonId, position, req.query.category, function () {
 			return res.json(topPlayersCache[week][type]);
 		});
 	} else {
-		console.log('get cache for batter & pithcer MVP');
+		console.log('get cache for batter & pitcher MVP');
 		return res.json(topPlayersCache[week][type]);
 	}
 });
@@ -289,14 +310,14 @@ function populatePastStats(req, res) {
 					throw err;
 				}
 
-				console.log(JSON.stringify(results[0]));
+				// console.log(JSON.stringify(results[0]));
 				listOfStats = results[0];
 				cb0(null, null);
 			});
 		}, 
 
 		updateDb : function(cb1) {
-			console.log(listOfStats);
+			// console.log(listOfStats);
 
 			connection.beginTransaction(function(err) {
 				if (err) {
@@ -350,7 +371,7 @@ function populateCurrentStats(req, res) {
 		}, 
 
 		updateDb : function(cb1) {
-			console.log(listOfStats);
+			// console.log(listOfStats);
 			
 			connection.beginTransaction(function(err){
 				if (err) {
@@ -360,7 +381,7 @@ function populateCurrentStats(req, res) {
 
 			var statement = 'REPLACE INTO baseball_stats SET ?';
 			async.each(listOfStats, function(teamStatLine, callback) {
-				console.log(teamStatLine);
+				// console.log(teamStatLine);
 				connection.query(statement, teamStatLine, function(err) {
 					if (err) {
 						connection.rollback();
@@ -406,7 +427,7 @@ function populateCurrentPlayerStats(req, res) {
 		}, 
 
 		updateDb : function(cb1) {
-			console.log(listOfStats);
+			// console.log(listOfStats);
 			
 			connection.beginTransaction(function(err){
 				if (err) {
@@ -416,7 +437,7 @@ function populateCurrentPlayerStats(req, res) {
 
 			var statement = 'REPLACE INTO player_stats SET ?';
 			async.each(listOfStats, function(statLine, callback) {
-				console.log(statLine);
+				// console.log(statLine);
 				connection.query(statement, statLine, function(err) {
 					if (err) {
 						connection.rollback();
