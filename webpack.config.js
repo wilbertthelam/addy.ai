@@ -7,7 +7,7 @@ const PATHS = {
 	editor: path.join(__dirname, 'public/scripts/editor.js'),
 	news: path.join(__dirname, 'public/scripts/news.js'),
 	hotload: 'webpack-hot-middleware/client',
-	build: path.join(__dirname, '/build')
+	build: path.join(__dirname, '/public/build')
 };
 
 module.exports = {
