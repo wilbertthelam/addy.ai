@@ -1,6 +1,7 @@
 import * as Leaderboards from './leaderboards.js';
 import * as News from './news.js';
 import * as Editor from './editor.js';
+import * as Scoreticker from './scoreticker.js';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import $ from 'jquery';
@@ -13,23 +14,30 @@ const MainContainerPage = React.createClass({
 	render: function () {
 		return (
 			<div className="innerMainContainer">
-				<div className="pure-menu pure-menu-horizontal fixedBannerContainer">
-					<a href="#" className="pure-menu-heading">addy.ai</a>
-					<ul className="pure-menu-list">
-						<li className="pure-menu-item">
-							<Link to="/" className="pure-menu-link">Home</Link>
-						</li>
-						<li className="pure-menu-item">
-							<Link to="/news" className="pure-menu-link">News</Link>
-						</li>
-						<li className="pure-menu-item">
-							<a href="/createEditor" className="pure-menu-link">Editor</a>
-						</li>
-						<li className="pure-menu-item">
-							<a href="#" className="pure-menu-link">Contact</a>
-						</li>
-					</ul>
+				<div>
+					<div className="pure-menu pure-menu-horizontal fixedBannerContainer">
+						<div id="menuContainer">
+							<ul className="pure-menu-list nav">
+
+								<li className="pure-menu-item">
+									<Link to="/" className="pure-menu-link">Home</Link>
+								</li>
+								<li className="pure-menu-item">
+									<Link to="/news" className="pure-menu-link">News</Link>
+								</li>
+								<li className="pure-menu-item">
+									<a href="/createEditor" className="pure-menu-link">Editor</a>
+								</li>
+								<li className="pure-menu-item">
+									<a href="#" className="pure-menu-link">Contact</a>
+								</li>
+							</ul>
+
+							<Scoreticker.ScoreTicker />
+						</div>
+					</div>
 				</div>
+
 				{this.props.children}
 			</div>
 		);
@@ -71,7 +79,7 @@ const LeaderboardPage = React.createClass({
 		for (let i = currentWeek; i > 0; i--) {
 			weeks.push(<MenuItem eventKey={i} key={i} onSelect={this.changeWeek}>Week {i}</MenuItem>);
 		}
-		console.log(weeks);
+		// console.log(weeks);
 		this.setState({ menuWeeks: weeks });
 	},
 	render: function () {
@@ -83,9 +91,6 @@ const LeaderboardPage = React.createClass({
 				return (
 					<div className="main">
 						<div className="banner">
-							<h1 className="banner-head">
-								<span id="title">addy.ai</span><span id="subtitle"> baseball</span>
-							</h1>
 						</div>
 
 						<div id="container">
@@ -195,9 +200,6 @@ const NewsPage = React.createClass({
 		return (
 			<div className="main">
 				<div className="banner">
-					<h1 className="banner-head">
-						<span id="title">addy.ai</span><span id="subtitle"> news </span>
-					</h1>
 				</div>
 
 				<div id="container">
@@ -213,9 +215,6 @@ const EditorPage = React.createClass({
 		return (
 			<div className="main">
 				<div className="banner">
-					<h1 className="banner-head">
-						<span id="title">addy.ai</span><span id="subtitle"> editor </span>
-					</h1>
 				</div>
 
 				<div id="quillContainer">

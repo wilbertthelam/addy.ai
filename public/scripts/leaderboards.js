@@ -184,7 +184,7 @@ const ButtonsList = React.createClass({
 			i++;
 			let activeStatus = '';
 			if (stat === that.props.activeStat) {
-				console.log(stat + 'set as active');
+				// console.log(stat + 'set as active');
 				activeStatus = 'active';
 			}
 			return (
@@ -301,7 +301,7 @@ const StatBox = React.createClass({
 const TopPlayersBox = React.createClass({
 	render: function () {
 		return (
-			<div className="table-responsive-vertical shadow-z-1 col-md-12">
+			<div className="table-responsive-vertical shadow-z-1 col-md-12 topPlayerBox">
 				<TopPlayersDisplay
 					baseUrl={this.props.baseUrl}
 					position={this.props.position}
@@ -337,14 +337,14 @@ const TopPlayersDisplay = React.createClass({
 		this.getPlayerData(nextProps.week);
 	},
 	getPlayerData: function (week) {
-		console.log("current week= " + week);
+		// console.log("current week= " + week);
 		$.ajax({
 			// add in leagueId, seasonId
 			url: this.props.baseUrl + '?position=' + this.props.position + '&week=' + week,
 			dataType: 'json',
 			cache: false,
 			success: function (data) {
-				console.log(JSON.stringify(data));
+				// console.log(JSON.stringify(data));
 				this.setState({ data: data.data });
 			}.bind(this),
 			error: function (xhr, status, err) {

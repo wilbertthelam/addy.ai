@@ -260,7 +260,7 @@
 /******/ 			hotSetStatus("prepare");
 /******/ 			hotCallback = callback;
 /******/ 			hotUpdate = {};
-/******/ 			var chunkId = 4;
+/******/ 			var chunkId = 2;
 /******/ 			{ // eslint-disable-line no-lone-blocks
 /******/ 				/*globals chunkId */
 /******/ 				hotEnsureUpdateChunk(chunkId);
@@ -583,7 +583,7 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(311);
+	__webpack_require__(313);
 	module.exports = __webpack_require__(219);
 
 
@@ -21662,7 +21662,9 @@
 /* 308 */,
 /* 309 */,
 /* 310 */,
-/* 311 */
+/* 311 */,
+/* 312 */,
+/* 313 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(module) {'use strict';
@@ -21691,33 +21693,18 @@
 	
 	var _components = {
 		_component: {},
-		_component2: {},
-		_component3: {},
-		_component4: {},
-		_component5: {},
-		_component6: {},
-		_component7: {},
-		_component8: {},
-		_component9: {},
-		_component10: {},
-		_component11: {},
-		_component12: {},
-		_component13: {},
-		_component14: {},
-		_component15: {},
-		_component16: {},
-		_component17: {}
+		_component2: {}
 	};
 	
 	var _reactTransformHmr2 = (0, _reactTransformHmr4.default)({
-		filename: 'C:/Users/Wilbert Lam/Projects/addy.ai/public/scripts/leaderboards.js',
+		filename: 'C:/Users/Wilbert Lam/Projects/addy.ai/public/scripts/scoreticker.js',
 		components: _components,
 		locals: [module],
 		imports: [_react3.default]
 	});
 	
 	var _reactTransformCatchErrors2 = (0, _reactTransformCatchErrors4.default)({
-		filename: 'C:/Users/Wilbert Lam/Projects/addy.ai/public/scripts/leaderboards.js',
+		filename: 'C:/Users/Wilbert Lam/Projects/addy.ai/public/scripts/scoreticker.js',
 		components: _components,
 		locals: [],
 		imports: [_react3.default, _redboxReact3.default]
@@ -21728,576 +21715,103 @@
 			return _reactTransformHmr2(_reactTransformCatchErrors2(Component, id), id);
 		};
 	} /* Wilbert Lam
-	  05/06/2016
-	  leaderboard.js
+	  06/07/2016
+	  scoreticker.js
 	  
-	  Contains components for the leaderboards
+	  Contains components for the score ticker
 	  
 	  */
 	
 	//--------------------------
-	// PowerRankingsTeamsBox information
+	// ScoreTicker information
 	//--------------------------
 	
-	var PRTeamListBox = _wrapComponent('_component')(_react3.default.createClass({
-		displayName: 'PRTeamListBox',
+	var ScoreTicker = _wrapComponent('_component')(_react3.default.createClass({
+		displayName: 'ScoreTicker',
 	
 		getInitialState: function getInitialState() {
 			return { data: [] };
 		},
 		componentDidMount: function componentDidMount() {
-			this.loadTeamsFromServer();
+			this.getScores();
 			// setInterval(this.loadTeamsFromServer, this.props.pollInterval);
 		},
-		loadTeamsFromServer: function loadTeamsFromServer() {
+		getScores: function getScores() {
 			_jquery2.default.ajax({
-				url: this.props.url,
+				url: '/scoreboard',
 				dataType: 'json',
 				cache: false,
 				success: function (data) {
-					// console.log(data.data);
 					this.setState({ data: data.data });
 				}.bind(this),
-				error: function (xhr, status, err) {
-					console.error(this.props.url, status, err.toString());
-				}.bind(this)
-			});
-		},
-		render: function render() {
-			return _react3.default.createElement(
-				'div',
-				{ className: 'table-responsive-vertical shadow-z-1' },
-				_react3.default.createElement(PRTeamList, { data: this.state.data })
-			);
-		}
-	}));
-	
-	var PRTeamList = _wrapComponent('_component2')(_react3.default.createClass({
-		displayName: 'PRTeamList',
-	
-		render: function render() {
-			var i = 0;
-			var teamNodes = this.props.data.map(function (data) {
-				i++;
-				return _react3.default.createElement(PRTeam, {
-					teamName: data.team_name,
-					ownerName: data.owner_name,
-					prScore: data.pr_score,
-					id: data.team_id,
-					key: i
-				});
-			});
-	
-			return _react3.default.createElement(
-				'table',
-				{ className: 'table table-hover table-mc-amber' },
-				_react3.default.createElement(
-					'thead',
-					null,
-					_react3.default.createElement(
-						'tr',
-						null,
-						_react3.default.createElement(
-							'th',
-							null,
-							'PR Rating'
-						),
-						_react3.default.createElement('th', null),
-						_react3.default.createElement('th', null)
-					)
-				),
-				_react3.default.createElement(
-					'tbody',
-					null,
-					teamNodes
-				)
-			);
-		}
-	}));
-	
-	var PRTeam = _wrapComponent('_component3')(_react3.default.createClass({
-		displayName: 'PRTeam',
-	
-		render: function render() {
-			return _react3.default.createElement(
-				'tr',
-				{ className: 'team' },
-				_react3.default.createElement(
-					'td',
-					{ 'data-title': 'PR Rating' },
-					this.props.prScore
-				),
-				_react3.default.createElement(
-					'td',
-					{ 'data-title': 'Owner' },
-					this.props.ownerName
-				),
-				_react3.default.createElement(
-					'td',
-					{ 'data-title': 'Team' },
-					this.props.teamName
-				)
-			);
-		}
-	}));
-	
-	//--------------------------
-	// TeamStatsBox information
-	//--------------------------
-	
-	function sortGenerator(statCategory) {
-		return function (a, b) {
-			return b[statCategory] - a[statCategory];
-		};
-	}
-	
-	// Overarching TeamBattersStat Container
-	var TeamStatsBox = _wrapComponent('_component4')(_react3.default.createClass({
-		displayName: 'TeamStatsBox',
-	
-		propTypes: {
-			url: _react3.default.PropTypes.string,
-			week: _react3.default.PropTypes.number,
-			displayField: _react3.default.PropTypes.string,
-			categories: _react3.default.PropTypes.array
-		},
-		getInitialState: function getInitialState() {
-			return {
-				data: [],
-				statCategory: this.props.categories[0]
-			};
-		},
-		componentDidMount: function componentDidMount() {
-			this.getStats(this.props.week);
-			// setInterval(this.loadTeamsFromServer, this.props.pollInterval);
-		},
-		componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
-			this.getStats(nextProps.week);
-		},
-		getStats: function getStats(week) {
-			_jquery2.default.ajax({
-				url: this.props.url + '?week=' + week,
-				dataType: 'json',
-				cache: false,
-				success: function (data) {
-					// console.log(data.data);
-					this.setState({ data: data.data }, function () {
-						this.updateStats();
-					});
-				}.bind(this),
-				error: function (xhr, status, err) {
-					console.error(this.state.statCategory, status, err.toString());
-				}.bind(this)
-			});
-		},
-		handleChildButtonClick: function handleChildButtonClick(stat) {
-			this.setState({ statCategory: stat }, function () {
-				this.updateStats();
-			});
-		},
-		updateStats: function updateStats() {
-			var tempData = this.state.data;
-			var statCategory = this.state.statCategory;
-			tempData.sort(sortGenerator(statCategory));
-			this.setState({ data: tempData });
-		},
-		render: function render() {
-			return _react3.default.createElement(
-				'div',
-				null,
-				_react3.default.createElement(ButtonsList, {
-					clickFunc: this.handleChildButtonClick,
-					statCategories: this.props.categories,
-					activeStat: this.state.statCategory
-				}),
-				_react3.default.createElement(
-					'div',
-					{ className: 'table-responsive-vertical shadow-z-1' },
-					_react3.default.createElement(StatBox, {
-						statData: this.state.data,
-						stat: this.state.statCategory,
-						displayField: this.props.displayField
-					})
-				)
-			);
-		}
-	}));
-	
-	// List of all buttons together
-	var ButtonsList = _wrapComponent('_component5')(_react3.default.createClass({
-		displayName: 'ButtonsList',
-	
-		render: function render() {
-			var that = this;
-			var i = 0;
-			var buttonNodes = this.props.statCategories.map(function (stat) {
-				i++;
-				var activeStatus = '';
-				if (stat === that.props.activeStat) {
-					// console.log(stat + 'set as active');
-					activeStatus = 'active';
+				error: function error(xhr, status, err) {
+					console.error('scoreboard error', status, err.toString());
 				}
-				return _react3.default.createElement(Button, {
+			});
+		},
+		render: function render() {
+			var i = -1;
+			var scoreNodes = this.state.data.map(function (score) {
+				i++;
+				return _react3.default.createElement(ScoreNode, {
 					key: i,
-					statCategory: stat,
-					activeStatus: activeStatus,
-					clickFunc: that.props.clickFunc
+					aTeamId: score.teamId_a,
+					bTeamId: score.teamId_b,
+					aTeamName: score.teamName_a,
+					bTeamName: score.teamName_b,
+					aResult: score.result_a,
+					bResult: score.result_b,
+					tieResult: score.result_tie,
+					aLeader: score.result_a > score.result_b ? 'bold' : '',
+					bLeader: score.result_b > score.result_a ? 'bold' : ''
 				});
 			});
 	
 			return _react3.default.createElement(
-				'span',
-				null,
+				'ul',
+				{ className: 'pure-menu-list' },
+				scoreNodes
+			);
+		}
+	}));
+	
+	var ScoreNode = _wrapComponent('_component2')(_react3.default.createClass({
+		displayName: 'ScoreNode',
+	
+		render: function render() {
+			return _react3.default.createElement(
+				'li',
+				{ className: 'pure-menu-item scoreNode' },
 				_react3.default.createElement(
 					'div',
-					{ className: 'btn-group', role: 'group', 'aria-label': 'Basic example' },
-					buttonNodes
-				)
-			);
-		}
-	}));
-	
-	// Individual buttons
-	var Button = _wrapComponent('_component6')(_react3.default.createClass({
-		displayName: 'Button',
-	
-		handleClick: function handleClick() {
-			var statLookup = this.props.statCategory;
-			// console.log(statLookup);
-			this.props.clickFunc(statLookup);
-		},
-		render: function render() {
-			return _react3.default.createElement(
-				'button',
-				{
-					onClick: this.handleClick,
-					type: 'button',
-					className: 'btn btn-primary ' + this.props.activeStatus
-				},
-				this.props.statCategory
-			);
-		}
-	}));
-	
-	// Individual statline
-	var Stat = _wrapComponent('_component7')(_react3.default.createClass({
-		displayName: 'Stat',
-	
-		render: function render() {
-			return _react3.default.createElement(
-				'tr',
-				null,
-				_react3.default.createElement(
-					'td',
-					{ className: 'statValue', 'data-title': this.props.statCategory },
-					this.props.statValue
-				),
-				_react3.default.createElement(
-					'td',
-					{ 'data-title': '' },
-					this.props.stats[this.props.displayField]
-				)
-			);
-		}
-	}));
-	
-	// Stat header value
-	var StatsHeader = _wrapComponent('_component8')(_react3.default.createClass({
-		displayName: 'StatsHeader',
-	
-		render: function render() {
-			return _react3.default.createElement(
-				'tr',
-				null,
-				_react3.default.createElement(
-					'th',
-					null,
-					this.props.stat
-				),
-				_react3.default.createElement('th', null)
-			);
-		}
-	}));
-	
-	// List of all the statlines
-	var StatsList = _wrapComponent('_component9')(_react3.default.createClass({
-		displayName: 'StatsList',
-	
-		render: function render() {
-			var statCategory = this.props.stat;
-			var displayField = this.props.displayField;
-			// console.log(JSON.stringify(this.props.statData));
-			var i = 0;
-			var statNodes = this.props.statData.map(function (statline) {
-				i++;
-				if (i <= 15) {
-					return _react3.default.createElement(Stat, {
-						key: i,
-						displayField: displayField,
-						stats: statline,
-						statCategory: statCategory,
-						id: statline.team_id,
-						teamName: statline.team_name,
-						owner: statline.owner_name,
-						statValue: statline[statCategory]
-					});
-				}
-			});
-			return _react3.default.createElement(
-				'tbody',
-				null,
-				statNodes
-			);
-		}
-	}));
-	
-	// Container for StatHeader and StatsList
-	var StatBox = _wrapComponent('_component10')(_react3.default.createClass({
-		displayName: 'StatBox',
-	
-		render: function render() {
-			return _react3.default.createElement(
-				'table',
-				{ className: 'table table-hover table-mc-amber' },
-				_react3.default.createElement(StatsList, {
-					statData: this.props.statData,
-					stat: this.props.stat,
-					displayField: this.props.displayField
-				})
-			);
-		}
-	}));
-	
-	var TopPlayersBox = _wrapComponent('_component11')(_react3.default.createClass({
-		displayName: 'TopPlayersBox',
-	
-		render: function render() {
-			return _react3.default.createElement(
-				'div',
-				{ className: 'table-responsive-vertical shadow-z-1 col-md-12 topPlayerBox' },
-				_react3.default.createElement(TopPlayersDisplay, {
-					baseUrl: this.props.baseUrl,
-					position: this.props.position,
-					categories: this.props.categories,
-					week: this.props.week
-				})
-			);
-		}
-	}));
-	
-	// const OptionsSelect = React.createClass({
-	// 	render: function () {
-	// 		return (
-	// 			<div>
-	// 				1B 2B SS 3B
-	// 			</div>
-	// 		);
-	// 	},
-	// });
-	
-	// Container for top players
-	var TopPlayersDisplay = _wrapComponent('_component12')(_react3.default.createClass({
-		displayName: 'TopPlayersDisplay',
-	
-		getInitialState: function getInitialState() {
-			return {
-				data: []
-			};
-		},
-		componentDidMount: function componentDidMount() {
-			this.getPlayerData(this.props.week);
-		},
-		componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
-			this.getPlayerData(nextProps.week);
-		},
-		getPlayerData: function getPlayerData(week) {
-			// console.log("current week= " + week);
-			_jquery2.default.ajax({
-				// add in leagueId, seasonId
-				url: this.props.baseUrl + '?position=' + this.props.position + '&week=' + week,
-				dataType: 'json',
-				cache: false,
-				success: function (data) {
-					// console.log(JSON.stringify(data));
-					this.setState({ data: data.data });
-				}.bind(this),
-				error: function (xhr, status, err) {
-					console.error(this.props.baseUrl, status, err.toString());
-				}.bind(this)
-			});
-		},
-		render: function render() {
-			return _react3.default.createElement(PlayerInfo, {
-				data: this.state.data,
-				categories: this.props.categories
-			});
-		}
-	}));
-	
-	var Picture = _wrapComponent('_component13')(_react3.default.createClass({
-		displayName: 'Picture',
-	
-		// componentDidMount: function () {
-		// 	getPicture(this.props.pictureUrl);
-		// },
-		getPicture: function getPicture() {
-			// ajax get here
-		},
-		render: function render() {
-			return _react3.default.createElement('img', { src: 'http://newton.physics.uiowa.edu/~sbaalrud/empty_profile.gif', alt: 'profilePic', height: '60', width: '60' });
-		}
-	}));
-	
-	var PlayerInfo = _wrapComponent('_component14')(_react3.default.createClass({
-		displayName: 'PlayerInfo',
-	
-		propTypes: {
-			data: _react3.default.PropTypes.array
-		},
-		render: function render() {
-			var _this = this;
-	
-			var playerNodes = [];
-			if (this.props.data.length > 0) {
-				(function () {
-					var i = 1;
-					playerNodes = _this.props.data.splice(1, 4).map(function (player) {
-						i++;
-						return _react3.default.createElement(PlayerInfoList, {
-							key: player.player_id,
-							index: i,
-							playerName: player.player_name,
-							teamName: player.team_name,
-							ownerName: player.owner_name
-						});
-					});
-				})();
-			}
-			return _react3.default.createElement(
-				'div',
-				{ className: 'row' },
-				_react3.default.createElement(PlayerFirstNode, {
-					data: this.props.data[0],
-					categories: this.props.categories
-				})
-			);
-		}
-	}));
-	
-	var PlayerInfoList = _wrapComponent('_component15')(_react3.default.createClass({
-		displayName: 'PlayerInfoList',
-	
-		render: function render() {
-			return _react3.default.createElement(
-				'tr',
-				null,
-				_react3.default.createElement(
-					'td',
-					{ className: 'bold' },
-					this.props.index
-				),
-				_react3.default.createElement(
-					'td',
-					null,
-					this.props.playerName,
-					_react3.default.createElement('br', null),
-					this.props.teamName
-				)
-			);
-		}
-	}));
-	
-	var PlayerFirstNode = _wrapComponent('_component16')(_react3.default.createClass({
-		displayName: 'PlayerFirstNode',
-	
-		render: function render() {
-			if (this.props.data) {
-				return _react3.default.createElement(
-					'div',
-					{ className: 'row' },
+					{ className: this.props.aLeader },
 					_react3.default.createElement(
-						'div',
-						{ className: 'col-md-3' },
-						_react3.default.createElement(Picture, null)
+						'span',
+						{ className: 'score' },
+						this.props.aResult,
+						' '
 					),
 					_react3.default.createElement(
-						'div',
-						{ className: 'col-md-9' },
-						_react3.default.createElement(
-							'div',
-							null,
-							_react3.default.createElement(
-								'span',
-								{ className: 'bold' },
-								this.props.data.player_name
-							),
-							_react3.default.createElement(
-								'span',
-								null,
-								', ',
-								this.props.data.player_position
-							)
-						),
-						_react3.default.createElement(
-							'div',
-							null,
-							this.props.data.team_name
-						)
-					),
-					_react3.default.createElement(
-						'div',
-						{ className: 'col-md-12' },
-						_react3.default.createElement(PlayerStatLine, {
-							data: this.props.data,
-							categories: this.props.categories
-						})
-					)
-				);
-			}
-			return null;
-		}
-	}));
-	
-	var PlayerStatLine = _wrapComponent('_component17')(_react3.default.createClass({
-		displayName: 'PlayerStatLine',
-	
-		render: function render() {
-			var headers = this.props.categories.map(function (category) {
-				return _react3.default.createElement(
-					'th',
-					{ key: category },
-					category
-				);
-			});
-	
-			var that = this;
-			var stats = this.props.categories.map(function (category) {
-				return _react3.default.createElement(
-					'td',
-					{ key: category },
-					that.props.data[category]
-				);
-			});
-	
-			return _react3.default.createElement(
-				'table',
-				{ className: 'table table-hover table-mc-amber' },
-				_react3.default.createElement(
-					'thead',
-					null,
-					_react3.default.createElement(
-						'tr',
+						'span',
 						null,
-						headers
+						this.props.aTeamName,
+						' '
 					)
 				),
 				_react3.default.createElement(
-					'tbody',
-					null,
+					'div',
+					{ className: this.props.bLeader },
 					_react3.default.createElement(
-						'tr',
+						'span',
+						{ className: 'score' },
+						this.props.bResult,
+						' '
+					),
+					_react3.default.createElement(
+						'span',
 						null,
-						stats
+						this.props.bTeamName,
+						' '
 					)
 				)
 			);
@@ -22305,12 +21819,10 @@
 	}));
 	
 	module.exports = {
-		TeamStatsBox: TeamStatsBox,
-		PRTeamListBox: PRTeamListBox,
-		TopPlayersBox: TopPlayersBox
+		ScoreTicker: ScoreTicker
 	};
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(37)(module)))
 
 /***/ }
 /******/ ]);
-//# sourceMappingURL=leaderboards_bundle.js.map
+//# sourceMappingURL=scoreticker_bundle.js.map
