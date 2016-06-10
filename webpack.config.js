@@ -18,22 +18,22 @@ module.exports = {
 			PATHS.app,
 			PATHS.hotload
 		],
-		leaderboards: [
-			PATHS.leaderboards,
-			PATHS.hotload
-		],
-		editor: [
-			PATHS.editor,
-			PATHS.hotload
-		],
-		news: [
-			PATHS.news,
-			PATHS.hotload
-		],
-		scoreticker: [
-			PATHS.scoreticker,
-			PATHS.hotload
-		],
+		// leaderboards: [
+		// 	PATHS.leaderboards,
+		// 	PATHS.hotload
+		// ],
+		// editor: [
+		// 	PATHS.editor,
+		// 	PATHS.hotload
+		// ],
+		// news: [
+		// 	PATHS.news,
+		// 	PATHS.hotload
+		// ],
+		// scoreticker: [
+		// 	PATHS.scoreticker,
+		// 	PATHS.hotload
+		// ],
 	},
 	output: {
 		path: PATHS.build,

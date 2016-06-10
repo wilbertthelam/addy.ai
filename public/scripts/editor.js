@@ -10,6 +10,21 @@ import React from 'react';
 import $ from 'jquery';
 import ReactQuill from 'react-quill';
 
+// turn on features for toolbar
+const formats = [
+	'bold',
+	'italic',
+	'strike',
+	'underline',
+	'color',
+	'background',
+	'image',
+	'link',
+	'bullet',
+	'list',
+	'align'
+];
+
 const Editor = React.createClass({
 	getInitialState: function () {
 		return {
@@ -96,6 +111,8 @@ const Editor = React.createClass({
 				</div>
 				<ReactQuill
 					theme="snow"
+					styles="false"
+					formats={formats}
 					value={this.state.text}
 					onChange={this.onTextChange}
 				/>
