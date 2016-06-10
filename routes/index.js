@@ -2,42 +2,23 @@ var express = require('express');
 var router = express.Router();
 
 // pass connection for db
-var db = require('../db_conn.js');
-var connection = db;
+var connection = require('../db_conn.js');
 
 var async = require('async');
-
-var moment = require('moment');
-moment().format();
 
 // create Python shell to allow us to run web scraper
 var PythonShell = require('python-shell');
 
-// league information
-var leagueId = 44067;
-var seasonId = 2016;
-var totalTeams = 8;
-
 // current week MANUALLY SET FOR NOW
 // var currentWeek = 10;
-var currentWeek = calculateWeek();
+var weeklyVariables = require('../weekly_variables.js');
 
-// calculate current week of game
-function calculateWeek() {
-	var now = moment().valueOf();
-	var start = moment(seasonId + "-04-03").valueOf();
+// league information
+var leagueId = weeklyVariables.leagueId;
+var seasonId = weeklyVariables.seasonId;
 
-	console.log("first time = " + now.valueOf());
-	console.log("second tiem = " + start.valueOf());
-
-	var oneWeek = 1000*60*60*24*7;
-
-	var diff = now - start;
-	console.log("wee= " + diff / oneWeek);
-	return Math.floor(diff / oneWeek) + 1; 
-};
-
-
+var currentWeek = weeklyVariables.currentWeek;
+var totalTeams = 8;
 
 //=====================
 // localcache variables
