@@ -179,7 +179,7 @@ router.get('/topPlayers', function (req, res) {
 
 
 /* Get scoreboard ticker scores and store in cache */
-function saveScoreboard(callback) {
+function saveScoreboard(currentWeek, leagueId, seasonId, callback) {
 	// take in req.query.position
 	//			req.query.category
 	PythonShell.run('./scraper/liveMatchupScoreScraper.py',
@@ -196,7 +196,7 @@ function saveScoreboard(callback) {
 /* GET scoreboard data */
 router.get('/scoreboard', function (req, res) {
 	if (scoreboard === null) {
-		saveScoreboard(function () {
+		saveScoreboard(currentWeek, leagueId, seasonId, function () {
 			return res.json(scoreboard);
 		});
 	} else {
@@ -204,6 +204,11 @@ router.get('/scoreboard', function (req, res) {
 	}
 });
 
+setInterval(function () {
+	saveScoreboard(currentWeek, leagueId, seasonId, function() {
+		console.log('Matchup scoreboard updated.');
+	});
+}, 300000);
 
 
 /* Calculate power rankings*/

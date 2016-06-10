@@ -63,9 +63,12 @@ const ScoreTicker = React.createClass({
 });
 
 const ScoreNode = React.createClass({
+	goToESPNScores: function () {
+		window.location.href = 'http://games.espn.go.com/flb/scoreboard?leagueId=44067&seasonId=2016';
+	},
 	render: function () {
 		return (
-			<li className="pure-menu-item scoreNode">
+			<li className="pure-menu-item scoreNode" onClick={this.goToESPNScores}>
 				<div className={this.props.aLeader}>
 					<span className="score">{this.props.aResult} </span>
 					<span>{this.props.aTeamName} </span>
