@@ -7,6 +7,7 @@ Contains components for the news
 */
 
 import React from 'react';
+import ReactDOM from 'react-dom';
 import $ from 'jquery';
 
 const NewsContainer = React.createClass({
@@ -23,6 +24,9 @@ const NewsContainer = React.createClass({
 	},
 	componentWillMount: function () {
 		this.loadArticle();
+	},
+	componentDidUpdate: function () {
+		// ReactDOM.findDOMNode(this).scrollIntoView();
 	},
 	loadArticle: function () {
 		$.ajax({

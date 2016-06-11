@@ -65,7 +65,7 @@
 /******/ 	}
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "6f5510cc25bc822a3e94"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "3a5e67835797c782ec21"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -1798,6 +1798,15 @@
 
 /***/ },
 /* 20 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	module.exports = __webpack_require__(594);
+
+
+/***/ },
+/* 21 */
 /***/ function(module, exports) {
 
 	/**
@@ -1841,15 +1850,6 @@
 	
 	exports['default'] = createChainedFunction;
 	module.exports = exports['default'];
-
-/***/ },
-/* 21 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	module.exports = __webpack_require__(594);
-
 
 /***/ },
 /* 22 */
@@ -14738,7 +14738,7 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 	
-	var _reactDom = __webpack_require__(21);
+	var _reactDom = __webpack_require__(20);
 	
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 	
@@ -16030,7 +16030,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactDom = __webpack_require__(21);
+	var _reactDom = __webpack_require__(20);
 	
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 	
@@ -16052,7 +16052,7 @@
 	
 	var _utilsBootstrapUtils = __webpack_require__(5);
 	
-	var _utilsCreateChainedFunction = __webpack_require__(20);
+	var _utilsCreateChainedFunction = __webpack_require__(21);
 	
 	var _utilsCreateChainedFunction2 = _interopRequireDefault(_utilsCreateChainedFunction);
 	
@@ -18627,7 +18627,7 @@
 	
 	var _reactOverlaysLibTransition2 = _interopRequireDefault(_reactOverlaysLibTransition);
 	
-	var _utilsCreateChainedFunction = __webpack_require__(20);
+	var _utilsCreateChainedFunction = __webpack_require__(21);
 	
 	var _utilsCreateChainedFunction2 = _interopRequireDefault(_utilsCreateChainedFunction);
 	
@@ -20347,7 +20347,7 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 	
-	var _reactDom = __webpack_require__(21);
+	var _reactDom = __webpack_require__(20);
 	
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 	
@@ -24640,7 +24640,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactDom = __webpack_require__(21);
+	var _reactDom = __webpack_require__(20);
 	
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 	
@@ -25557,7 +25557,7 @@
 	
 	var _utilsBootstrapUtils = __webpack_require__(5);
 	
-	var _utilsCreateChainedFunction = __webpack_require__(20);
+	var _utilsCreateChainedFunction = __webpack_require__(21);
 	
 	var _utilsCreateChainedFunction2 = _interopRequireDefault(_utilsCreateChainedFunction);
 	
@@ -25715,7 +25715,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactDom = __webpack_require__(21);
+	var _reactDom = __webpack_require__(20);
 	
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 	
@@ -25729,7 +25729,7 @@
 	
 	var _utilsBootstrapUtils = __webpack_require__(5);
 	
-	var _utilsCreateChainedFunction = __webpack_require__(20);
+	var _utilsCreateChainedFunction = __webpack_require__(21);
 	
 	var _utilsCreateChainedFunction2 = _interopRequireDefault(_utilsCreateChainedFunction);
 	
@@ -26061,7 +26061,7 @@
 	
 	var _SafeAnchor2 = _interopRequireDefault(_SafeAnchor);
 	
-	var _utilsCreateChainedFunction = __webpack_require__(20);
+	var _utilsCreateChainedFunction = __webpack_require__(21);
 	
 	var _utilsCreateChainedFunction2 = _interopRequireDefault(_utilsCreateChainedFunction);
 	
@@ -26506,7 +26506,7 @@
 	
 	var _utilsBootstrapUtils = __webpack_require__(5);
 	
-	var _utilsCreateChainedFunction = __webpack_require__(20);
+	var _utilsCreateChainedFunction = __webpack_require__(21);
 	
 	var _utilsCreateChainedFunction2 = _interopRequireDefault(_utilsCreateChainedFunction);
 	
@@ -27589,7 +27589,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactDom = __webpack_require__(21);
+	var _reactDom = __webpack_require__(20);
 	
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 	
@@ -27728,7 +27728,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactDom = __webpack_require__(21);
+	var _reactDom = __webpack_require__(20);
 	
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 	
@@ -27908,7 +27908,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactDom = __webpack_require__(21);
+	var _reactDom = __webpack_require__(20);
 	
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 	
@@ -34369,7 +34369,7 @@
 	
 	var Scoreticker = _interopRequireWildcard(_scoreticker);
 	
-	var _reactDom = __webpack_require__(21);
+	var _reactDom = __webpack_require__(20);
 	
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 	
@@ -35427,6 +35427,10 @@
 	
 	var _reactTransformHmr4 = _interopRequireDefault(_reactTransformHmr3);
 	
+	var _reactDom = __webpack_require__(20);
+	
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+	
 	var _jquery = __webpack_require__(57);
 	
 	var _jquery2 = _interopRequireDefault(_jquery);
@@ -35482,6 +35486,9 @@
 		},
 		componentWillMount: function componentWillMount() {
 			this.loadArticle();
+		},
+		componentDidUpdate: function componentDidUpdate() {
+			// ReactDOM.findDOMNode(this).scrollIntoView();
 		},
 		loadArticle: function loadArticle() {
 			_jquery2.default.ajax({
@@ -52102,13 +52109,13 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactDom = __webpack_require__(21);
+	var _reactDom = __webpack_require__(20);
 	
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 	
 	var _utilsBootstrapUtils = __webpack_require__(5);
 	
-	var _utilsCreateChainedFunction = __webpack_require__(20);
+	var _utilsCreateChainedFunction = __webpack_require__(21);
 	
 	var _utilsCreateChainedFunction2 = _interopRequireDefault(_utilsCreateChainedFunction);
 	
@@ -53749,7 +53756,7 @@
 	
 	var _utilsBootstrapUtils = __webpack_require__(5);
 	
-	var _utilsCreateChainedFunction = __webpack_require__(20);
+	var _utilsCreateChainedFunction = __webpack_require__(21);
 	
 	var _utilsCreateChainedFunction2 = _interopRequireDefault(_utilsCreateChainedFunction);
 	
@@ -53958,7 +53965,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactDom = __webpack_require__(21);
+	var _reactDom = __webpack_require__(20);
 	
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 	
@@ -54756,7 +54763,7 @@
 	
 	var _utilsBootstrapUtils = __webpack_require__(5);
 	
-	var _utilsCreateChainedFunction = __webpack_require__(20);
+	var _utilsCreateChainedFunction = __webpack_require__(21);
 	
 	var _utilsCreateChainedFunction2 = _interopRequireDefault(_utilsCreateChainedFunction);
 	
@@ -54852,7 +54859,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactDom = __webpack_require__(21);
+	var _reactDom = __webpack_require__(20);
 	
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 	
@@ -54864,7 +54871,7 @@
 	
 	var _Overlay2 = _interopRequireDefault(_Overlay);
 	
-	var _utilsCreateChainedFunction = __webpack_require__(20);
+	var _utilsCreateChainedFunction = __webpack_require__(21);
 	
 	var _utilsCreateChainedFunction2 = _interopRequireDefault(_utilsCreateChainedFunction);
 	
@@ -55208,7 +55215,7 @@
 	
 	var _SafeAnchor2 = _interopRequireDefault(_SafeAnchor);
 	
-	var _utilsCreateChainedFunction = __webpack_require__(20);
+	var _utilsCreateChainedFunction = __webpack_require__(21);
 	
 	var _utilsCreateChainedFunction2 = _interopRequireDefault(_utilsCreateChainedFunction);
 	
@@ -55297,7 +55304,7 @@
 	
 	var _utilsValidComponentChildren2 = _interopRequireDefault(_utilsValidComponentChildren);
 	
-	var _utilsCreateChainedFunction = __webpack_require__(20);
+	var _utilsCreateChainedFunction = __webpack_require__(21);
 	
 	var _utilsCreateChainedFunction2 = _interopRequireDefault(_utilsCreateChainedFunction);
 	
@@ -55661,7 +55668,7 @@
 	
 	var _reactPropTypesLibElementType2 = _interopRequireDefault(_reactPropTypesLibElementType);
 	
-	var _utilsCreateChainedFunction = __webpack_require__(20);
+	var _utilsCreateChainedFunction = __webpack_require__(21);
 	
 	var _utilsCreateChainedFunction2 = _interopRequireDefault(_utilsCreateChainedFunction);
 	
@@ -58208,7 +58215,7 @@
 	
 	exports.childrenValueInputValidation = _childrenValueInputValidation3['default'];
 	
-	var _createChainedFunction2 = __webpack_require__(20);
+	var _createChainedFunction2 = __webpack_require__(21);
 	
 	var _createChainedFunction3 = _interopRequireDefault(_createChainedFunction2);
 	
@@ -61215,7 +61222,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactDom = __webpack_require__(21);
+	var _reactDom = __webpack_require__(20);
 	
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 	
@@ -62734,7 +62741,7 @@
 	'use strict';
 	
 	var React = __webpack_require__(1),
-		ReactDOM = __webpack_require__(21),
+		ReactDOM = __webpack_require__(20),
 		QuillToolbar = __webpack_require__(246),
 		QuillMixin = __webpack_require__(245),
 		T = React.PropTypes;
