@@ -65,6 +65,8 @@ for i in range(0, currentWeek):
 def calcIndvScore(data, stat_median, stat_std, norm_factor):
     #print "data" + amstr(data)
     #print ((data - stat_median) * 1.0 / stat_std) * norm_factor
+    if stat_std == 0:
+    	return 0
     ceil_factor = 0.5
     x_std_dev = (data - stat_median) * 1.0 / stat_std
     if x_std_dev > ceil_factor:

@@ -28,6 +28,33 @@ var powerRankings = null;
  // intended to be stored in form {'batters': {xxx}, 'pitchers': {xxx}}
 var topPlayersCache = [];
 
+// CRONjob to automatically increment week on Monday 12am PST
+var CronJob = require('cron').CronJob;
+var job = new CronJob('00 00 00 * * 1', function () {
+   		console.log("Next week started: " + (currentWeek + 1));
+		currentWeek++;
+	},
+	false,
+	'America/Seattle'
+);
+
+
+// for (var i = 1; i <= currentWeek; i++) {
+// 	console.log('currentweek: ' + i);
+// 	if (!topPlayersCache[i] || !topPlayersCache[i][type]) {
+// 		if (!topPlayersCache[i]) {
+// 			topPlayersCache[i] = {};
+// 		}
+// 		cacheTopPlayers('batter', i, leagueId, seasonId, 'SS', 'HR', function() {
+// 			console.log('Initial batter cache stored for week: ' + i);
+// 		});
+// 		cacheTopPlayers('pitcher', i, leagueId, seasonId, 'SP', 'K', function() {
+// 			console.log('Initial pithcer cache stored for week: ' + i);
+// 		});
+// 	}
+// }
+
+
 
 /* GET home page. */
 router.get('/', function (req, res) {
@@ -290,8 +317,8 @@ function populatePastStats(req, res) {
 	var listOfStats;
 	
 	async.series({
-		runPyScript : function(cb0) {
-			PythonShell.run('./scraper/pastScoreScraper.py', {mode: 'json', args: [currentWeek, leagueId, seasonId] }, function(err, results) {
+		runPyScript: function(cb0) {
+			PythonShell.run('./scraper/pastScoreScraper.py', { mode: 'json', args: [currentWeek, leagueId, seasonId] }, function(err, results) {
 				if (err) {
 					throw err;
 				}
@@ -302,7 +329,7 @@ function populatePastStats(req, res) {
 			});
 		}, 
 
-		updateDb : function(cb1) {
+		updateDb: function(cb1) {
 			// console.log(listOfStats);
 
 			connection.beginTransaction(function(err) {

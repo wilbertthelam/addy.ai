@@ -99,6 +99,10 @@ h2 {
     margin-bottom: 6px;
 }
 
+.articleSubHeader {
+    font-size: 1.2em;
+    padding-bottom: 20px;
+}
 
 /* Leadeboard styles */
 tr .statValue {
@@ -123,14 +127,6 @@ tr .statValue {
 
 #container {
     margin: 50px;
-}
-
-@media (max-width: 480px) {
-    #container {
-        margin-left: -20px;
-        margin-right: -20px;
-        padding: 0px;
-    }
 }
 
 .container {
@@ -158,6 +154,10 @@ tr .statValue {
     margin-left: -80px;
 }
 
+img {
+    max-width: 100%;
+}
+
 @media (max-width: 480px) {
     .sidebar {
         margin: 0px;
@@ -173,19 +173,26 @@ tr .statValue {
     }
 
     #container {
-        margin-top: 0px;
+        margin-left: -20px;
+        margin-right: -20px;
+        padding: 0px;
     }
 
     .articleNav {
         padding: 5px;
+        font-size: 0.85em;
     }
 
     .articleNavHeader {
-        padding: 5px;
+        display: none;
     }
 
     #newsDateLabel {
         display: none;
+    }
+
+    .newsNavBar {
+        margin-top: -40px;
     }
 }
 

@@ -21,16 +21,13 @@ var variables = {
 };
 
 function calculateWeek(seasonId) {
-	var now = moment().valueOf();
-	var start = moment(seasonId + "-04-03").valueOf();
-
-	console.log("first time = " + now.valueOf());
-	console.log("second time = " + start.valueOf());
+	var now = moment();
+	var start = moment(seasonId + "-04-04");
 
 	var oneWeek = 1000*60*60*24*7;
 
 	var diff = now - start;
-	console.log("week = " + diff / oneWeek);
+	// console.log("week = " + (Math.floor(diff / oneWeek) + 1));
 	return Math.floor(diff / oneWeek) + 1; 
 };
 

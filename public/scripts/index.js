@@ -106,7 +106,7 @@ const LeaderboardPage = React.createClass({
 								</div>
 
 								<div className="col-md-6">
-									<div className="col-md-6">
+									<div className="col-sm-6">
 										<h2>Batting MVP</h2>
 										<Leaderboards.TopPlayersBox
 											baseUrl="/topPlayers"
@@ -116,7 +116,7 @@ const LeaderboardPage = React.createClass({
 										/>
 									</div>
 
-									<div className="col-md-6">
+									<div className="col-sm-6">
 										<h2>Pitching MVP</h2>
 										<Leaderboards.TopPlayersBox
 											baseUrl="/topPlayers"

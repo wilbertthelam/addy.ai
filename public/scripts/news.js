@@ -179,8 +179,10 @@ const Article = React.createClass({
 		return (
 			<div className="articleContainer" >
 				<h1>{s.title}</h1>
-				<span> {formattedDate} </span>
-				<div id="article_author">by {s.author}</div>
+				<div className="articleSubHeader">
+					<span id="article_author">by {s.author}</span> on
+					<span> {formattedDate} </span>
+				</div>
 				<div id="article_body" dangerouslySetInnerHTML={{ __html: s.body }}></div>
 			</div>
 		);
