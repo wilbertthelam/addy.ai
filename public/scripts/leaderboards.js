@@ -8,6 +8,7 @@ Contains components for the leaderboards
 
 import React from 'react';
 import $ from 'jquery';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 //--------------------------
 // PowerRankingsTeamsBox information
@@ -168,6 +169,7 @@ const TeamStatsBox = React.createClass({
 						statData={this.state.data}
 						stat={this.state.statCategory}
 						displayField={this.props.displayField}
+						tooltipKey={this.props.tooltipKey}
 					/>
 				</div>
 			</div>
@@ -231,13 +233,16 @@ const Button = React.createClass({
 const Stat = React.createClass({
 	render: function () {
 		return (
-			<tr>
-				<td className="statValue" data-title={this.props.statCategory}>{this.props.statValue}</td>
-				<td data-title="">{this.props.stats[this.props.displayField]}</td>
-			</tr>
+			<OverlayTrigger placement="right" overlay={(<Tooltip>{this.props.tooltipValue}</Tooltip>)}>
+				<tr>
+					<td className="statValue" data-title={this.props.statCategory}>{this.props.statValue}</td>
+					<td data-title="">{this.props.stats[this.props.displayField]}</td>
+				</tr>
+			</OverlayTrigger>
 		);
 	}
 });
+
 
 // Stat header value
 const StatsHeader = React.createClass({
@@ -256,6 +261,7 @@ const StatsList = React.createClass({
 	render: function () {
 		const statCategory = this.props.stat;
 		const displayField = this.props.displayField;
+		const tooltipKey = this.props.tooltipKey;
 		// console.log(JSON.stringify(this.props.statData));
 		let i = 0;
 		const statNodes = this.props.statData.map(function (statline) {
@@ -270,6 +276,7 @@ const StatsList = React.createClass({
 						id={statline.team_id}
 						teamName={statline.team_name}
 						owner={statline.owner_name}
+						tooltipValue={statline[tooltipKey]}
 						statValue={statline[statCategory]}
 					/>
 				);
@@ -292,6 +299,7 @@ const StatBox = React.createClass({
 					statData={this.props.statData}
 					stat={this.props.stat}
 					displayField={this.props.displayField}
+					tooltipKey={this.props.tooltipKey}
 				/>
 			</table>
 		);

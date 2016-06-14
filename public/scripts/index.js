@@ -134,6 +134,7 @@ const LeaderboardPage = React.createClass({
 											week={this.state.week}
 											categories={['R', 'HR', 'RBI', 'SB', 'OBP']}
 											displayField="player_name"
+											tooltipKey="team_name"
 										/>
 									</div>
 
@@ -144,9 +145,9 @@ const LeaderboardPage = React.createClass({
 											week={this.state.week}
 											categories={['K', 'W', 'SV', 'ERA', 'WHIP']}
 											displayField="player_name"
+											tooltipKey="team_name"
 										/>
 									</div>
-									
 								</div>
 
 								<div className="col-md-6">
@@ -157,6 +158,7 @@ const LeaderboardPage = React.createClass({
 											week={this.state.week}
 											categories={['R', 'HR', 'RBI', 'SB', 'OBP']}
 											displayField="team_name"
+											tooltipKey="owner_name"
 										/>
 									</div>
 
@@ -167,6 +169,7 @@ const LeaderboardPage = React.createClass({
 											week={this.state.week}
 											categories={['K', 'W', 'SV', 'ERA', 'WHIP']}
 											displayField="team_name"
+											tooltipKey="owner_name"
 										/>
 									</div>
 
