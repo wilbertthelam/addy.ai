@@ -80,7 +80,13 @@ router.get('/createEditor', function (req, res) {
 	});
 });
 
+/* GET about page. */
 router.get('/editor', function (req, res) {
+	res.render('index', { title: 'addy.ai' });
+});
+
+/* GET about page. */
+router.get('/about', function (req, res) {
 	res.render('index', { title: 'addy.ai' });
 });
 

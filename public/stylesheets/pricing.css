@@ -260,4 +260,16 @@ img {
 }
 
 
+.teamCard {
+    padding: 30px;
+    background-color: white;
+    text-align: center;
+}
 
+.teamMemberPic {
+    width: 225px;
+    height: 200px;
+    margin: 30px;
+    margin-right: auto;
+    margin-left: auto;
+}

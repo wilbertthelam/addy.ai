@@ -2,6 +2,7 @@ import * as Leaderboards from './leaderboards.js';
 import * as News from './news.js';
 import * as Editor from './editor.js';
 import * as Scoreticker from './scoreticker.js';
+import * as About from './about.js';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import $ from 'jquery';
@@ -29,7 +30,7 @@ const MainContainerPage = React.createClass({
 									<a href="/createEditor" className="pure-menu-link">Editor</a>
 								</li>
 								<li className="pure-menu-item">
-									<a href="#" className="pure-menu-link">Contact</a>
+									<Link to="/about" className="pure-menu-link">About</Link>
 								</li>
 							</ul>
 
@@ -225,12 +226,28 @@ const EditorPage = React.createClass({
 	}
 });
 
+const AboutPage = React.createClass({
+	render: function () {
+		return (
+			<div className="main">
+				<div className="banner">
+				</div>
+
+				<div id="container">
+					<About.AboutContainer />
+				</div>
+			</div>
+		);
+	}
+});
+
 ReactDOM.render((
 	<Router history={browserHistory}>
 		<Route component={MainContainerPage}>
 			<Route path="/" component={LeaderboardPage} />
 			<Route path="/news" component={NewsPage} />
 			<Route path="/editor" component={EditorPage} />
+			<Route path="/about" component={AboutPage} />
 		</Route>
 	</Router>
 ), document.getElementById('mainContainer'));
