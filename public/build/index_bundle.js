@@ -65,7 +65,7 @@
 /******/ 	}
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "c6d584fe0c89cb3607f4"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "a2c2e8a14b37ed127453"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -34767,7 +34767,7 @@
 					body: this.state.text,
 					text: 'Save',
 					type: 'btn btn-primary',
-					url: '/news/saveArticle'
+					url: '/news/saveArticleXXX'
 				}),
 				_react3.default.createElement(Button, {
 					articleId: this.state.articleId,
@@ -34777,7 +34777,7 @@
 					body: this.state.text,
 					text: 'Publish',
 					type: 'btn btn-success',
-					url: '/news/publishArticle'
+					url: '/news/publishArticleXXX'
 				}),
 				_react3.default.createElement(
 					'div',
@@ -35214,46 +35214,6 @@
 											'Power rankings'
 										),
 										_react3.default.createElement(Leaderboards.PRTeamListBox, { url: '/powerRankings', pollInterval: 5000 })
-									),
-									_react3.default.createElement(
-										'div',
-										{ className: 'col-sm-12' },
-										_react3.default.createElement(
-											'h2',
-											null,
-											'Admin tools'
-										),
-										_react3.default.createElement(
-											'ul',
-											null,
-											_react3.default.createElement(
-												'li',
-												null,
-												_react3.default.createElement(
-													'a',
-													{ href: '/populatePastStats' },
-													'populate past stats'
-												)
-											),
-											_react3.default.createElement(
-												'li',
-												null,
-												_react3.default.createElement(
-													'a',
-													{ href: '/populateCurrentStats' },
-													'populate current stats'
-												)
-											),
-											_react3.default.createElement(
-												'li',
-												null,
-												_react3.default.createElement(
-													'a',
-													{ href: '/populateCurrentPlayerStats' },
-													'populate current player stats'
-												)
-											)
-										)
 									)
 								)
 							)
@@ -35315,6 +35275,15 @@
 			);
 		}
 	}));
+	
+	//<div className="col-sm-12">
+	//	<h2>Admin tools</h2>
+	//	<ul>
+	//		<li><a href="/populatePastStats">populate past stats</a></li>
+	//		<li><a href="/populateCurrentStats">populate current stats</a></li>
+	//		<li><a href="/populateCurrentPlayerStats">populate current player stats</a></li>
+	//	</ul>
+	//</div>
 	
 	_reactDom2.default.render(_react3.default.createElement(
 		_reactRouter.Router,
@@ -36199,9 +36168,7 @@
 						formattedDate
 					)
 				),
-				this.props.title,
-				' ',
-				this.props.articleId
+				this.props.title
 			);
 		}
 	}));

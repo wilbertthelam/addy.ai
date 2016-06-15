@@ -132,7 +132,7 @@ const ArticleNav = React.createClass({
 				<div id="newsDateLabel">
 					<span className="label label-primary">{formattedDate}</span>
 				</div>
-				{this.props.title} {this.props.articleId}
+				{this.props.title}
 			</div>
 		);
 	}

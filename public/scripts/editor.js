@@ -71,7 +71,7 @@ const Editor = React.createClass({
 					body={this.state.text}
 					text="Save"
 					type="btn btn-primary"
-					url="/news/saveArticle"
+					url="/news/saveArticleXXX"
 				/>
 				<Button
 					articleId={this.state.articleId}
@@ -81,7 +81,7 @@ const Editor = React.createClass({
 					body={this.state.text}
 					text="Publish"
 					type="btn btn-success"
-					url="/news/publishArticle"
+					url="/news/publishArticleXXX"
 				/>
 				<div className="editorInfo">
 					<form>

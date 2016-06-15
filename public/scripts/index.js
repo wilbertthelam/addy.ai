@@ -178,14 +178,6 @@ const LeaderboardPage = React.createClass({
 										<Leaderboards.PRTeamListBox url="/powerRankings" pollInterval={5000} />
 									</div>
 
-									<div className="col-sm-12">
-										<h2>Admin tools</h2>
-										<ul>
-											<li><a href="/populatePastStats">populate past stats</a></li>
-											<li><a href="/populateCurrentStats">populate current stats</a></li>
-											<li><a href="/populateCurrentPlayerStats">populate current player stats</a></li>
-										</ul>
-									</div>
 								</div>
 							</div>
 						</div>
@@ -243,6 +235,15 @@ const AboutPage = React.createClass({
 		);
 	}
 });
+
+//<div className="col-sm-12">
+//	<h2>Admin tools</h2>
+//	<ul>
+//		<li><a href="/populatePastStats">populate past stats</a></li>
+//		<li><a href="/populateCurrentStats">populate current stats</a></li>
+//		<li><a href="/populateCurrentPlayerStats">populate current player stats</a></li>
+//	</ul>
+//</div>
 
 ReactDOM.render((
 	<Router history={browserHistory}>
