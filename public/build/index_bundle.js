@@ -65,7 +65,7 @@
 /******/ 	}
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "a2c2e8a14b37ed127453"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "7156bdc1b21f124462ad"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -35487,6 +35487,9 @@
 	
 	function sortGenerator(statCategory) {
 		return function (a, b) {
+			if (statCategory === 'ERA' || statCategory === 'WHIP') {
+				return a[statCategory] - b[statCategory];
+			}
 			return b[statCategory] - a[statCategory];
 		};
 	}
@@ -35678,20 +35681,30 @@
 			var tooltipKey = this.props.tooltipKey;
 			// console.log(JSON.stringify(this.props.statData));
 			var i = 0;
+			var cutoff = 1.0;
 			var statNodes = this.props.statData.map(function (statline) {
 				i++;
 				if (i <= 15) {
-					return _react3.default.createElement(Stat, {
-						key: i,
-						displayField: displayField,
-						stats: statline,
-						statCategory: statCategory,
-						id: statline.team_id,
-						teamName: statline.team_name,
-						owner: statline.owner_name,
-						tooltipValue: statline[tooltipKey],
-						statValue: statline[statCategory]
-					});
+					if (statline.IP < cutoff && (statline.player_position === 'SP' || statline.player_position === 'RP') && displayField === 'player_name') {
+						i--;
+					} else {
+						if ((statCategory === 'WHIP' || statCategory === 'ERA') && statline.player_position !== 'SP' && statline.player_position !== 'RP' && displayField === 'player_name') {
+							i--;
+						} else {
+							console.log('entered positive zine');
+							return _react3.default.createElement(Stat, {
+								key: i,
+								displayField: displayField,
+								stats: statline,
+								statCategory: statCategory,
+								id: statline.team_id,
+								teamName: statline.team_name,
+								owner: statline.owner_name,
+								tooltipValue: statline[tooltipKey],
+								statValue: statline[statCategory]
+							});
+						}
+					}
 				}
 			});
 			return _react3.default.createElement(

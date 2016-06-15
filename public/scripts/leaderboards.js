@@ -102,6 +102,9 @@ const PRTeam = React.createClass({
 
 function sortGenerator(statCategory) {
 	return function (a, b) {
+		if (statCategory === 'ERA' || statCategory === 'WHIP') {
+			return a[statCategory] - b[statCategory];
+		}
 		return b[statCategory] - a[statCategory];
 	};
 }
@@ -264,22 +267,33 @@ const StatsList = React.createClass({
 		const tooltipKey = this.props.tooltipKey;
 		// console.log(JSON.stringify(this.props.statData));
 		let i = 0;
+		const cutoff = 1.0;
 		const statNodes = this.props.statData.map(function (statline) {
 			i++;
 			if (i <= 15) {
-				return (
-					<Stat
-						key={i}
-						displayField={displayField}
-						stats={statline}
-						statCategory={statCategory}
-						id={statline.team_id}
-						teamName={statline.team_name}
-						owner={statline.owner_name}
-						tooltipValue={statline[tooltipKey]}
-						statValue={statline[statCategory]}
-					/>
-				);
+				if (statline.IP < cutoff && (statline.player_position === 'SP' || statline.player_position === 'RP') && (displayField === 'player_name')) {
+					i--;
+				}
+				else {
+					if ((statCategory === 'WHIP' || statCategory === 'ERA') && (statline.player_position !== 'SP' && statline.player_position !== 'RP') && displayField === 'player_name') {
+						i--;
+					} else {
+						console.log('entered positive zine')
+						return (
+							<Stat
+								key={i}
+								displayField={displayField}
+								stats={statline}
+								statCategory={statCategory}
+								id={statline.team_id}
+								teamName={statline.team_name}
+								owner={statline.owner_name}
+								tooltipValue={statline[tooltipKey]}
+								statValue={statline[statCategory]}
+							/>
+						);
+					}
+				}
 			}
 		});
 		return (
