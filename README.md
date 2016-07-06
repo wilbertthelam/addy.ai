@@ -1,6 +1,8 @@
 # addy.ai
 Automated fantasy power rankings for ESPN fantasy sites
 
+URL (test version) : <a href="http://www.addyai.me">http://www.addyai.me</a>
+
 <b>Contributors:</b> David Lee, Addison Wright, Wilbert Lam<br>
 
 <h2>Features:</h2>
