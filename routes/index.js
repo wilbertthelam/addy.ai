@@ -17,7 +17,8 @@ var weeklyVariables = require('../weekly_variables.js');
 var leagueId = weeklyVariables.leagueId;
 var seasonId = weeklyVariables.seasonId;
 
-var currentWeek = weeklyVariables.currentWeek;
+// var currentWeek = weeklyVariables.currentWeek;
+var currentWeek = 21;
 var totalTeams = 8;
 
 //=====================
@@ -29,14 +30,14 @@ var powerRankings = null;
 var topPlayersCache = [];
 
 // CRONjob to automatically increment week on Monday 12am PST
-var CronJob = require('cron').CronJob;
-var job = new CronJob('00 00 00 * * 1', function () {
-   		console.log("Next week started: " + (currentWeek + 1));
-		currentWeek++;
-	},
-	false,
-	'America/Seattle'
-);
+// var CronJob = require('cron').CronJob;
+// var job = new CronJob('00 00 00 * * 1', function () {
+//    		console.log("Next week started: " + (currentWeek + 1));
+// 		currentWeek++;
+// 	},
+// 	false,
+// 	'America/Seattle'
+// );
 
 
 for (var i = 1; i <= currentWeek; i++) {
@@ -302,6 +303,17 @@ router.get('/powerRankings', function (req, res) {
 	}
 });
 
+/* Season leader players per category */
+router.get('/seasonLeaders', function (req, res) {
+	var statement = 'SELECT * FROM statv WHERE week = ? AND league_id = ? AND year = ?;';
+	connection.query(statement, [currentWeek, leagueId, seasonId], function(err, results) {
+		if (err) {
+			return res.json({ execSuccess: false, message: 'Cannot get stats.', error: err});
+		} else {
+			return res.json({ execSuccess: true, message: 'Stats successfully retrieved.', data: results});
+		}
+	});
+});
 
 /* Populate all the old stats prior to a certain week */
 router.get('/populatePastStats', function (req, res) {
