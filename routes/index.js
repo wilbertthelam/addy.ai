@@ -18,7 +18,7 @@ var leagueId = weeklyVariables.leagueId;
 var seasonId = weeklyVariables.seasonId;
 
 // var currentWeek = weeklyVariables.currentWeek;
-var currentWeek = 10;
+var currentWeek = 21;
 var totalTeams = 8;
 
 //=====================
