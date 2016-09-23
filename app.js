@@ -7,12 +7,17 @@ var bodyParser = require('body-parser');
 var webpack = require('webpack');
 var webpackConfig = require('./webpack.config');
 var compiler = webpack(webpackConfig);
+var session = require('express-session');
 
 var app = express();
 
 var routes = require('./routes/index');
 var news = require('./routes/news');
 var automatedtasks = require('./routes/automatedtasks');
+var login = require('./routes/login');
+var voting = require('./routes/voting');
+var league = require('./routes/league');
+var footballtasks = require('./routes/footballtasks');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -28,6 +33,13 @@ if (app.get('env') === 'development') {
     app.use(require('webpack-hot-middleware')(compiler));
 }
 
+// session middleware
+app.use(session({
+  secret: 'football session',
+  resave: false,
+  saveUninitialized: false
+}));
+
 app.use(logger('dev'));
 
 app.use(bodyParser.json());
@@ -38,6 +50,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', routes);
 app.use('/news', news);
 app.use('/tasks', automatedtasks);
+
+app.use('/football/login', login);
+app.use('/football/voting', voting);
+app.use('/football/league', league);
+app.use('/football/tasks', footballtasks);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
