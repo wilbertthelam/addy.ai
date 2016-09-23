@@ -5,7 +5,7 @@ var router = express.Router();
 var db = require('../db_conn_football.js');
 var connection = db;
 
-
+var loginAuth = require('./utilities/loginAuthenticationMiddleware.js');
 
 /* POST to login into user account */
 router.post('/login', function (req, res) {
@@ -34,6 +34,16 @@ router.post('/logout', function (req, res) {
 		return res.json('logged out');
 	});
 });
+
+router.get('/testLogin', loginAuth.isAuthenticated, function(req, res) {
+	return res.json('Logged in.');
+});
+
+// router.get('/notLoggedIn', function(req, res) {
+// 	return res.json('Didnt log in');
+// });
+
+
 
 function checkUserLogin(email, password, callback) {
 	var statement = 'SELECT * FROM addy_ai_football.users WHERE email = ? AND password = ?';

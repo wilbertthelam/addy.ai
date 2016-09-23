@@ -54,6 +54,7 @@ CREATE TABLE `teams` (
   `user_id` int(50),
   `team_name` VARCHAR(70) NOT NULL DEFAULT 'Unnamed Team',
   `year` int(10) NOT NULL,
+  `owner_name` VARCHAR(70) NOT NULL DEFAULT 'Unnamed Owner',
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP);
 
 # sample data
