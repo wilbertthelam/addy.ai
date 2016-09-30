@@ -13,11 +13,6 @@ seasonId = str(sys.argv[2])
 # leagueId = str(187575)
 # seasonId = str(2016)
 
-
-# retrieve number of weeks from the number of weeks that the league provides
-# (see what the last element )
-numberOfWeeks = 12
-
 # final JSON result
 data = {}
 
@@ -49,6 +44,11 @@ for team in teamsInfo:
 	teams.append(row)
 
 
+# retrieve number of weeks from the number of weeks that the league provides
+# (see what the last element )
+weekStrip = soup.select('.bodyCopy')
+weeks = weekStrip[0].findAll('a')
+numberOfWeeks = int(weeks[-1].get_text())
 
 
 # URL for ESPN scoreboard

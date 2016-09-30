@@ -1,0 +1,75 @@
+.login-box {
+	background-color: linen;
+	padding: 0px;
+}
+
+.login-box-inner {
+	background-color: white;
+	padding: 20px;
+}
+
+.login-box input {
+	width: 100%;
+}
+
+.login-box p {
+	margin-bottom: 50px;
+}
+
+.warning {
+	color: red;
+	text-align: center;
+}
+
+.nav-bar {
+	background-color: white;
+	padding: 0px;
+}
+
+.nav-bar ul {
+	list-style: none;
+	padding: 0px;
+	margin: 0px;
+}
+
+.nav-bar li {
+	padding: 10px;
+	padding-left: 20px;
+	margin: 0px;
+}
+
+#nav-bar-title {
+	background-color: linen;
+	margin: 0px;
+	padding: 10px;
+	font-weight: bold;
+}
+
+.content-box {
+	width: 100%;
+	background-color: white;
+	padding: 10px;
+}
+
+.matchup {
+	width: 100%;
+	padding: 20px;
+	margin-bottom: 10px;
+}
+
+#vs {
+	font-size: 20px;
+}
+
+.owner-name {
+	padding: 0px;
+}
+
+.team-name {
+	font-size: 20px;
+	padding: 0px;
+}
+
+.team {
+	padding: 0px;
+}

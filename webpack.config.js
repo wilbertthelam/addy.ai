@@ -3,6 +3,7 @@ const path = require('path');
 
 const PATHS = {
 	app: path.join(__dirname, 'public/scripts/index.js'),
+	football: path.join(__dirname, 'public/scripts/football.js'),
 	leaderboards: path.join(__dirname, 'public/scripts/leaderboards.js'),
 	editor: path.join(__dirname, 'public/scripts/editor.js'),
 	news: path.join(__dirname, 'public/scripts/news.js'),
@@ -18,10 +19,10 @@ module.exports = {
 			PATHS.app,
 			PATHS.hotload
 		],
-		// leaderboards: [
-		// 	PATHS.leaderboards,
-		// 	PATHS.hotload
-		// ],
+		football: [
+			PATHS.football,
+			PATHS.hotload
+		],
 		// editor: [
 		// 	PATHS.editor,
 		// 	PATHS.hotload

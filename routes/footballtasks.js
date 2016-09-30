@@ -15,12 +15,21 @@ var async = require('async');
 // create Python shell to allow us to run web scraper
 var PythonShell = require('python-shell');
 
-/* POST to run Py script to  */
+/* POST to run add league data for a new league  
+	1. parse league information - TODO
+	2. check if league is private or not - TODO
+	3. check to see if league already exists - TODO
+	4. run python script to get league
+	5. update the DB with the teams
+	6. update the DB with the matchups
+*/
 router.post('/addLeague', function (req, res) {
 	// parameters passed via GET call
 	var leagueId = req.body.leagueId;
 	var seasonId = req.body.seasonId;
 
+	console.log(leagueId)
+	console.log(seasonId)
 	var data;
 	
 	async.series({

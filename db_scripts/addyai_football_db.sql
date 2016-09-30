@@ -10,7 +10,7 @@ DROP TABLE IF EXISTS `users`;
 /*!40101 SET character_set_client = utf8 */;
 
 CREATE TABLE `users` (
-  `user_id` int(50) NOT NULL,
+  `user_id` int(50) NOT NULL AUTO_INCREMENT,
   `email` varchar(50) NOT NULL,
   `password` varchar(50) NOT NULL,
   `first_name` varchar(50) NOT NULL,
@@ -75,13 +75,36 @@ DROP TABLE IF EXISTS `leagues`;
 /*!40101 SET character_set_client = utf8 */;
 
 CREATE TABLE `leagues` (
-  `league_id` int(50) NOT NULL,
+  `league_id` int(50) NOT NULL AUTO_INCREMENT,
   `espn_id` int(50) NOT NULL,
   `year` int(50) NOT NULL,
   `league_name` varchar(70) NOT NULL,
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`league_id`,`year`));
   
+INSERT INTO `leagues` VALUES(1, 44067, 2016, 'Russells Midget Minions', '2016-02-22 12:22:25');
+INSERT INTO `leagues` VALUES(2, 44012, 2016, 'Chipotle Kitchen', '2016-02-22 12:22:25');
+INSERT INTO `leagues` VALUES(3, 44012, 2016, 'Auction League', '2016-02-22 12:22:25');
+INSERT INTO `leagues` VALUES(4, 44012, 2016, 'Arjun League', '2016-02-22 12:22:25');
+
+
+########################
+# Football user_leagues #
+########################
+DROP TABLE IF EXISTS `user_leagues`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+
+CREATE TABLE `user_leagues` (
+  `league_id` int(50) NOT NULL,
+  `user_id` int(50) NOT NULL,
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`league_id`,`user_id`));
+  
+INSERT INTO `user_leagues` VALUES(1, 1, '2016-02-22 12:22:25');
+INSERT INTO `user_leagues` VALUES(2, 1, '2016-02-22 12:22:25'); 
+INSERT INTO `user_leagues` VALUES(3, 1, '2016-02-22 12:22:25'); 
+INSERT INTO `user_leagues` VALUES(4, 1, '2016-02-22 12:22:25');  
 #CREATE OR REPLACE VIEW weekly_player_statv AS
 #SELECT  teams.team_name, teams.owner_name, player_stats.*
 #	FROM teams, player_stats
