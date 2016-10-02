@@ -1,6 +1,7 @@
 import * as About from './about.js';
 import * as Login from './football_login.js';
 import * as Dashboard from './football_dashboard.js';
+import * as Leagues from './football_leagues.js';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import $ from 'jquery';
@@ -144,6 +145,7 @@ ReactDOM.render((
 					<Route path="voting" component={Dashboard.VotingContainer} />
 					<Route path="leaderboard" component={Dashboard.LeaderboardContainer} />
 				</Route>
+				<Route path="leagues" component={Leagues.LeagueContainer} />
 			</Route>
 		</Route>
 	</Router>

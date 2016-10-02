@@ -40,6 +40,11 @@ CREATE TABLE `matchups` (
   `team_id2` int(50) NOT NULL,
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`matchup_id`));
+  
+INSERT INTO `matchups` VALUES(100, 123456, 1, 2016, 100, 101, '2016-02-21 22:21:08');
+INSERT INTO `matchups` VALUES(101, 123456, 1, 2016, 102, 103, '2016-02-21 22:21:08');
+INSERT INTO `matchups` VALUES(102, 123456, 1, 2016, 104, 105, '2016-02-21 22:21:08');
+
 
 ###############
 # Football teams #
@@ -58,14 +63,12 @@ CREATE TABLE `teams` (
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP);
 
 # sample data
-#INSERT INTO `teams` VALUES(1, 44067, 'This Team is UnFrazierable', 'Wilbert Lam', '2016-02-22 12:22:25');
-#INSERT INTO `teams` VALUES(2, 44067, 'Team dickbutt is coming for u', 'Davy Til', '2016-02-22 12:22:25');
-#INSERT INTO `teams` VALUES(3, 44067, 'SSID PLWUYANG', 'Chris Chan', '2016-02-22 12:22:25');
-#INSERT INTO `teams` VALUES(4, 44067, 'Baseball sucks so does Wilburt', 'Linsen Wu', '2016-02-22 12:22:25');
-#INSERT INTO `teams` VALUES(5, 44067, 'Davys Manny Pujols', 'Addison Wright', '2016-02-22 12:22:25');
-#INSERT INTO `teams` VALUES(6, 44067, 'Caves Kitchen Curries', 'John Luu', '2016-02-22 12:22:25');
-#INSERT INTO `teams` VALUES(7, 44067, 'The Number One Fanned', 'Kevin Yan', '2016-02-22 12:22:25');
-#INSERT INTO `teams` VALUES(8, 44067, 'BURT THE MILFHUNTER', 'Loc Nguyen', '2016-02-22 12:22:25');
+INSERT INTO `teams` VALUES(100, 123456, 100, 'Name of Amys Sextape!', 2016, 'Jake Peralta', '2016-02-22 12:22:25');
+INSERT INTO `teams` VALUES(101, 123456, 101, 'I Skipped 4th Grade', 2016, 'Amy Santiago', '2016-02-22 12:22:25');
+INSERT INTO `teams` VALUES(102, 123456, 102, 'Basement Dweller', 2016, 'Charles Boyle', '2016-02-22 12:22:25');
+INSERT INTO `teams` VALUES(103, 123456, 103, 'i hate you', 2016, 'Rosa Diaz', '2016-02-22 12:22:25');
+INSERT INTO `teams` VALUES(104, 123456, 104, 'Give me my Yogurt!', 2016, 'Terry Giffords', '2016-02-22 12:22:25');
+INSERT INTO `teams` VALUES(105, 123456, 105, 'Married to Kevin Cozner', 2016, 'Captain Ray Holt', '2016-02-22 12:22:25');
 
 ########################
 # Football leagues #
@@ -80,12 +83,12 @@ CREATE TABLE `leagues` (
   `year` int(50) NOT NULL,
   `league_name` varchar(70) NOT NULL,
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`league_id`,`year`));
+  PRIMARY KEY (`league_id`,`espn_id`,`year`));
   
-INSERT INTO `leagues` VALUES(1, 44067, 2016, 'Russells Midget Minions', '2016-02-22 12:22:25');
 INSERT INTO `leagues` VALUES(2, 44012, 2016, 'Chipotle Kitchen', '2016-02-22 12:22:25');
 INSERT INTO `leagues` VALUES(3, 44012, 2016, 'Auction League', '2016-02-22 12:22:25');
 INSERT INTO `leagues` VALUES(4, 44012, 2016, 'Arjun League', '2016-02-22 12:22:25');
+INSERT INTO `leagues` VALUES(123456, 123456, 2016, 'Test Mock Football League', '2016-02-22 12:22:25');
 
 
 ########################
@@ -124,4 +127,4 @@ CREATE TABLE `votes` (
   `winning_team_id` int(50) NOT NULL,
   `losing_team_id` int(50) NOT NULL,
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`vote_id`));
+  PRIMARY KEY (`vote_id`, `matchup_id`, `user_id`));

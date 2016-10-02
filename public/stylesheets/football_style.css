@@ -19,6 +19,7 @@
 .warning {
 	color: red;
 	text-align: center;
+	margin-left: 10px;
 }
 
 .nav-bar {
@@ -72,4 +73,30 @@
 
 .team {
 	padding: 0px;
+}
+
+.team:hover {
+	font-weight: bold;
+	cursor: pointer;
+}
+
+.vote-selected {
+	font-weight: bold;
+	color: black;
+}
+
+.league-rows {
+	list-style: none;
+	padding: 3px;
+	font-size: 1.1em;
+}
+
+.league-rows .league-row {
+	margin-left: 10px;
+	padding: 5px;
+}
+
+.league-header {
+	font-size: 1.4em;
+	font-weight: bold;
 }

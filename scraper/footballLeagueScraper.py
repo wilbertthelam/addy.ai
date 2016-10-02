@@ -9,6 +9,7 @@ import json
 
 leagueId = str(sys.argv[1])
 seasonId = str(sys.argv[2])
+espnId = str(sys.argv[3])
 
 # leagueId = str(187575)
 # seasonId = str(2016)
@@ -22,17 +23,17 @@ teams = []
 # matchup information
 matchups = []
 
-
-
-
-
 # for each team, we need to include the following fields:
 # league_id | team_id | team_name | year | owner_name
-teamsURL = 'http://games.espn.com/ffl/scoreboard?leagueId=' + leagueId + '&seasonId=' + seasonId
+teamsURL = 'http://games.espn.com/ffl/scoreboard?leagueId=' + espnId + '&seasonId=' + seasonId
 response = requests.get(teamsURL)
 soup = bs4.BeautifulSoup(response.content, 'lxml')
 
 teamsInfo = soup.findAll(id=re.compile('^teamscrg_*'))
+
+if len(teamsInfo) == 0:
+	print json.dumps('invalid league')
+	sys.exit()
 
 for team in teamsInfo:
 	row = {}
@@ -52,11 +53,11 @@ numberOfWeeks = int(weeks[-1].get_text())
 
 
 # URL for ESPN scoreboard
-scoreboardURL = 'http://games.espn.com/ffl/scoreboard?leagueId=' + leagueId + '&seasonId=' + seasonId + '&matchupPeriodId='
+scoreboardURL = 'http://games.espn.com/ffl/scoreboard?leagueId=' + espnId + '&seasonId=' + seasonId + '&matchupPeriodId='
 
 # for each matchup, we need to include the following fields:
 # league_id | week | year (seasonId) | team_id1 | team_id2
-for week in range(0, 12):
+for week in range(0, numberOfWeeks):
 	# HTML response
 	response = requests.get(scoreboardURL + str(week + 1))
 
