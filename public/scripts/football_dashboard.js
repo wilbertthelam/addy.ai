@@ -28,6 +28,11 @@ DashboardContainer.contextTypes = {
 };
 
 const NavBar = React.createClass({
+	getInitialState: function () {
+		return {
+			// activeLeagueId: null
+		};
+	},
 	render: function () {
 		return (
 			<div className="nav-bar shadow-z-1">
@@ -35,6 +40,7 @@ const NavBar = React.createClass({
 					<li id="nav-bar-title">Your leagues:</li>
 					<LeagueList
 						baseUrl="/football/league/userLeagues"
+						// activeLeagueId={this.state.activeLeagueId}
 					/>
 					<li id="nav-bar-title">
 						<Link to="/dashboard/leagues">Join leagues</Link>
@@ -48,13 +54,25 @@ const NavBar = React.createClass({
 const LeagueList = React.createClass({
 	getInitialState: function () {
 		return {
-			data: []
+			data: [],
+			activeLeagueId: null
 		};
 	},
 	componentDidMount: function () {
+		this.leagueDisplay(this.props.baseUrl);
+	},
+
+	// componentWillReceiveProps: function (nextProps) {
+	// 	this.setState({ activeLeagueId: nextProps.activeLeagueId }, this.leagueDisplay(this.props.baseUrl));
+	// },
+	setActiveLeagueId: function (activeLeagueId) {
+		console.log('activeLeagueId set at : ' + activeLeagueId);
+		this.setState({ activeLeagueId: activeLeagueId });
+	},
+	leagueDisplay: function (baseUrl) {
 		$.ajax({
 			type: 'GET',
-			url: this.props.baseUrl,
+			url: baseUrl,
 			dataType: 'json',
 			cache: false,
 			success: function (data) {
@@ -69,13 +87,20 @@ const LeagueList = React.createClass({
 			}.bind(this)
 		});
 	},
-
 	render: function () {
+		const that = this;
 		const leagueNodes = this.state.data.map(function (league) {
+			let activeClass = '';
+			console.log('that.state.activeID: ' + that.state.activeLeagueId);
+			if (that.state.activeLeagueId === league.league_id) {
+				activeClass = 'league-selected';
+			}
 			return (
 				<LeagueNode
 					leagueId={league.league_id}
 					leagueName={league.league_name}
+					activeClass={activeClass}
+					setActiveLeagueId={that.setActiveLeagueId}
 				/>
 			);
 		});
@@ -95,10 +120,23 @@ const LeagueList = React.createClass({
 });
 
 const LeagueNode = React.createClass({
+	getInitialState: function () {
+		return {
+			activeClass: this.props.activeClass
+		};
+	},
+	componentWillReceiveProps: function (nextProps) {
+		this.setState({ activeClass: nextProps.activeClass });
+	},
+	indexSelected: function (leagueId) {
+		console.log('got selected baby!' + leagueId);
+		this.props.setActiveLeagueId(leagueId);
+	},
+
 	render: function () {
 		const url = '/dashboard/league/' + this.props.leagueId + '/voting';
 		return (
-			<li><Link to={url}>{this.props.leagueName}</Link></li>
+			<li className={this.state.activeClass} onClick={() => this.indexSelected(this.props.leagueId)}><Link to={url}>{this.props.leagueName}</Link></li>
 		);
 	}
 });
@@ -162,10 +200,20 @@ const VotingContainer = React.createClass({
 		};
 	},
 	componentDidMount: function () {
+		this.displayPage(this.props.params.leagueId);
+		// alert('leagueId right now: ' + this.props.params.leagueId)
+	},
+
+	componentWillReceiveProps: function (nextProps) {
+		this.displayPage(nextProps.params.leagueId);
+		// alert('leagueId updated: ' + nextProps.params.leagueId)
+	},
+
+	displayPage: function (leagueId) {
 		$.ajax({
 			type: 'GET',
 			url: '/football/voting/matchups',
-			data: { leagueId: this.props.params.leagueId },
+			data: { leagueId: leagueId },
 			dataType: 'json',
 			cache: false,
 			success: function (data) {
@@ -215,40 +263,45 @@ const MatchupNode = React.createClass({
 		};
 	},
 	componentDidMount: function () {
+		this.getUserVotes(this.props.data.matchup_id, this.props.data.team_id2);
+	},
+	componentWillReceiveProps: function (nextProps) {
+		this.getUserVotes(this.data.matchup_id, this.data.team_id2);
+	},
+	getUserVotes: function (matchupId, teamId2) {
 		// on load check to see which team has won from the particular matchup
 		$.ajax({
 			type: 'GET',
 			url: '/football/voting/votingPicksForUser',
-			data: { matchupId: this.props.data.matchup_id },
+			data: { matchupId: matchupId },
 			dataType: 'json',
 			cache: false,
 			success: function (data) {
 				console.log(JSON.stringify(data));
 				if (!data.execSuccess) {
-					console.log("Failed to update");
+					console.log('Failed to update');
 				} else {
 					if (data.data.length > 0) {
 						const voteRow = data.data[0];
 						let winner = 0;
-						if (voteRow.winning_team_id === this.props.data.team_id2) {
+						if (voteRow.winning_team_id === teamId2) {
 							winner = 1;
 						}
 						const newSelectClass = [];
 						newSelectClass[winner] = this.state.activeClass;
 						newSelectClass[1 - winner] = '';
-						this.setState({selectClass: newSelectClass });
+						this.setState({ selectClass: newSelectClass, winner: winner });
 					}
-					
 				}
-				console.log("populated user voting decision");
+				console.log('populated user voting decision');
 			}.bind(this),
 			error: function (status, err) {
 				console.error(status, err.toString());
-				alert("no work");
+				alert('no work');
 			}
 		});
-
 	},
+
 	updateActiveClasses: function () {
 		// on state change, change the classes that highlight your pick
 
@@ -256,7 +309,7 @@ const MatchupNode = React.createClass({
 		const winner = this.state.winner;
 		newSelectClass[winner] = this.state.activeClass;
 		newSelectClass[1 - winner] = '';
-		this.setState({selectClass: newSelectClass });
+		this.setState({ selectClass: newSelectClass });
 	},
 	vote: function (winningTeam) {
 		// team 0 is the first team on the list,

@@ -11,7 +11,7 @@ var async = require('async');
 
 /* GET to return ALL leagues that a user is in. */
 router.get('/userLeagues', loginAuth.isAuthenticated, function (req, res) {
-	var statement = 'SELECT * FROM addy_ai_football.user_leagues ul, addy_ai_football.leagues l WHERE user_id = ? and ul.league_id = l.league_id;';
+	var statement = 'SELECT * FROM addy_ai_football.user_leagues ul, addy_ai_football.leagues l WHERE user_id = ? and ul.league_id = l.league_id ORDER BY l.league_name;';
 	connection.query(statement, req.session.userId, function (err, results) {
 		if (err) {
 			return res.json({ execSuccess: false, message: 'Cannot get user leagues.', error: err });
@@ -23,7 +23,7 @@ router.get('/userLeagues', loginAuth.isAuthenticated, function (req, res) {
 
 /* GET leagues the user isn't in. */
 router.get('/availableLeagues', loginAuth.isAuthenticated, function (req, res) {
-	var statement = 'SELECT * FROM addy_ai_football.leagues WHERE league_id NOT IN ( SELECT league_id FROM addy_ai_football.user_leagues WHERE user_id = ?); ;';
+	var statement = 'SELECT * FROM addy_ai_football.leagues WHERE league_id NOT IN ( SELECT league_id FROM addy_ai_football.user_leagues WHERE user_id = ?) ORDER BY league_name;';
 	connection.query(statement, [req.session.userId], function (err, results) {
 		if (err) {
 			return res.json({ execSuccess: false, message: 'Cannot get leagues.', error: err });
@@ -72,4 +72,15 @@ router.get('/leagueInfo', loginAuth.isAuthenticated, function (req, res) {
 	});
 });
 
+/* GET info on a league that the user is in. */
+router.get('/leagueInfoESPNSeason', loginAuth.isAuthenticated, function (req, res) {
+	var statement = 'SELECT * FROM addy_ai_football.leagues WHERE espn_id = ? AND year = ?;';
+	connection.query(statement, [req.query.espnId, req.query.seasonId], function (err, results) {
+		if (err) {
+			return res.json({ execSuccess: false, message: 'Cannot get league.', error: err });
+		} else {
+			return res.json({ execSuccess: true, message: 'League successfully retrieved.', data: results });
+		}
+	});
+});
 module.exports = router;

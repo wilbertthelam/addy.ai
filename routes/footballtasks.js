@@ -31,6 +31,7 @@ router.post('/createNewLeague', loginAuth.isAuthenticated, function (req, res) {
 	// parameters passed via GET call
 	var espnId = req.body.espnId;
 	var leagueId;
+	var leagueName;
 	var seasonId = req.body.seasonId;
 
 	console.log(leagueId);
@@ -94,6 +95,8 @@ router.post('/createNewLeague', loginAuth.isAuthenticated, function (req, res) {
 				} else {
 					connection.commit();
 					leagueId = result.insertId;
+					leagueName = infoData.league.league_name;
+					console.log('updateDbLeague is: ' + leagueId);
 					cb1(null, null);
 				}
 			});
@@ -171,7 +174,7 @@ router.post('/createNewLeague', loginAuth.isAuthenticated, function (req, res) {
 					return res.json({ execSuccess: false, message: 'Cannot close transaction.', error: err });
 				} else {
 					connection.commit();
-					res.json({execSuccess: true, message: 'Added league to the database.', data: infoData });
+					res.json({ execSuccess: true, message: 'Added league to the database.', data: { league_id: leagueId, league_name: leagueName } });
 				}
 			});
 		},

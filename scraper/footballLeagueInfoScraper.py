@@ -33,7 +33,7 @@ info = header.select('.info-area')[0]
 
 league['espn_id'] = espnId
 league['year'] = seasonId
-league['league_name'] = header.select('.league-team-names')[0].h1['title']
+league['league_name'] = header.select('.league-team-names')[0].h1['title'].strip()
 
 
 data['league'] = league

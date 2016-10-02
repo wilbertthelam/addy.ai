@@ -100,3 +100,8 @@
 	font-size: 1.4em;
 	font-weight: bold;
 }
+
+.league-selected {
+	font-weight: bold;
+	color: black;
+}

@@ -140,7 +140,7 @@ const AddLeague = React.createClass({
 		};
 	},
 	createLeague: function () {
-		this.setState({ message: '' });
+		this.setState({ displayResult: false, message: '' });
 		const urlSections = this.state.url.split('?');
 		let parameterString = '';
 		if (urlSections.length <= 1) {
@@ -166,7 +166,23 @@ const AddLeague = React.createClass({
 						if (data.execSuccess === false) {
 							console.log('error could not add league');
 							if (data.code === 'ERR_DUPLICATE_ESPN_ID') {
-								this.setState({ message: 'The league already exists!' });
+								// if already exists, then make a ajax call to get the leagueId
+								$.ajax({
+									type: 'GET',
+									url: '/football/league/leagueInfoESPNSeason',
+									data: { espnId: parsed.leagueId, seasonId: parsed.seasonId },
+									dataType: 'json',
+									cache: false,
+									success: function (data2) {
+										this.setState({ displayResult: true, leagueId: data2.data[0].league_id, leagueName: data2.data[0].league_name });
+										
+									}.bind(this),
+									error: function (status, err) {
+										console.error(status, err.toString());
+										this.setState({ message: 'Hm, looks like the servers are down. Try again in a bit!' });
+										// print network error warning
+									}.bind(this)
+								});
 							} else if (data.code === 'ERR_PRIVATE_NOT_EXIST') {
 								this.setState({ message: 'Sorry, the league is privated or does not exist! Ask your league manager to make your league public!' });
 							} else if (data.code === 'ERR_INV_LEAGUE_TYPE') {
@@ -174,14 +190,11 @@ const AddLeague = React.createClass({
 							} else {
 								this.setState({ message: 'Some strange error happened, try again in a bit!' });
 							}
-							this.setState({ displayResult: false });
 							// could not add league
 							// return message saying if wrong type or league is privated or does not exist
 						} else {
 							console.log('successfully added');
-							const leagueId = data.data;
-
-							this.setState({ displayResult: true, leagueId: leagueId });
+							this.setState({ displayResult: true, leagueId: data.data.league_id, leagueName: data.data.league_name });
 							// place option for the league to show up below
 							
 						}
@@ -205,8 +218,8 @@ const AddLeague = React.createClass({
 	render: function () {
 		let resultComponent;
 		if (this.state.displayResult) {
-			alert('display thing here');
-			resultComponent = <LeagueNode leagueId={this.state.leagueId} leagueName="TODO: add league name" />;
+			// alert('display thing here : ' + this.state.leagueId);
+			resultComponent = <LeagueNode leagueId={this.state.leagueId} leagueName={this.state.leagueName} />;
 		}
 		return (
 			<div>

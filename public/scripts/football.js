@@ -60,7 +60,7 @@ const LoginPage = React.createClass({
 });
 
 const DashboardPage = React.createClass({
-	componentWillMount: function () {
+	componentDidMount: function () {
 		$.ajax({
 			type: 'POST',
 			url: '/football/login/isUserLoggedIn',
