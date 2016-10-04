@@ -25,7 +25,7 @@ router.get('/matchups', function (req, res) {
 
 /* GET to return ALL user voters for a given matchupId. */
 router.get('/votingPicksForUser', loginAuth.isAuthenticated, function (req, res) {
-	var statement = 'SELECT * FROM addy_ai_football.votes WHERE user_id = ? AND matchup_id = ?;';
+	var statement = 'SELECT * FROM addy_ai_football.votes WHERE user_id = ? AND matchup_id = ? ORDER BY create_time DESC, vote_id DESC LIMIT 1;';
 	connection.query(statement, [req.session.userId, req.query.matchupId], function (err, results) {
 		if (err) {
 			return res.json({ execSuccess: false, message: 'Cannot get matchup data.', error: err });

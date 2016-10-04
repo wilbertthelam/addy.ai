@@ -62,9 +62,9 @@ const LeagueList = React.createClass({
 		this.leagueDisplay(this.props.baseUrl);
 	},
 
-	// componentWillReceiveProps: function (nextProps) {
-	// 	this.setState({ activeLeagueId: nextProps.activeLeagueId }, this.leagueDisplay(this.props.baseUrl));
-	// },
+	componentWillReceiveProps: function (nextProps) {
+		this.setState({ activeLeagueId: nextProps.activeLeagueId }, this.leagueDisplay(this.props.baseUrl));
+	},
 	setActiveLeagueId: function (activeLeagueId) {
 		console.log('activeLeagueId set at : ' + activeLeagueId);
 		this.setState({ activeLeagueId: activeLeagueId });
@@ -144,15 +144,20 @@ const LeagueNode = React.createClass({
 const ContentBox = React.createClass({
 	getInitialState: function () {
 		return {
-			activeTab: 1
+			activeTab: 1,
+			leagueId: this.props.params.leagueId
 		};
+	},
+	componentWillReceiveProps: function (nextProps) {
+		this.setState({ leagueId: nextProps.params.leagueId });
 	},
 	handleSelect: function (keyId) {
 		if (keyId !== this.state.activeTab) {
 			this.setState({ activeTab: keyId });
-			const voteUrl = '/dashboard/league/' + this.props.params.leagueId + '/voting';
-			const leaderboardUrl = '/dashboard/league/' + this.props.params.leagueId + '/leaderboard';
+			const voteUrl = '/dashboard/league/' + this.state.leagueId + '/voting';
+			const leaderboardUrl = '/dashboard/league/' + this.state.leagueId + '/leaderboard';
 			if (keyId === 1) {
+				// this.setState({ leagueId: })
 				this.context.router.push(voteUrl);
 			} else {
 				this.context.router.push(leaderboardUrl);
@@ -186,8 +191,7 @@ const DefaultContainer = React.createClass({
 	render: function () {
 		return (
 			<div>
-
-				This is just the default thing 
+				This is just the default thing
 			</div>
 		);
 	}
@@ -197,14 +201,17 @@ const VotingContainer = React.createClass({
 	getInitialState: function () {
 		return {
 			data: [],
+			leagueId: this.props.params.leagueId
 		};
 	},
 	componentDidMount: function () {
+		// alert("voting container mounted");
 		this.displayPage(this.props.params.leagueId);
 		// alert('leagueId right now: ' + this.props.params.leagueId)
 	},
 
 	componentWillReceiveProps: function (nextProps) {
+		// alert("voting container received new props")
 		this.displayPage(nextProps.params.leagueId);
 		// alert('leagueId updated: ' + nextProps.params.leagueId)
 	},
@@ -220,7 +227,7 @@ const VotingContainer = React.createClass({
 				console.log(JSON.stringify(data));
 				// if successfully logged in, open dashboard, else redirect to login
 
-				this.setState({ data: data.data });
+				this.setState({ leagueId: leagueId, data: data.data });
 			}.bind(this),
 			error: function (status, err) {
 				console.error(status, err.toString());
@@ -253,7 +260,7 @@ const VotingContainer = React.createClass({
 });
 
 const MatchupNode = React.createClass({
-	getInitialState: function() {
+	getInitialState: function () {
 		// winner is 0 or 1, represents whether the first team (0)
 		// or second team (1) is currently winning
 		return {
@@ -266,7 +273,8 @@ const MatchupNode = React.createClass({
 		this.getUserVotes(this.props.data.matchup_id, this.props.data.team_id2);
 	},
 	componentWillReceiveProps: function (nextProps) {
-		this.getUserVotes(this.data.matchup_id, this.data.team_id2);
+		console.log(JSON.stringify(nextProps.data));
+		this.getUserVotes(nextProps.data.matchup_id, nextProps.data.team_id2);
 	},
 	getUserVotes: function (matchupId, teamId2) {
 		// on load check to see which team has won from the particular matchup
