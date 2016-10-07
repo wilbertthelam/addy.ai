@@ -61,7 +61,7 @@ router.post('/addLeagueForUser', loginAuth.isAuthenticated, function (req, res) 
 });
 
 /* GET info on a league that the user is in. */
-router.get('/leagueInfo', loginAuth.isAuthenticated, function (req, res) {
+router.get('/leagueInfo', function (req, res) {
 	var statement = 'SELECT * FROM addy_ai_football.leagues WHERE league_id = ?;';
 	connection.query(statement, [req.query.leagueId], function (err, results) {
 		if (err) {

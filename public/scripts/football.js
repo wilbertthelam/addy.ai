@@ -6,7 +6,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import $ from 'jquery';
 import { DropdownButton, MenuItem } from 'react-bootstrap';
-import { Router, Route, Link, IndexRoute, browserHistory } from 'react-router';
+import { Router, Route, Link, IndexRoute, browserHistory, hashHistory } from 'react-router';
 
 console.log('Football section Entry point');
 
@@ -134,7 +134,7 @@ const AboutPage = React.createClass({
 //</div>
 
 ReactDOM.render((
-	<Router>
+	<Router history={hashHistory}>
 		<Route path="/" component={MainContainerPage}>
 			<IndexRoute component={DashboardPage} />
 			<Route path="login" component={LoginPage} />

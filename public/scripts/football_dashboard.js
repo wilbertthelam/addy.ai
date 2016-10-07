@@ -1,8 +1,8 @@
 /* Wilbert Lam
 09/27/2016
-football_login.js
+football_dashboard.js
 
-Contains components for the news
+Contains components for the Dashboard
 
 */
 
@@ -12,21 +12,35 @@ import $ from 'jquery';
 import { Router, Route, Link, browserHistory } from 'react-router';
 import { Button, Nav, NavItem } from 'react-bootstrap';
 
+
+
+// ============================================
+// ROUTER CONTAINER FOR THE DASHBOARD SECTION
+// ============================================
 const DashboardContainer = React.createClass({
-	
 	render: function () {
 		return (
 			<div>
-				<ContentBox params={this.props.params} children={this.props.children} />
+				<ContentBox
+					params={this.props.params}
+					children={this.props.children}
+					location={this.props.location}
+				/>
 			</div>
 		);
 	}
 });
 
+// allow for redirects inside the dashboard
 DashboardContainer.contextTypes = {
 	router: React.PropTypes.object
 };
 
+
+
+//=========================================
+// NAVIGATION BAR ON THE SIDE
+//=========================================
 const NavBar = React.createClass({
 	getInitialState: function () {
 		return {
@@ -63,7 +77,9 @@ const LeagueList = React.createClass({
 	},
 
 	componentWillReceiveProps: function (nextProps) {
-		this.setState({ activeLeagueId: nextProps.activeLeagueId }, this.leagueDisplay(this.props.baseUrl));
+		this.setState({
+			activeLeagueId: nextProps.activeLeagueId
+		}, this.leagueDisplay(this.props.baseUrl));
 	},
 	setActiveLeagueId: function (activeLeagueId) {
 		console.log('activeLeagueId set at : ' + activeLeagueId);
@@ -149,7 +165,22 @@ const ContentBox = React.createClass({
 		};
 	},
 	componentWillReceiveProps: function (nextProps) {
-		this.setState({ leagueId: nextProps.params.leagueId });
+		let activeTab = 1;
+		if (nextProps.params.leagueId !== this.state.leagueId) {
+			this.setState({ leagueId: nextProps.params.leagueId, activeTab: 1 });
+		} else {
+			this.setState({ leagueId: nextProps.params.leagueId });
+		}
+		
+	},
+	changeActiveTab: function (tab) {
+		if (tab === 'voting') {
+			this.setState({ activeTab: 1 });
+		} else if (tab === 'leaderboard') {
+			this.setState({ activeTab: 2 });
+		} else {
+			console.log('hm weird issue with the tab select');
+		}
 	},
 	handleSelect: function (keyId) {
 		if (keyId !== this.state.activeTab) {
@@ -157,7 +188,6 @@ const ContentBox = React.createClass({
 			const voteUrl = '/dashboard/league/' + this.state.leagueId + '/voting';
 			const leaderboardUrl = '/dashboard/league/' + this.state.leagueId + '/leaderboard';
 			if (keyId === 1) {
-				// this.setState({ leagueId: })
 				this.context.router.push(voteUrl);
 			} else {
 				this.context.router.push(leaderboardUrl);
@@ -167,15 +197,26 @@ const ContentBox = React.createClass({
 	render: function () {
 		console.log(JSON.stringify(this.props.params));
 
-
 		return (
-			<div className="login-box shadow-z-1">
-				<Nav bsStyle="tabs" justified activeKey={this.state.activeTab} onSelect={this.handleSelect}>
-					<NavItem eventKey={1}>Vote</NavItem>
-					<NavItem eventKey={2}>Leaderboard</NavItem>
-				</Nav>
-				<div className="content-box">
-					{this.props.children}
+			<div>
+				<div className="shadow-z-1 content-box">
+					<LeagueTitle 
+						leagueId={this.props.params.leagueId}
+					/>
+				</div>
+				<div className="login-box shadow-z-1">
+					<Nav
+						bsStyle="tabs"
+						justified
+						activeKey={this.state.activeTab}
+						onSelect={this.handleSelect}
+					>
+						<NavItem eventKey={1}>Vote</NavItem>
+						<NavItem eventKey={2}>Leaderboard</NavItem>
+					</Nav>
+					<div className="content-box">
+						{this.props.children}
+					</div>
 				</div>
 			</div>
 		);
@@ -186,6 +227,47 @@ ContentBox.contextTypes = {
 	router: React.PropTypes.object
 };
 
+// Component that displays the league name
+const LeagueTitle = React.createClass({
+	getInitialState: function () {
+		return {
+			leagueName: ''
+		};
+	},
+	componentDidMount: function () {
+		this.getLeagueName(this.props.leagueId);
+	},
+	componentWillReceiveProps: function (nextProps) {
+		this.getLeagueName(nextProps.leagueId);
+	},
+	getLeagueName: function (leagueId) {
+		$.ajax({
+			type: 'GET',
+			url: '/football/league/leagueInfo',
+			data: { leagueId: leagueId },
+			dataType: 'json',
+			cache: false,
+			success: function (data) {
+				this.setState({ leagueName: data.data[0].league_name });
+			}.bind(this),
+			error: function (status, err) {
+				console.error(status, err.toString());
+			}
+		});
+	},
+	render: function () {
+		return (
+			<div className="league-header">
+				{this.state.leagueName}
+			</div>
+		);
+	}
+});
+
+
+//=========================================
+// ROUTER CONTAINER FOR THE DEFAULT SECTION
+//=========================================
 const DefaultContainer = React.createClass({
 
 	render: function () {
@@ -197,6 +279,11 @@ const DefaultContainer = React.createClass({
 	}
 });
 
+
+
+//=========================================
+// ROUTER CONTAINER FOR THE VOTING SECTION
+//=========================================
 const VotingContainer = React.createClass({
 	getInitialState: function () {
 		return {
@@ -219,14 +306,14 @@ const VotingContainer = React.createClass({
 	displayPage: function (leagueId) {
 		$.ajax({
 			type: 'GET',
-			url: '/football/voting/matchups',
-			data: { leagueId: leagueId },
+			url: '/football/voting/matchupsWithUserVote',
+			// TODO: MOVE OUT YEAR
+			data: { leagueId: leagueId, year: 2016 },
 			dataType: 'json',
 			cache: false,
 			success: function (data) {
 				console.log(JSON.stringify(data));
 				// if successfully logged in, open dashboard, else redirect to login
-
 				this.setState({ leagueId: leagueId, data: data.data });
 			}.bind(this),
 			error: function (status, err) {
@@ -237,6 +324,12 @@ const VotingContainer = React.createClass({
 	},
 
 	render: function () {
+		if (this.state.data == null) {
+			return (
+				<div>There aren't any teams in the league.</div>
+			);
+		}
+
 		const voteNodes = this.state.data.map(function (matchup) {
 			return (
 				<MatchupNode
@@ -247,7 +340,7 @@ const VotingContainer = React.createClass({
 
 		if (voteNodes.length < 1) {
 			return (
-				<li>There aren't any teams in the league.</li>
+				<div>There aren't any teams in the league.</div>
 			);
 		}
 
@@ -270,46 +363,23 @@ const MatchupNode = React.createClass({
 		};
 	},
 	componentDidMount: function () {
-		this.getUserVotes(this.props.data.matchup_id, this.props.data.team_id2);
+		this.decideClasses(this.props.data);
 	},
 	componentWillReceiveProps: function (nextProps) {
-		console.log(JSON.stringify(nextProps.data));
-		this.getUserVotes(nextProps.data.matchup_id, nextProps.data.team_id2);
+		this.decideClasses(nextProps.data);
 	},
-	getUserVotes: function (matchupId, teamId2) {
-		// on load check to see which team has won from the particular matchup
-		$.ajax({
-			type: 'GET',
-			url: '/football/voting/votingPicksForUser',
-			data: { matchupId: matchupId },
-			dataType: 'json',
-			cache: false,
-			success: function (data) {
-				console.log(JSON.stringify(data));
-				if (!data.execSuccess) {
-					console.log('Failed to update');
-				} else {
-					if (data.data.length > 0) {
-						const voteRow = data.data[0];
-						let winner = 0;
-						if (voteRow.winning_team_id === teamId2) {
-							winner = 1;
-						}
-						const newSelectClass = [];
-						newSelectClass[winner] = this.state.activeClass;
-						newSelectClass[1 - winner] = '';
-						this.setState({ selectClass: newSelectClass, winner: winner });
-					}
-				}
-				console.log('populated user voting decision');
-			}.bind(this),
-			error: function (status, err) {
-				console.error(status, err.toString());
-				alert('no work');
-			}
-		});
-	},
+	decideClasses: function (data) {
+		const selectClass = ['', ''];
+		let winner = 0;
+		if (data.team_1_active === 1) {
+			selectClass[0] = this.state.activeClass;
+		} else if (data.team_2_active === 1) {
+			selectClass[1] = this.state.activeClass;
+			winner = 1;
+		}
 
+		this.setState({ selectClass: selectClass, winner: winner });
+	},
 	updateActiveClasses: function () {
 		// on state change, change the classes that highlight your pick
 
@@ -336,22 +406,26 @@ const MatchupNode = React.createClass({
 			$.ajax({
 				type: 'POST',
 				url: '/football/voting/vote',
-				data: { matchupId: this.props.data.matchup_id, winningTeamId: Number(winningTeamId), losingTeamId: Number(losingTeamId) },
+				data: {
+					matchupId: this.props.data.matchup_id,
+					winningTeamId: winningTeamId,
+					losingTeamId: losingTeamId
+				},
 				dataType: 'json',
 				cache: false,
 				success: function (data) {
 					console.log(JSON.stringify(data));
 					if (!data.execSuccess) {
-						console.log("Failed to update");
+						console.log('Failed to update');
 					} else {
 						this.setState({ winner: winningTeam }, this.updateActiveClasses);
 					}
 					
-					console.log("successfully updated vote!");
+					console.log('successfully updated vote!');
 				}.bind(this),
 				error: function (status, err) {
 					console.error(status, err.toString());
-					alert("no work");
+					alert('no work');
 				}.bind(this)
 			});
 		}
@@ -383,12 +457,109 @@ const MatchupNode = React.createClass({
 	}
 });
 
+
+
+//==============================================
+// ROUTER CONTAINER FOR THE LEADERBOARD SECTION
+//==============================================
 const LeaderboardContainer = React.createClass({
 	render: function () {
+		// TODO: years add selection
 		return (
 			<div>
-				THIS IS THE LEADERBOARD
+				<div className="table-responsive-vertical shadow-z-1">
+					<table className="table table-hover table-mc-amber">
+						<thead>
+							<tr>
+								<th>User</th>
+								<th>Wins</th>
+								<th>Losses</th>
+								<th>Win % </th>
+							</tr>
+						</thead>
+						<LeaderboardList
+							url="/football/voting/leaderboard"
+							leagueId={this.props.params.leagueId}
+							year="2016"
+						/>
+					</table>
+				</div>
 			</div>
+		);
+	}
+});
+
+const LeaderboardList = React.createClass({
+	getInitialState: function () {
+		return {
+			data: []
+		};
+	},
+	componentDidMount: function () {
+		// alert(this.props.leagueId);
+		// alert("leadeboard container mounted");
+		this.getLeaderboardData(this.props.url);
+	},
+	getLeaderboardData: function (url) {
+		$.ajax({
+			type: 'GET',
+			url: url,
+			// TODO: include week
+			data: { leagueId: this.props.leagueId, year: this.props.year },
+			dataType: 'json',
+			cache: false,
+			success: function (data) {
+				console.log(JSON.stringify(data));
+				// if successfully logged in, open dashboard, else redirect to login
+				if (data.execSuccess === false) {
+					console.log('error could not get leaderboard data.');
+				} else {
+					// alert(this.props.leagueId)
+					this.setState({ data: data.data });
+				}
+			}.bind(this),
+			error: function (status, err) {
+				console.error(status, err.toString());
+			}.bind(this)
+		});
+	},
+	render: function () {
+		const nodes = this.state.data.map(function (result) {
+			return (
+				<LeaderboardRow
+					data={result}
+				/>
+			);
+		});
+
+		return (
+			<tbody>
+				{nodes}
+			</tbody>
+		);
+	}
+});
+
+const LeaderboardRow = React.createClass({
+	getInitialState: function () {
+		return {
+			data: this.props.data
+		};
+	},
+	capitalize: function (name) {
+		return name.charAt(0).toUpperCase() + name.slice(1);
+	},
+	render: function () {
+		return (
+			<tr>
+				<td>
+					{this.capitalize(this.state.data.first_name)}
+					{this.capitalize(this.state.data.last_name)}
+				</td>
+				<td>{this.state.data.wins}</td>
+				<td>{this.state.data.losses}</td>
+				<td>{this.state.data.win_percentage}</td>
+			</tr>
 		);
 	}
 });

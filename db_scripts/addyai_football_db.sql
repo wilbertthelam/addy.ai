@@ -22,6 +22,7 @@ CREATE TABLE `users` (
 INSERT INTO `users` VALUES(1, 'wilbertthelam@gmail.com', 'wilbert', 'wilbert', 'lam', '2016-02-21 22:21:06');
 INSERT INTO `users` VALUES(2, 'linsen@gmail.com', 'linsen', 'linsen', 'wu', '2016-02-21 22:21:07');
 INSERT INTO `users` VALUES(3, 'addy@gmail.com', 'addy', 'addison', 'wright', '2016-02-21 22:21:08');
+INSERT INTO `users` VALUES(4, 'christine@gmail.com', 'christine', 'christine', 'yeh', '2016-02-21 22:21:08');
 
 
 ##########################
@@ -70,6 +71,7 @@ INSERT INTO `teams` VALUES(103, 123456, 103, 'i hate you', 2016, 'Rosa Diaz', '2
 INSERT INTO `teams` VALUES(104, 123456, 104, 'Give me my Yogurt!', 2016, 'Terry Giffords', '2016-02-22 12:22:25');
 INSERT INTO `teams` VALUES(105, 123456, 105, 'Married to Kevin Cozner', 2016, 'Captain Ray Holt', '2016-02-22 12:22:25');
 
+
 ########################
 # Football leagues #
 ########################
@@ -113,6 +115,7 @@ INSERT INTO `user_leagues` VALUES(4, 1, '2016-02-22 12:22:25');
 #	FROM teams, player_stats
 #	WHERE teams.team_id = player_stats.team_id;
     
+    
 ##################
 # Football votes #
 ##################
@@ -121,10 +124,31 @@ DROP TABLE IF EXISTS `votes`;
 /*!40101 SET character_set_client = utf8 */;
 
 CREATE TABLE `votes` (
-  `vote_id` int(50) NOT NULL AUTO_INCREMENT,
   `matchup_id` int(50) NOT NULL,
   `user_id` int(50) NOT NULL,
   `winning_team_id` int(50) NOT NULL,
   `losing_team_id` int(50) NOT NULL,
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`vote_id`, `matchup_id`, `user_id`));
+  PRIMARY KEY (`matchup_id`, `user_id`));
+  
+  
+########################
+# Football results #
+########################
+DROP TABLE IF EXISTS `results`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+
+CREATE TABLE `results` (
+  `matchup_id` int(50) NOT NULL AUTO_INCREMENT,
+  `winning_team_id` int(50) NOT NULL,
+  `losing_team_id` int(50) NOT NULL,
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`matchup_id`));
+  
+INSERT INTO `results` VALUES(100, 100, 101, '2016-02-22 12:22:25');
+INSERT INTO `results` VALUES(101, 103, 102, '2016-02-22 12:22:25');
+INSERT INTO `results` VALUES(102, 104, 105, '2016-02-22 12:22:25');
+
+
+
