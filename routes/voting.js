@@ -9,7 +9,7 @@ var async = require('async');
 
 var loginAuth = require('./utilities/loginAuthenticationMiddleware.js');
 
-var week = 1;
+var week = 2;
 
 /* GET to return all matchups with the user vote included */
 router.get('/matchupsWithUserVote', loginAuth.isAuthenticated, function (req, res) {

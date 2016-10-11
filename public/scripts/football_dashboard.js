@@ -13,7 +13,6 @@ import { Router, Route, Link, browserHistory } from 'react-router';
 import { Button, Nav, NavItem } from 'react-bootstrap';
 
 
-
 // ============================================
 // ROUTER CONTAINER FOR THE DASHBOARD SECTION
 // ============================================
@@ -24,7 +23,7 @@ const DashboardContainer = React.createClass({
 				<ContentBox
 					params={this.props.params}
 					children={this.props.children}
-					location={this.props.location}
+					//location={this.props.location}
 				/>
 			</div>
 		);
@@ -44,20 +43,36 @@ DashboardContainer.contextTypes = {
 const NavBar = React.createClass({
 	getInitialState: function () {
 		return {
-			// activeLeagueId: null
+			activeLeagueId: this.props.activeLeagueId
 		};
+	},
+	componentDidMount: function () {
+		//alert('mounted')
+	},
+	componentWillReceiveProps: function (nextProps) {
+		//alert('updated')
+		// this.setState({ nextProps.activeLeagueId });
 	},
 	render: function () {
 		return (
 			<div className="nav-bar shadow-z-1">
 				<ul>
-					<li id="nav-bar-title">Your leagues:</li>
+					<li className="nav-bar-title">
+						<Link to="/dashboard/">
+							<span className="glyphicon glyphicon-user" aria-hidden="true"></span> Profile
+						</Link>
+					</li>
+					<li className="nav-bar-title">
+						<span className="glyphicon glyphicon-th-list" aria-hidden="true"></span> Your leagues
+					</li>
 					<LeagueList
 						baseUrl="/football/league/userLeagues"
-						// activeLeagueId={this.state.activeLeagueId}
+						activeLeagueId={this.state.activeLeagueId}
 					/>
-					<li id="nav-bar-title">
-						<Link to="/dashboard/leagues">Join leagues</Link>
+					<li className="nav-bar-title">
+						<Link to="/dashboard/leagues">
+							<span className="glyphicon glyphicon-plus" aria-hidden="true"></span> Join leagues
+						</Link>
 					</li>
 				</ul>
 			</div>
@@ -69,7 +84,7 @@ const LeagueList = React.createClass({
 	getInitialState: function () {
 		return {
 			data: [],
-			activeLeagueId: null
+			activeLeagueId: this.props.activeLeagueId
 		};
 	},
 	componentDidMount: function () {
@@ -81,9 +96,10 @@ const LeagueList = React.createClass({
 			activeLeagueId: nextProps.activeLeagueId
 		}, this.leagueDisplay(this.props.baseUrl));
 	},
-	setActiveLeagueId: function (activeLeagueId) {
+	setActiveLeagueId: function (activeLeagueId, url) {
 		console.log('activeLeagueId set at : ' + activeLeagueId);
 		this.setState({ activeLeagueId: activeLeagueId });
+		this.context.router.push(url);
 	},
 	leagueDisplay: function (baseUrl) {
 		$.ajax({
@@ -128,12 +144,17 @@ const LeagueList = React.createClass({
 		}
 
 		return (
-			<div>
+			<div className="nav-bar-subtitle">
 				{leagueNodes}
 			</div>
 		);
 	}
 });
+
+// allow for redirects inside the dashboard
+LeagueList.contextTypes = {
+	router: React.PropTypes.object
+};
 
 const LeagueNode = React.createClass({
 	getInitialState: function () {
@@ -144,15 +165,22 @@ const LeagueNode = React.createClass({
 	componentWillReceiveProps: function (nextProps) {
 		this.setState({ activeClass: nextProps.activeClass });
 	},
-	indexSelected: function (leagueId) {
+	indexSelected: function (leagueId, url) {
 		console.log('got selected baby!' + leagueId);
-		this.props.setActiveLeagueId(leagueId);
+		this.props.setActiveLeagueId(leagueId, url);
 	},
 
 	render: function () {
 		const url = '/dashboard/league/' + this.props.leagueId + '/voting';
 		return (
-			<li className={this.state.activeClass} onClick={() => this.indexSelected(this.props.leagueId)}><Link to={url}>{this.props.leagueName}</Link></li>
+			<div className="league-menu-row">
+				<li
+					className={this.state.activeClass}
+					onClick={() => this.indexSelected(this.props.leagueId, url)}
+				>
+					{this.props.leagueName}
+				</li>
+			</div>
 		);
 	}
 });
@@ -273,7 +301,13 @@ const DefaultContainer = React.createClass({
 	render: function () {
 		return (
 			<div>
-				This is just the default thing
+				<div className="shadow-z-1 content-box">
+					<div className="league-header">Profile</div>
+				</div>
+			
+				<div className="content-box shadow-z-1">
+					This is just the default thing
+				</div>
 			</div>
 		);
 	}
@@ -370,9 +404,10 @@ const MatchupNode = React.createClass({
 	},
 	decideClasses: function (data) {
 		const selectClass = ['', ''];
-		let winner = 0;
+		let winner = null;
 		if (data.team_1_active === 1) {
 			selectClass[0] = this.state.activeClass;
+			winner = 0;
 		} else if (data.team_2_active === 1) {
 			selectClass[1] = this.state.activeClass;
 			winner = 1;
@@ -393,7 +428,8 @@ const MatchupNode = React.createClass({
 		// team 0 is the first team on the list,
 		// team 1 is the second team on the list
 		// if team is already selected, don't bother with the ajax vote update call
-		if (winningTeam !== this.state.winner) {
+		// alert('winningTeam: ' + winningTeam + '   state winningteam: ' + this.state.winner);
+		if (winningTeam !== this.state.winner || this.state.winner === null) {
 			// get the winning and losing team
 			let winningTeamId = this.props.data.team_id1;
 			let losingTeamId = this.props.data.team_id2;
@@ -467,7 +503,7 @@ const LeaderboardContainer = React.createClass({
 		// TODO: years add selection
 		return (
 			<div>
-				<div className="table-responsive-vertical shadow-z-1">
+				<div className="table-responsive-vertical">
 					<table className="table table-hover table-mc-amber">
 						<thead>
 							<tr>
@@ -553,7 +589,7 @@ const LeaderboardRow = React.createClass({
 		return (
 			<tr>
 				<td>
-					{this.capitalize(this.state.data.first_name)}
+					{this.capitalize(this.state.data.first_name)} 
 					{this.capitalize(this.state.data.last_name)}
 				</td>
 				<td>{this.state.data.wins}</td>

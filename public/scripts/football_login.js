@@ -16,12 +16,14 @@ const LoginContainer = React.createClass({
 	render: function () {
 		return (
 			<div className="container">
-				<div className="col-md-6">
-					<Splash />
-				</div>
+				<div className="splash-image">
+					<div className="col-md-6">
+						<Splash />
+					</div>
 
-				<div className="col-md-6">
-					<LoginBox />
+					<div className="col-md-6">
+						<LoginBox />
+					</div>
 				</div>
 			</div>
 

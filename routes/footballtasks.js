@@ -17,6 +17,8 @@ var loginAuth = require('./utilities/loginAuthenticationMiddleware.js');
 // create Python shell to allow us to run web scraper
 var PythonShell = require('python-shell');
 
+var week = 3;
+
 /* POST to run add league data for a new league  
 	1. parse league information
 	2. check if league is private or not
@@ -161,7 +163,7 @@ router.post('/createNewLeague', loginAuth.isAuthenticated, function (req, res) {
 			var statement = 'INSERT INTO addy_ai_football.matchups SET ?';
 			async.each(data.matchups, function(row, callback) {
 				// console.log(row);
-				connection.query(statement, row, function(err) {
+				connection.query(statement, row, function (err) {
 					if (err) {
 						connection.rollback();
 						callback(err);
@@ -182,7 +184,121 @@ router.post('/createNewLeague', loginAuth.isAuthenticated, function (req, res) {
 		if (err) {
 			throw err;
 		}
-		return res.json({execSuccess: true, message: 'Reached the end of database update.' });
+		return res.json({ execSuccess: true, message: 'Reached the end of database update.' });
+	});
+});
+
+
+// POST to populate the database with results for a given week
+// 1. Get all the leagueIds
+// 2. For each leagueId, run the Python script to get the results
+// 3. If it cannot get results, then add the leagueId to the list of non working leagues
+// 4. Take working results and populate the database
+// 5. Return success and the leagues that don't work in response
+router.post('/populateLeagueResults', /*loginAuth.isAuthenticated,*/ function (req, res) {
+	var idList = []; // array with each element being an object with espnId and leagueId
+	var workingLeaguesData = [];
+	var nonWorkingLeaguesList = [];
+
+	async.series({
+		getLeagueIds: function (cb0) {
+			var statement = 'SELECT league_id, espn_id FROM addy_ai_football.leagues;';
+			connection.query(statement, function (err, results) {
+				if (err) {
+					return res.json({ execSuccess: false, message: 'DB error in getLeagueIds.', error: err });
+				}
+
+				console.log(JSON.stringify(results));
+				if (!results || results.length < 1) {
+					console.log('No leagues exists');
+					return res.json({ execSuccess: false, message: 'No leagues exist.', code: 'ERR_NO_LEAGUE', data: [] });
+				}
+				idList = JSON.stringify(results);
+				console.log(idList);
+				return cb0(null, 'League available');
+			});
+		},
+		getLeagueResults: function (cb1) {
+			PythonShell.run('./scraper/footballResultsScraper.py', { mode: 'json', args: [idList, 2016, week] }, function (err, results) {
+				if (err) {
+					return res.json({ execSuccess: false, message: 'Could not parse league result data.', code: 'ERR_PRIVATE_NOT_EXIST', error: err });
+				}
+
+				// console.log('All matchups: ' + JSON.stringify(results[0]));
+				var infoData = results[0];
+				workingLeaguesData = infoData['leagueData'];
+				nonWorkingLeaguesList = infoData['invalidLeagues'];
+
+				console.log('non working: ' + nonWorkingLeaguesList);
+				cb1(null, null);
+			});
+		},
+		getMatchupId: function (cb2) {
+			var statement = 'SELECT matchup_id FROM addy_ai_football.matchups WHERE league_id = ? AND week = ? '
+				+ 'AND team_id1 in (?, ?) AND team_id2 in (?, ?) LIMIT 1;';
+
+			async.each(workingLeaguesData, function (row, callback) {
+				console.log('week: ' + week)
+				connection.query(statement, [row.league_id, week, row.winning_team_id, row.losing_team_id, row.winning_team_id, row.losing_team_id], function (err, results) {
+					console.log('results: ' + JSON.stringify(results));
+					var errorMessage = '';
+					if (err) {
+						errorMessage = 'DB error in getMatchupId.';
+						return callback(errorMessage);
+					}
+
+					console.log('result stuff: ' + JSON.stringify(results));
+					console.log('row stuff: ' + JSON.stringify(row))
+					if (!results || results.length < 1) {
+						console.log('No matchup exists');
+						errorMessage = 'No matchup exist.';
+						return callback(errorMessage);
+					}
+					row['matchup_id'] = results[0].matchup_id;
+					console.log(row);
+					return callback();
+				});
+			}, function (err) {
+				if (err) {
+					return res.json({ execSuccess: false, message: err });
+				}
+
+				return cb2(null, null);
+			});
+			//cb2(null, null);
+
+		},
+
+		insertIntoResults: function (cb3) {
+			connection.beginTransaction(function(err) {
+				if (err) {
+					return res.json({ execSuccess: false, message: 'Cannot begin transaction.', error: err});
+				}
+			});
+
+			var statement = 'REPLACE INTO addy_ai_football.results SET ?';
+			async.each(workingLeaguesData, function(row, callback) {
+				// console.log(teamStatLine);
+				delete row.league_id;
+				delete row.espn_id;
+				connection.query(statement, row, function(err) {
+					if (err) {
+						connection.rollback();
+						return callback(err);
+					} else {
+						return callback();
+					}
+				});
+			}, function(err) {
+				if (err) {
+					return res.json({ execSuccess: false, message: 'Cannot close transaction.', error: err});
+				} else {
+					connection.commit();
+					return res.json({ execSuccess: true, message: 'Successfully updated database.' });
+				}
+			});
+		}
+
 	});
 });
 

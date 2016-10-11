@@ -143,12 +143,14 @@ CREATE TABLE `results` (
   `matchup_id` int(50) NOT NULL AUTO_INCREMENT,
   `winning_team_id` int(50) NOT NULL,
   `losing_team_id` int(50) NOT NULL,
+  `winning_team_score` int(50) NOT NULL,
+  `losing_team_score` int(50) NOT NULL,
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`matchup_id`));
   
-INSERT INTO `results` VALUES(100, 100, 101, '2016-02-22 12:22:25');
-INSERT INTO `results` VALUES(101, 103, 102, '2016-02-22 12:22:25');
-INSERT INTO `results` VALUES(102, 104, 105, '2016-02-22 12:22:25');
+INSERT INTO `results` VALUES(100, 100, 101, 93, 90, '2016-02-22 12:22:25');
+INSERT INTO `results` VALUES(101, 103, 102, 100, 89, '2016-02-22 12:22:25');
+INSERT INTO `results` VALUES(102, 104, 105, 67, 43, '2016-02-22 12:22:25');
 
 
 

@@ -31,9 +31,6 @@ const MainContainerPage = React.createClass({
 									<a href="/" className="pure-menu-link">Baseball</a>
 								</li>
 							</ul>
-
-							THIS IS THE FOOTBALL STUFF
-
 						</div>
 					</div>
 				</div>
@@ -84,6 +81,7 @@ const DashboardPage = React.createClass({
 	},
 
 	render: function () {
+		// alert(JSON.stringify(this.props.params.leagueId));
 		return (
 			<div className="main">
 				<div className="banner">
