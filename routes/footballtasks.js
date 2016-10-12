@@ -17,7 +17,10 @@ var loginAuth = require('./utilities/loginAuthenticationMiddleware.js');
 // create Python shell to allow us to run web scraper
 var PythonShell = require('python-shell');
 
-var week = 3;
+var currentTime = require('./utilities/currentTime.js');
+
+var week = currentTime.week;
+var year = currentTime.year;
 
 /* POST to run add league data for a new league  
 	1. parse league information
@@ -34,8 +37,8 @@ router.post('/createNewLeague', loginAuth.isAuthenticated, function (req, res) {
 	var espnId = req.body.espnId;
 	var leagueId;
 	var leagueName;
-	var seasonId = req.body.seasonId;
-
+	// var seasonId = req.body.seasonId;
+	var seasonId = year;
 	console.log(leagueId);
 	console.log(seasonId);
 	

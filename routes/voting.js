@@ -9,7 +9,12 @@ var async = require('async');
 
 var loginAuth = require('./utilities/loginAuthenticationMiddleware.js');
 
-var week = 2;
+var currentTime = require('./utilities/currentTime.js');
+
+
+var week = currentTime.week;
+console.log('current week as of now: ' + currentTime.week);
+var year = currentTime.year;
 
 /* GET to return all matchups with the user vote included */
 router.get('/matchupsWithUserVote', loginAuth.isAuthenticated, function (req, res) {

@@ -12,6 +12,7 @@ import $ from 'jquery';
 import { Router, Route, Link, browserHistory } from 'react-router';
 import { Button, Nav, NavItem } from 'react-bootstrap';
 import * as QueryString from 'query-string';
+import Loading from 'react-loading';
 
 const LeagueContainer = React.createClass({
 	render: function () {
@@ -69,7 +70,7 @@ const LeagueList = React.createClass({
 	render: function () {
 		if (this.state.data.length < 1) {
 			return (
-				<li>No leagues created yet.</li>
+				<li>No leagues available.</li>
 			);
 		}
 		const leagueNodes = this.state.data.map(function (league) {
@@ -135,32 +136,34 @@ const AddLeague = React.createClass({
 			url: '',
 			message: '',
 			displayResult: false,
+			displayLoader: false,
 			leageueId: '',
 			leagueName: ''
 		};
 	},
 	createLeague: function () {
-		this.setState({ displayResult: false, message: '' });
+		this.setState({ displayResult: false, displayLoader: true, message: '' });
 		const urlSections = this.state.url.split('?');
 		let parameterString = '';
 		if (urlSections.length <= 1) {
-			this.setState({ message: 'This URL is invalid, try another one!' });
+			this.setState({ displayLoader: false, message: 'This URL is invalid, try another one!' });
 		} else {
 			parameterString = urlSections[1];
 
 			const parsed = QueryString.parse(parameterString);
-			if (!parsed.leagueId || !parsed.seasonId) {
+			if (!parsed.leagueId) {
 				// invalid url
 				console.log('do prevent here');
-				this.setState({ message: 'This URL is invalid, try another one!' });
+				this.setState({ displayLoader: false, message: 'This URL is invalid, try another one!' });
 			} else {
 				$.ajax({
 					type: 'POST',
 					url: '/football/tasks/createNewLeague',
-					data: { espnId: parsed.leagueId, seasonId: parsed.seasonId },
+					data: { espnId: parsed.leagueId, seasonId: '' },
 					dataType: 'json',
 					cache: false,
 					success: function (data) {
+						this.setState({ displayLoader: false }); 
 						console.log(JSON.stringify(data));
 						// if successfully logged in, open dashboard, else redirect to login
 						if (data.execSuccess === false) {
@@ -170,7 +173,7 @@ const AddLeague = React.createClass({
 								$.ajax({
 									type: 'GET',
 									url: '/football/league/leagueInfoESPNSeason',
-									data: { espnId: parsed.leagueId, seasonId: parsed.seasonId },
+									data: { espnId: parsed.leagueId, seasonId: '' },
 									dataType: 'json',
 									cache: false,
 									success: function (data2) {
@@ -201,6 +204,7 @@ const AddLeague = React.createClass({
 						
 					}.bind(this),
 					error: function (status, err) {
+						this.setState({ displayLoader: false }); 
 						console.error(status, err.toString());
 						this.setState({ message: 'Hm, looks like the servers are down. Try again in a bit!' });
 						// print network error warning
@@ -217,9 +221,14 @@ const AddLeague = React.createClass({
 
 	render: function () {
 		let resultComponent;
+		let displayLoaderComponent;
 		if (this.state.displayResult) {
 			// alert('display thing here : ' + this.state.leagueId);
 			resultComponent = <LeagueNode leagueId={this.state.leagueId} leagueName={this.state.leagueName} />;
+		}
+		if (this.state.displayLoader) {
+			// alert('display thing here : ' + this.state.leagueId);
+			displayLoaderComponent = <Loading type="cylon" color="#e3e3e3" />;
 		}
 		return (
 			<div>
@@ -244,6 +253,7 @@ const AddLeague = React.createClass({
 						Search
 					</Button>
 					<span className="warning">
+						{displayLoaderComponent}
 						{this.state.message}
 					</span>
 				</span>

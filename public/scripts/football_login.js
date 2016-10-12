@@ -25,6 +25,37 @@ const LoginContainer = React.createClass({
 						<LoginBox />
 					</div>
 				</div>
+
+				<div className="col-md-4">
+					<h2><span className="glyphicon glyphicon-menu-right" aria-hidden="true"></span> What's this junk?</h2>
+					<p>
+						Do you have that friend who always thinks his team is gonna win? 
+						Or that other team manager who thinks he's hot stuff?
+						addy.ai Football let's you vote on yours or someone elses weekly matchups to prove who really knows their league best.
+						Just search up your league and vote!
+					</p>
+				</div>
+
+				<div className="col-md-4">
+					<h2><span className="glyphicon glyphicon-menu-right" aria-hidden="true"></span> FAQ</h2>
+					<p className="bold"><span className="glyphicon glyphicon-menu-down" aria-hidden="true"></span> Why is my league not listed?</p>
+					<p>
+						Some leagues aren't listed yet in our database, so you can add your league by simply pasting any URL from your ESPN league page (any page works). 
+						Just make sure you're in the league page and not on the general ESPN site or it'll be difficult for us to get the league information. 
+					</p>
+					<p className="bold"><span className="glyphicon glyphicon-menu-down" aria-hidden="true"></span> Why won't my league load after I've added it?</p>
+					<p>
+						The only leagues compatible right now are head-to-head matchups from ESPN fantasy football. 
+						Secondly, check with your league manager to see if your league is current set to private. 
+						Unforunately, addy.ai Football only works with public leagues (ask your LM to change it under LM settings).
+					</p>
+
+				</div>
+
+				<div className="col-md-4">
+					<h2><span className="glyphicon glyphicon-menu-right" aria-hidden="true"></span> Need more help?</h2>
+					<p>Email wilbertthelam@gmail.com for more help, or krestofur@gmail.com for career opportunities.</p>
+				</div>
 			</div>
 
 		);
@@ -34,10 +65,13 @@ const LoginContainer = React.createClass({
 const Splash = React.createClass({
 	render: function () {
 		return (
-			<div>
-				<h3>addy.ai</h3>
-				<h1>FOOTBALL</h1>
-				<h2>Weekly ESPN Fantasy League Pick'em</h2>
+			<div className="splash-description">
+				<div>
+					<span id="splash-company">addy.ai </span><span id="splash-football">FOOTBALL</span>
+				</div>
+				<div>
+					<span id="splash-subtitle">ESPN Fantasy League Pick'em</span>
+				</div>
 			</div>
 		);
 	}

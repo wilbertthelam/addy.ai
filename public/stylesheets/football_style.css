@@ -5,6 +5,7 @@
 .login-box-inner {
 	background-color: white;
 	padding: 20px;
+	width: 100%;
 }
 
 .login-box input {
@@ -15,13 +16,47 @@
 	margin-bottom: 50px;
 }
 
+.bold {
+	font-weight: bold;
+}
+
 .splash-image {
-	background-image: url('../media/richardsherman.jpg');
+	background: linear-gradient(rgba(255,255,255,.4), rgba(0,0,0,.5)), url('../media/richardsherman.jpg');
 	background-size: cover;
 	background-repeat: no-repeat;
 	background-position: center;
 	width: 100%;
+	height: 450px;
+	padding-top: 100px;
+}
 
+.splash-description {
+	color: white;
+	font-weight: bold;
+}
+
+.splash-description #splash-company {
+	vertical-align: bottom;
+	background-color: rgba(169,169,169,0.6);
+	font-size: 1em;
+	padding: 5px;
+}
+
+.splash-description #splash-football {
+	vertical-align: bottom;
+	background-color: rgba(169,169,169,0.6);
+	font-size: 1.5em;
+	padding: 5px;
+}
+
+.splash-description #splash-subtitle {
+	background-color: rgba(169,169,169,0.6);
+	font-size: 2em;
+	padding: 5px;
+}
+
+.splash-description div {
+	padding: 10px;
 }
 
 .warning {
@@ -53,6 +88,7 @@
 	padding: 10px;
 	font-weight: bold;
 	margin-bottom: 1px;
+	cursor: pointer;
 }
 
 .content-box {

@@ -11,6 +11,7 @@ import ReactDOM from 'react-dom';
 import $ from 'jquery';
 import { Router, Route, Link, browserHistory } from 'react-router';
 import { Button, Nav, NavItem } from 'react-bootstrap';
+import * as Profile from './football_profile.js';
 
 
 // ============================================
@@ -53,15 +54,32 @@ const NavBar = React.createClass({
 		//alert('updated')
 		// this.setState({ nextProps.activeLeagueId });
 	},
+	logout: function () {
+		$.ajax({
+			type: 'POST',
+			url: '/football/login/logout',
+			dataType: 'json',
+			cache: false,
+			success: function (data) {
+				//console.log(JSON.stringify(data));
+				this.context.router.push('/login');
+			}.bind(this),
+			error: function (status, err) {
+				console.error(status, err.toString());
+				this.context.router.push('/login');
+			}.bind(this)
+		});
+	},
 	render: function () {
 		return (
 			<div className="nav-bar shadow-z-1">
 				<ul>
-					<li className="nav-bar-title">
-						<Link to="/dashboard/">
-							<span className="glyphicon glyphicon-user" aria-hidden="true"></span> Profile
-						</Link>
-					</li>
+					<Link to="/dashboard/">
+						<li className="nav-bar-title">
+							
+								<span className="glyphicon glyphicon-user" aria-hidden="true"></span> Profile
+						</li>
+					</Link>
 					<li className="nav-bar-title">
 						<span className="glyphicon glyphicon-th-list" aria-hidden="true"></span> Your leagues
 					</li>
@@ -69,16 +87,26 @@ const NavBar = React.createClass({
 						baseUrl="/football/league/userLeagues"
 						activeLeagueId={this.state.activeLeagueId}
 					/>
+					<Link to="/dashboard/leagues">
+						<li className="nav-bar-title">
+								<span className="glyphicon glyphicon-plus" aria-hidden="true"></span> Join leagues
+						</li>
+					</Link>
 					<li className="nav-bar-title">
-						<Link to="/dashboard/leagues">
-							<span className="glyphicon glyphicon-plus" aria-hidden="true"></span> Join leagues
-						</Link>
+						<div onClick={() => this.logout()}>
+							<span className="glyphicon glyphicon-log-out" aria-hidden="true"></span> Logout
+						</div>
 					</li>
 				</ul>
 			</div>
 		);
 	}
 });
+
+// allow for redirects inside the dashboard
+NavBar.contextTypes = {
+	router: React.PropTypes.object
+};
 
 const LeagueList = React.createClass({
 	getInitialState: function () {
@@ -193,7 +221,6 @@ const ContentBox = React.createClass({
 		};
 	},
 	componentWillReceiveProps: function (nextProps) {
-		let activeTab = 1;
 		if (nextProps.params.leagueId !== this.state.leagueId) {
 			this.setState({ leagueId: nextProps.params.leagueId, activeTab: 1 });
 		} else {
@@ -302,11 +329,11 @@ const DefaultContainer = React.createClass({
 		return (
 			<div>
 				<div className="shadow-z-1 content-box">
-					<div className="league-header">Profile</div>
+					<div className="league-header">Your profile</div>
 				</div>
 			
 				<div className="content-box shadow-z-1">
-					This is just the default thing
+					<Profile.ProfileBox />
 				</div>
 			</div>
 		);
@@ -589,8 +616,7 @@ const LeaderboardRow = React.createClass({
 		return (
 			<tr>
 				<td>
-					{this.capitalize(this.state.data.first_name)} 
-					{this.capitalize(this.state.data.last_name)}
+					{this.capitalize(this.state.data.first_name)} {this.capitalize(this.state.data.last_name)}
 				</td>
 				<td>{this.state.data.wins}</td>
 				<td>{this.state.data.losses}</td>
