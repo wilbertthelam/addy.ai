@@ -70,6 +70,11 @@ router.post('/signup', function(req, res) {
 	var firstName = req.body.firstName;
 	var lastName = req.body.lastName;
 
+	if (email == '' || password == '' || firstName == '' || lastName == '') {
+		return res.json({ execSuccess: false, message: 'One of the fields is empty.' });
+
+	}
+
 	var userId;
 
 	// check to see if email is free
@@ -119,7 +124,7 @@ router.post('/signup', function(req, res) {
 			req.session.firstName = firstName;
 			req.session.lastName = lastName;
 
-			return res.json(JSON.stringify(req.session));
+			return res.json(req.session);
 		},
 
 	}, function(err, results) {

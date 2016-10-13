@@ -182,7 +182,71 @@ router.get('/leaderboard', function (req, res) {
 	});
 });
 
+router.get('/leaderboardForUser', function (req, res) {
+	// pass 
 
+	var statement = 'SELECT count(*) as wins, ' + 
+			'(SELECT count(*) FROM addy_ai_football.matchups m2 WHERE m2.league_id = m.league_id AND m2.week < ?) - count(*) as losses, ' +
+			'count(*) / (SELECT count(*) FROM addy_ai_football.matchups m2 WHERE m2.league_id = m.league_id AND m2.week < ?) as win_percentage, ' +
+	 		'v.user_id, ' + 
+	 		'm.league_id, ' + 
+	 		'm.year, ' +
+	 		'l.league_name ' +
+		'FROM addy_ai_football.votes v, addy_ai_football.matchups m, addy_ai_football.results r, addy_ai_football.leagues l ' +
+		'WHERE v.winning_team_id = r.winning_team_id ' +
+		'AND m.matchup_id = v.matchup_id ' +
+		'AND v.matchup_id = r.matchup_id ' +
+		'AND m.week < ? ' +
+		'AND m.league_id = l.league_id ' +
+		'AND m.year = ? ' +
+		'AND v.user_id = ? ' +
+		'GROUP BY m.league_id ' +
+		'ORDER BY wins DESC, win_percentage DESC;';
+
+	// input into query are (in order)
+	connection.query(statement, [week, week, week, req.query.year, req.session.userId], function (err, results) {
+		if (err) {
+			return res.json({ execSuccess: false, message: 'Cannot get profile leaderboard data.', error: err });
+		} else {
+			console.log(JSON.stringify(results));
+			return res.json({ execSuccess: true, message: 'Profile leaderboard data successfully retrieved.', data: results });
+		}
+	});
+});
+
+router.get('/leaderboardByWeek', function (req, res) {
+	// pass 
+
+	var statement = 'SELECT count(*) as wins, ' + 
+			'(SELECT count(*) FROM addy_ai_football.matchups m2 WHERE m2.league_id = m.league_id AND m2.week = ?) - count(*) as losses, ' +
+			'count(*) / (SELECT count(*) FROM addy_ai_football.matchups m2 WHERE m2.league_id = m.league_id AND m2.week = ?) as win_percentage, ' +
+	 		'v.user_id, ' + 
+	 		'm.league_id, ' + 
+	 		'm.year, ' +
+	 		'u.first_name, ' +
+	 		'u.last_name, ' +
+	 		'u.email ' +
+		'FROM addy_ai_football.votes v, addy_ai_football.matchups m, addy_ai_football.results r, addy_ai_football.users u ' +
+		'WHERE v.winning_team_id = r.winning_team_id ' +
+		'AND m.matchup_id = v.matchup_id ' +
+		'AND v.matchup_id = r.matchup_id ' +
+		'AND u.user_id = v.user_id ' +
+		'AND m.week = ? ' +
+		'AND m.league_id = ? ' +
+		'AND m.year = ? ' +
+		'GROUP BY v.user_id ' +
+		'ORDER BY wins DESC, win_percentage DESC;';
+
+	// input into query are (in order)
+	connection.query(statement, [req.query.week, req.query.week, req.query.week, req.query.leagueId, req.query.year], function (err, results) {
+		if (err) {
+			return res.json({ execSuccess: false, message: 'Cannot get leaderboard weekly data.', error: err });
+		} else {
+			console.log(JSON.stringify(results));
+			return res.json({ execSuccess: true, message: 'Leaderboard weekly data successfully retrieved.', data: results });
+		}
+	});
+});
 
 
 module.exports = router;

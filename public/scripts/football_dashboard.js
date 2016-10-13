@@ -10,7 +10,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import $ from 'jquery';
 import { Router, Route, Link, browserHistory } from 'react-router';
-import { Button, Nav, NavItem } from 'react-bootstrap';
+import { Button, Nav, NavItem, Collapse, ButtonToolbar, DropdownButton, MenuItem } from 'react-bootstrap';
 import * as Profile from './football_profile.js';
 
 
@@ -44,7 +44,8 @@ DashboardContainer.contextTypes = {
 const NavBar = React.createClass({
 	getInitialState: function () {
 		return {
-			activeLeagueId: this.props.activeLeagueId
+			activeLeagueId: this.props.activeLeagueId,
+			open: true
 		};
 	},
 	componentDidMount: function () {
@@ -72,32 +73,44 @@ const NavBar = React.createClass({
 	},
 	render: function () {
 		return (
-			<div className="nav-bar shadow-z-1">
-				<ul>
-					<Link to="/dashboard/">
-						<li className="nav-bar-title">
-							
-								<span className="glyphicon glyphicon-user" aria-hidden="true"></span> Profile
+			<div>
+				<div className="nav-bar shadow-z-1">
+					<ul>
+						<li className="nav-bar-title" onClick={() => this.setState({ open: !this.state.open })}>
+							<span className="glyphicon glyphicon-th-list" aria-hidden="true"></span> Your leagues
 						</li>
-					</Link>
-					<li className="nav-bar-title">
-						<span className="glyphicon glyphicon-th-list" aria-hidden="true"></span> Your leagues
-					</li>
-					<LeagueList
-						baseUrl="/football/league/userLeagues"
-						activeLeagueId={this.state.activeLeagueId}
-					/>
-					<Link to="/dashboard/leagues">
-						<li className="nav-bar-title">
+						<Collapse
+							in={this.state.open}
+						>
+							<div>
+								<LeagueList
+									baseUrl="/football/league/userLeagues"
+									activeLeagueId={this.state.activeLeagueId}
+								/>
+							</div>
+						</Collapse>
+					</ul>
+				</div>
+
+				<div className="nav-bar shadow-z-1">
+					<ul>
+						<Link to="/dashboard/leagues">
+							<li className="nav-bar-title">
 								<span className="glyphicon glyphicon-plus" aria-hidden="true"></span> Join leagues
+							</li>
+						</Link>
+						<Link to="/dashboard/">
+							<li className="nav-bar-title">
+								<span className="glyphicon glyphicon-user" aria-hidden="true"></span> Profile
+							</li>
+						</Link>
+						<li className="nav-bar-title">
+							<div onClick={() => this.logout()}>
+								<span className="glyphicon glyphicon-log-out" aria-hidden="true"></span> Logout
+							</div>
 						</li>
-					</Link>
-					<li className="nav-bar-title">
-						<div onClick={() => this.logout()}>
-							<span className="glyphicon glyphicon-log-out" aria-hidden="true"></span> Logout
-						</div>
-					</li>
-				</ul>
+					</ul>
+				</div>
 			</div>
 		);
 	}
@@ -167,7 +180,7 @@ const LeagueList = React.createClass({
 
 		if (leagueNodes.length < 1) {
 			return (
-				<li>No leagues joined yet.</li>
+				<div id="no-league-joined">No leagues joined yet.</div>
 			);
 		}
 
@@ -253,13 +266,13 @@ const ContentBox = React.createClass({
 		console.log(JSON.stringify(this.props.params));
 
 		return (
-			<div>
+			<div className="col-md-12">
 				<div className="shadow-z-1 content-box">
 					<LeagueTitle 
 						leagueId={this.props.params.leagueId}
 					/>
 				</div>
-				<div className="login-box shadow-z-1">
+				<div className="voting-box shadow-z-1">
 					<Nav
 						bsStyle="tabs"
 						justified
@@ -328,13 +341,13 @@ const DefaultContainer = React.createClass({
 	render: function () {
 		return (
 			<div>
-				<div className="shadow-z-1 content-box">
-					<div className="league-header">Your profile</div>
+				<div className="col-md-12">
+					<div className="shadow-z-1 content-box">
+						<div className="league-header">Profile</div>
+					</div>
 				</div>
-			
-				<div className="content-box shadow-z-1">
-					<Profile.ProfileBox />
-				</div>
+
+				<Profile.ProfileBox />
 			</div>
 		);
 	}
@@ -526,10 +539,64 @@ const MatchupNode = React.createClass({
 // ROUTER CONTAINER FOR THE LEADERBOARD SECTION
 //==============================================
 const LeaderboardContainer = React.createClass({
+	getInitialState: function () {
+		return {
+			currentWeek: 0,
+			selectedWeek: 0,
+			url: '/football/voting/leaderboard',
+			activeMenuItem: 'Cumulative'
+		};
+	},
+	componentDidMount: function () {
+		$.ajax({
+			type: 'GET',
+			url: '/football/league/week',
+			dataType: 'json',
+			cache: false,
+			success: function (data) {
+				this.setState({ currentWeek: data.data.week});
+			}.bind(this),
+			error: function (status, err) {
+				console.error(status, err.toString());
+			}.bind(this)
+		});
+	},
+	updateTable: function (eventKey) {
+		//alert('clocked');
+		console.log('did updateTable');
+		if (eventKey === 'cumulative') {
+			this.setState({ url: '/football/voting/leaderboard', selectedWeek: 0, activeMenuItem: 'Cumulative' });
+		} else {
+			this.setState({ url: '/football/voting/leaderboardByWeek', selectedWeek: eventKey, activeMenuItem: 'Week ' + eventKey });
+		}
+	},
 	render: function () {
+		const weekList = [];
+		for (let i = 0; i < this.state.currentWeek - 1; i++) {
+			weekList[i] = this.state.currentWeek - 1 - i;
+		}
+		const that = this;
 		// TODO: years add selection
 		return (
 			<div>
+				<span>
+					<ButtonToolbar>
+						<DropdownButton
+							id="dropdown-size-medium"
+							key="cumulative"
+							title={this.state.activeMenuItem}
+						>
+							<MenuItem eventKey="cumulative" onSelect={that.updateTable}>Cumulative</MenuItem>
+							<MenuItem divider />
+								{weekList.map(function (data) {
+								return (<MenuItem eventKey={data} onSelect={that.updateTable}>Week {data}</MenuItem>);
+							})}
+						</DropdownButton>
+					</ButtonToolbar>
+					*note: forgetting to vote is recorded as a loss
+				</span>
+
+
 				<div className="table-responsive-vertical">
 					<table className="table table-hover table-mc-amber">
 						<thead>
@@ -541,9 +608,10 @@ const LeaderboardContainer = React.createClass({
 							</tr>
 						</thead>
 						<LeaderboardList
-							url="/football/voting/leaderboard"
+							url={this.state.url}
 							leagueId={this.props.params.leagueId}
 							year="2016"
+							week={this.state.selectedWeek}
 						/>
 					</table>
 				</div>
@@ -561,14 +629,17 @@ const LeaderboardList = React.createClass({
 	componentDidMount: function () {
 		// alert(this.props.leagueId);
 		// alert("leadeboard container mounted");
-		this.getLeaderboardData(this.props.url);
+		this.getLeaderboardData(this.props.url, this.props.week, this.props.year, this.props.leagueId);
 	},
-	getLeaderboardData: function (url) {
+	componentWillReceiveProps: function (nextProps) {
+		this.getLeaderboardData(nextProps.url, nextProps.week, nextProps.year, nextProps.leagueId);
+	},
+	getLeaderboardData: function (url, week, year, leagueId) {
 		$.ajax({
 			type: 'GET',
 			url: url,
 			// TODO: include week
-			data: { leagueId: this.props.leagueId, year: this.props.year },
+			data: { leagueId: leagueId, year: year, week: week },
 			dataType: 'json',
 			cache: false,
 			success: function (data) {
@@ -608,6 +679,9 @@ const LeaderboardRow = React.createClass({
 		return {
 			data: this.props.data
 		};
+	},
+	componentWillReceiveProps: function (nextProps) {
+		this.setState({ data: nextProps.data });
 	},
 	capitalize: function (name) {
 		return name.charAt(0).toUpperCase() + name.slice(1);

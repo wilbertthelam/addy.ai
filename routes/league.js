@@ -103,6 +103,15 @@ router.get('/user', loginAuth.isAuthenticated, function (req, res) {
 	});
 });
 
+/* GET week. */
+router.get('/week', loginAuth.isAuthenticated, function (req, res) {
+	var data = {
+		week: week
+	};
+	return res.json({ execSuccess: true, message: 'Week successfully retrieved.', data: data });
+});
+
+
 
 
 module.exports = router;
