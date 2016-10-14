@@ -12,6 +12,9 @@ import { Link } from 'react-router';
 import { Button, Nav, NavItem, ButtonToolbar, DropdownButton, MenuItem } from 'react-bootstrap';
 import io from 'socket.io-client';
 
+// TODO: BRING THIS TO BE DYNAMIC
+const socket = io.connect('http://localhost:80');
+
 //=========================================
 // ROUTER CONTAINER FOR THE VOTING SECTION
 //=========================================
@@ -19,22 +22,23 @@ const VotingContainer = React.createClass({
 	getInitialState: function () {
 		return {
 			data: [],
-			leagueId: this.props.params.leagueId
+			leagueId: this.props.params.leagueId,
+			userId: ''
 		};
 	},
 	componentDidMount: function () {
 		// alert("voting container mounted");
-		this.displayPage(this.props.params.leagueId);
-		// alert('leagueId right now: ' + this.props.params.leagueId)
+		this._displayPage(this.props.params.leagueId);
+		this._getUser();
 	},
 
 	componentWillReceiveProps: function (nextProps) {
 		// alert("voting container received new props")
-		this.displayPage(nextProps.params.leagueId);
-		// alert('leagueId updated: ' + nextProps.params.leagueId)
+		this._displayPage(nextProps.params.leagueId);
+		this._getUser();
 	},
 
-	displayPage: function (leagueId) {
+	_displayPage: function (leagueId) {
 		$.ajax({
 			type: 'GET',
 			url: '/football/voting/matchupsWithUserVote',
@@ -53,7 +57,26 @@ const VotingContainer = React.createClass({
 			}.bind(this)
 		});
 	},
-
+	_getUser: function () {
+		$.ajax({
+			type: 'POST',
+			url: '/football/login/isUserLoggedIn',
+			dataType: 'json',
+			cache: false,
+			success: function (data) {
+				console.log(JSON.stringify(data));
+				// if successfully logged in, open dashboard
+				if (data.userId) {
+					this.setState({ userId: data.userId });
+				} else {
+					this.context.router.push('/login');
+				}
+			}.bind(this),
+			error: function (status, err) {
+				this.context.router.push('/login');
+			}.bind(this)
+		});
+	},
 	render: function () {
 		if (this.state.data == null) {
 			return (
@@ -61,10 +84,12 @@ const VotingContainer = React.createClass({
 			);
 		}
 
+		var that = this;
 		const voteNodes = this.state.data.map(function (matchup) {
 			return (
 				<MatchupNode
 					data={matchup}
+					userId={that.state.userId}
 				/>
 			);
 		});
@@ -79,34 +104,6 @@ const VotingContainer = React.createClass({
 			<div>
 				{voteNodes}
 			</div>
-		);
-	}
-});
-
-// TODO: BRING THIS TO BE DYNAMIC
-const socket = io.connect('http://localhost:80');
-
-const SocketTest = React.createClass({
-	getInitialState: function () {
-		return {
-			number: 0
-		};
-	},
-	componentDidMount: function () {
-		alert('asdf')
-		socket.on('voteNotif', this._updateVotingUI);
-	},
-	componentWillReceiveProps: function (nextProps) {
-
-	},
-	_updateVotingUI: function (data) {
-		this.setState({ number: data.result })
-	},
-	render: function () {
-		return (
-			<div>
-				{this.state.number}
-			</div> 
 		);
 	}
 });
@@ -194,7 +191,7 @@ const MatchupNode = React.createClass({
 		}
 	},
 	updateNotifications: function () {
-		socket.emit('voteNotif', { userId: 1, leagueId: this.props.data.league_id });
+		socket.emit('voteNotif', { userId: this.props.userId, leagueId: this.props.data.league_id });
 	},
 	render: function () {
 		return (

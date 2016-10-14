@@ -22,17 +22,17 @@ const NavBar = React.createClass({
 	getInitialState: function () {
 		return {
 			activeLeagueId: this.props.activeLeagueId,
-			open: true
+			open: true,
+			userId: ''
 		};
 	},
 	componentDidMount: function () {
-		//alert('mounted')
+		this._getUser();
 	},
-	componentWillReceiveProps: function (nextProps) {
-		//alert('updated')
-		// this.setState({ nextProps.activeLeagueId });
+	componentWillReceiveProps: function () {
+		this._getUser();
 	},
-	logout: function () {
+	_logout: function () {
 		$.ajax({
 			type: 'POST',
 			url: '/football/login/logout',
@@ -44,6 +44,26 @@ const NavBar = React.createClass({
 			}.bind(this),
 			error: function (status, err) {
 				console.error(status, err.toString());
+				this.context.router.push('/login');
+			}.bind(this)
+		});
+	},
+	_getUser: function () {
+		$.ajax({
+			type: 'POST',
+			url: '/football/login/isUserLoggedIn',
+			dataType: 'json',
+			cache: false,
+			success: function (data) {
+				console.log(JSON.stringify(data));
+				// if successfully logged in, open dashboard
+				if (data.userId) {
+					this.setState({ userId: data.userId });
+				} else {
+					this.context.router.push('/login');
+				}
+			}.bind(this),
+			error: function (status, err) {
 				this.context.router.push('/login');
 			}.bind(this)
 		});
@@ -63,6 +83,7 @@ const NavBar = React.createClass({
 								<LeagueList
 									baseUrl="/football/league/userLeagues"
 									activeLeagueId={this.state.activeLeagueId}
+									userId={this.state.userId}
 								/>
 							</div>
 						</Collapse>
@@ -82,7 +103,7 @@ const NavBar = React.createClass({
 							</li>
 						</Link>
 						<li className="nav-bar-title">
-							<div onClick={() => this.logout()}>
+							<div onClick={() => this._logout()}>
 								<span className="glyphicon glyphicon-log-out" aria-hidden="true"></span> Logout
 							</div>
 						</li>
@@ -151,6 +172,7 @@ const LeagueList = React.createClass({
 					leagueName={league.league_name}
 					activeClass={activeClass}
 					setActiveLeagueId={that.setActiveLeagueId}
+					userId={that.props.userId}
 				/>
 			);
 		});
@@ -179,12 +201,12 @@ const LeagueNode = React.createClass({
 	getInitialState: function () {
 		return {
 			activeClass: this.props.activeClass,
-			notifStatus: 1
+			notifStatus: 0
 		};
 	},
 	componentDidMount: function () {
 		socket.on('voteNotif', this._getNotifStatus);
-		socket.emit('voteNotif', { leagueId: this.props.leagueId, userId: 1 });
+		socket.emit('voteNotif', { leagueId: this.props.leagueId, userId: this.props.userId });
 	},
 	componentWillReceiveProps: function (nextProps) {
 		this.setState({ activeClass: nextProps.activeClass });
@@ -202,8 +224,8 @@ const LeagueNode = React.createClass({
 	render: function () {
 		const url = '/dashboard/league/' + this.props.leagueId + '/voting';
 		let notificationIcon = '';
-		if (this.state.notifStatus === 0) {
-			notificationIcon = <span className="glyphicon glyphicon-triangle-right" aria-hidden="true"></span>;
+		if (this.state.notifStatus === 1) {
+			notificationIcon = <span className="glyphicon glyphicon-ok league-filled" aria-hidden="true"></span>;
 		}
 		return (
 			<div className="league-menu-row">
@@ -211,7 +233,7 @@ const LeagueNode = React.createClass({
 					className={this.state.activeClass}
 					onClick={() => this._indexSelected(this.props.leagueId, url)}
 				>
-					{notificationIcon} {this.props.leagueName}
+					{this.props.leagueName} {notificationIcon}
 				</li>
 			</div>
 		);
