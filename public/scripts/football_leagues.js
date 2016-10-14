@@ -62,7 +62,7 @@ const LeagueList = React.createClass({
 			}.bind(this),
 			error: function (status, err) {
 				console.error(status, err.toString());
-				this.context.router.push('/login');
+				this.context.router.push('/football/login');
 			}.bind(this)
 		});
 	},

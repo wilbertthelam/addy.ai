@@ -9,10 +9,6 @@ var connection = db;
 
 var loginAuth = require('./utilities/loginAuthenticationMiddleware.js');
 
-/* Login home page */
-router.get('/', function (req, res) {
-	res.render('football', { title: 'addy.ai' });
-});
 
 /* POST to login into user account */
 router.post('/login', function (req, res) {

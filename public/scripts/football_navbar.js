@@ -40,11 +40,11 @@ const NavBar = React.createClass({
 			cache: false,
 			success: function () {
 				//console.log(JSON.stringify(data));
-				this.context.router.push('/login');
+				this.context.router.push('/football/login');
 			}.bind(this),
 			error: function (status, err) {
 				console.error(status, err.toString());
-				this.context.router.push('/login');
+				this.context.router.push('/football/login');
 			}.bind(this)
 		});
 	},
@@ -60,11 +60,11 @@ const NavBar = React.createClass({
 				if (data.userId) {
 					this.setState({ userId: data.userId });
 				} else {
-					this.context.router.push('/login');
+					this.context.router.push('/football/login');
 				}
 			}.bind(this),
 			error: function (status, err) {
-				this.context.router.push('/login');
+				this.context.router.push('/football/login');
 			}.bind(this)
 		});
 	},
@@ -92,12 +92,12 @@ const NavBar = React.createClass({
 
 				<div className="nav-bar shadow-z-1">
 					<ul>
-						<Link to="/dashboard/leagues">
+						<Link to="/football/dashboard/leagues">
 							<li className="nav-bar-title">
 								<span className="glyphicon glyphicon-plus" aria-hidden="true"></span> Join leagues
 							</li>
 						</Link>
-						<Link to="/dashboard/">
+						<Link to="/football/dashboard/">
 							<li className="nav-bar-title">
 								<span className="glyphicon glyphicon-user" aria-hidden="true"></span> Profile
 							</li>
@@ -154,7 +154,7 @@ const LeagueList = React.createClass({
 			}.bind(this),
 			error: function (status, err) {
 				console.error(status, err.toString());
-				this.context.router.push('/login');
+				this.context.router.push('/football/login');
 			}.bind(this)
 		});
 	},
@@ -222,7 +222,7 @@ const LeagueNode = React.createClass({
 		this.props.setActiveLeagueId(leagueId, url);
 	},
 	render: function () {
-		const url = '/dashboard/league/' + this.props.leagueId + '/voting';
+		const url = '/football/dashboard/league/' + this.props.leagueId + '/voting';
 		let notificationIcon = '';
 		if (this.state.notifStatus === 1) {
 			notificationIcon = <span className="glyphicon glyphicon-ok league-filled" aria-hidden="true"></span>;

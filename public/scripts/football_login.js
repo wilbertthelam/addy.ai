@@ -138,7 +138,7 @@ const LoginForm = React.createClass({
 				if (data.userId) {
 					this.setState({ warnings: { notExist: false } });
 					console.log('logged in');
-					this.context.router.push('/dashboard');
+					this.context.router.push('/football/dashboard');
 				} else {
 					this.setState({ warnings: { notExist: true } });
 					console.log('login failed');
@@ -278,7 +278,7 @@ const SignupForm = React.createClass({
 						// if successfully logged in, open dashboard
 						if (data.userId) {
 							console.log('logged in');
-							this.context.router.push('/dashboard');
+							this.context.router.push('/football/dashboard');
 						} else {
 							this.setState({ errorMessage: 'This email is already taken!' });
 							console.log('login failed');

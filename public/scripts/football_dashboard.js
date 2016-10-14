@@ -64,8 +64,8 @@ const ContentBox = React.createClass({
 	handleSelect: function (keyId) {
 		if (keyId !== this.state.activeTab) {
 			this.setState({ activeTab: keyId });
-			const voteUrl = '/dashboard/league/' + this.state.leagueId + '/voting';
-			const leaderboardUrl = '/dashboard/league/' + this.state.leagueId + '/leaderboard';
+			const voteUrl = '/football/dashboard/league/' + this.state.leagueId + '/voting';
+			const leaderboardUrl = '/football/dashboard/league/' + this.state.leagueId + '/leaderboard';
 			if (keyId === 1) {
 				this.context.router.push(voteUrl);
 			} else {

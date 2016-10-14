@@ -24,7 +24,7 @@ const MainContainerPage = React.createClass({
 							<ul className="pure-menu-list nav">
 
 								<li className="pure-menu-item">
-									<Link to="/dashboard" className="pure-menu-link">Home</Link>
+									<Link to="/football/dashboard" className="pure-menu-link">Home</Link>
 								</li>
 								
 								<li className="pure-menu-item">
@@ -74,12 +74,12 @@ const MainPage = React.createClass({
 					console.log('authenticated');
 				} else {
 					console.log('not logged in, redirect to login');
-					this.context.router.push('/login');
+					this.context.router.push('/football/login');
 				}
 			}.bind(this),
 			error: function (status, err) {
 				console.error(status, err.toString());
-				this.context.router.push('/login');
+				this.context.router.push('/football/login');
 			}.bind(this)
 		});
 	},
@@ -127,8 +127,8 @@ const AboutPage = React.createClass({
 });
 
 ReactDOM.render((
-	<Router history={hashHistory}>
-		<Route path="/" component={MainContainerPage}>
+	<Router history={browserHistory}>
+		<Route path="/football" component={MainContainerPage}>
 			<IndexRoute component={MainPage} />
 			<Route path="login" component={LoginPage} />
 			<Route path="about" component={AboutPage} />

@@ -97,7 +97,7 @@ const UserInfo = React.createClass({
 			}.bind(this),
 			error: function (status, err) {
 				console.error(status, err.toString());
-				this.context.router.push('/login');
+				this.context.router.push('/football/login');
 			}.bind(this)
 		});
 	},
@@ -136,7 +136,7 @@ const OverallRecords = React.createClass({
 			}.bind(this),
 			error: function (status, err) {
 				console.error(status, err.toString());
-				this.context.router.push('/login');
+				this.context.router.push('/football/login');
 			}.bind(this)
 		})
 	},
@@ -164,7 +164,7 @@ const OverallRecords = React.createClass({
 
 const RecordNode = React.createClass({
 	viewLeague: function (leagueId) {
-		this.context.router.push('/dashboard/league/' + leagueId + '/voting');
+		this.context.router.push('/football/dashboard/league/' + leagueId + '/voting');
 	},
 	render: function () {
 		const data = this.props.data;

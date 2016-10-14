@@ -53,7 +53,7 @@ const VotingContainer = React.createClass({
 			}.bind(this),
 			error: function (status, err) {
 				console.error(status, err.toString());
-				this.context.router.push('/login');
+				this.context.router.push('/football/login');
 			}.bind(this)
 		});
 	},
@@ -69,11 +69,11 @@ const VotingContainer = React.createClass({
 				if (data.userId) {
 					this.setState({ userId: data.userId });
 				} else {
-					this.context.router.push('/login');
+					this.context.router.push('/football/login');
 				}
 			}.bind(this),
 			error: function (status, err) {
-				this.context.router.push('/login');
+				this.context.router.push('/football/login');
 			}.bind(this)
 		});
 	},
