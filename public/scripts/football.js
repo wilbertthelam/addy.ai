@@ -2,10 +2,14 @@ import * as About from './about.js';
 import * as Login from './football_login.js';
 import * as Dashboard from './football_dashboard.js';
 import * as Leagues from './football_leagues.js';
+import * as NavBar from './football_navbar.js';
+import * as Profile from './football_profile.js';
+import * as Voting from './football_dashboard_voting.js';
+import * as Leaderboard from './football_dashboard_leaderboard.js';
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import $ from 'jquery';
-import { DropdownButton, MenuItem } from 'react-bootstrap';
 import { Router, Route, Link, IndexRoute, browserHistory, hashHistory } from 'react-router';
 
 console.log('Football section Entry point');
@@ -56,7 +60,7 @@ const LoginPage = React.createClass({
 	}
 });
 
-const DashboardPage = React.createClass({
+const MainPage = React.createClass({
 	componentDidMount: function () {
 		$.ajax({
 			type: 'POST',
@@ -90,7 +94,7 @@ const DashboardPage = React.createClass({
 				<div id="container">
 					<div className="container">
 						<div className="col-md-3">
-							<Dashboard.NavBar />
+							<NavBar.NavBar />
 						</div>
 
 						<div className="col-md-9">
@@ -103,7 +107,7 @@ const DashboardPage = React.createClass({
 	}
 });
 
-DashboardPage.contextTypes = {
+MainPage.contextTypes = {
 	router: React.PropTypes.object
 };
 
@@ -122,26 +126,17 @@ const AboutPage = React.createClass({
 	}
 });
 
-//<div className="col-sm-12">
-//	<h2>Admin tools</h2>
-//	<ul>
-//		<li><a href="/populatePastStats">populate past stats</a></li>
-//		<li><a href="/populateCurrentStats">populate current stats</a></li>
-//		<li><a href="/populateCurrentPlayerStats">populate current player stats</a></li>
-//	</ul>
-//</div>
-
 ReactDOM.render((
 	<Router history={hashHistory}>
 		<Route path="/" component={MainContainerPage}>
-			<IndexRoute component={DashboardPage} />
+			<IndexRoute component={MainPage} />
 			<Route path="login" component={LoginPage} />
 			<Route path="about" component={AboutPage} />
-			<Route path="dashboard" component={DashboardPage}>
-				<IndexRoute component={Dashboard.DefaultContainer} />
+			<Route path="dashboard" component={MainPage}>
+				<IndexRoute component={Profile.ProfileContainer} />
 				<Route path="league/:leagueId" component={Dashboard.DashboardContainer}>
-					<Route path="voting" component={Dashboard.VotingContainer} />
-					<Route path="leaderboard" component={Dashboard.LeaderboardContainer} />
+					<Route path="voting" component={Voting.VotingContainer} />
+					<Route path="leaderboard" component={Leaderboard.LeaderboardContainer} />
 				</Route>
 				<Route path="leagues" component={Leagues.LeagueContainer} />
 			</Route>

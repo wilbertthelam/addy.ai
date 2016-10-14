@@ -55,9 +55,6 @@ router.get('/testLogin', loginAuth.isAuthenticated, function(req, res) {
 	return res.json('Logged in.');
 });
 
-// router.get('/notLoggedIn', function(req, res) {
-// 	return res.json('Didnt log in');
-// });
 
 /* POST user creation */
 router.post('/signup', function(req, res) {
@@ -144,7 +141,7 @@ router.post('/signup', function(req, res) {
 function checkUserLogin(email, password, callback) {
 	var statement = 'SELECT * FROM addy_ai_football.users WHERE email = ? AND password = ?;';
 	connection.query(statement, [email, password], function (err, results) {
-		console.log('Login result: ' + JSON.stringify(results));
+		// console.log('Login result: ' + JSON.stringify(results));
 		if (err) {
 			return callback({ execSuccess: false, message: 'DB error in checkUserLogin.', error: err });
 		} 
@@ -152,7 +149,7 @@ function checkUserLogin(email, password, callback) {
 		if (results.length < 1) {
 			return callback({ execSuccess: true, message: 'Could not find user.', code: 'ERR_NO_USER', data: [] });
 		}
-		if (results.length > 1) {			
+		if (results.length > 1) {
 			return callback({ execSuccess: true, message: 'Duplicate users exist.', code: 'ERR_DUPLICATE_USER', data: [] });
 		}
 		if (results.length === 1) {

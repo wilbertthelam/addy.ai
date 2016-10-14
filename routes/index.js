@@ -41,7 +41,7 @@ var topPlayersCache = [];
 
 
 for (var i = 1; i <= currentWeek; i++) {
-	console.log('currentweek: ' + i);
+	// console.log('currentweek: ' + i);
 	if (!topPlayersCache[i] || !topPlayersCache[i][type]) {
 		if (!topPlayersCache[i]) {
 			topPlayersCache[i] = {};

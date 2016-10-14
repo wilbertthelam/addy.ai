@@ -11,6 +11,12 @@ var session = require('express-session');
 
 var app = express();
 
+var server = require('http').Server(app);
+var io = require('socket.io')(server);
+
+var notifications = require('./routes/sockets/notifications')(io);
+
+
 var routes = require('./routes/index');
 var news = require('./routes/news');
 var automatedtasks = require('./routes/automatedtasks');
@@ -18,6 +24,8 @@ var login = require('./routes/login');
 var voting = require('./routes/voting');
 var league = require('./routes/league');
 var footballtasks = require('./routes/footballtasks');
+
+server.listen(80);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

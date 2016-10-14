@@ -1,0 +1,223 @@
+/* Wilbert Lam
+10/13/2016
+football_navbar.js
+
+Contains components for the NavBar
+
+*/
+
+import React from 'react';
+import $ from 'jquery';
+import { Link } from 'react-router';
+import { Collapse } from 'react-bootstrap';
+import io from 'socket.io-client';
+
+// TODO: BRING THIS TO BE DYNAMIC
+const socket = io.connect('http://localhost:80');
+
+// =========================================
+// NAVIGATION BAR ON THE SIDE
+// =========================================
+const NavBar = React.createClass({
+	getInitialState: function () {
+		return {
+			activeLeagueId: this.props.activeLeagueId,
+			open: true
+		};
+	},
+	componentDidMount: function () {
+		//alert('mounted')
+	},
+	componentWillReceiveProps: function (nextProps) {
+		//alert('updated')
+		// this.setState({ nextProps.activeLeagueId });
+	},
+	logout: function () {
+		$.ajax({
+			type: 'POST',
+			url: '/football/login/logout',
+			dataType: 'json',
+			cache: false,
+			success: function () {
+				//console.log(JSON.stringify(data));
+				this.context.router.push('/login');
+			}.bind(this),
+			error: function (status, err) {
+				console.error(status, err.toString());
+				this.context.router.push('/login');
+			}.bind(this)
+		});
+	},
+	render: function () {
+		return (
+			<div>
+				<div className="nav-bar shadow-z-1">
+					<ul>
+						<li className="nav-bar-title" onClick={() => this.setState({ open: !this.state.open })}>
+							<span className="glyphicon glyphicon-th-list" aria-hidden="true"></span> Your leagues
+						</li>
+						<Collapse
+							in={this.state.open}
+						>
+							<div>
+								<LeagueList
+									baseUrl="/football/league/userLeagues"
+									activeLeagueId={this.state.activeLeagueId}
+								/>
+							</div>
+						</Collapse>
+					</ul>
+				</div>
+
+				<div className="nav-bar shadow-z-1">
+					<ul>
+						<Link to="/dashboard/leagues">
+							<li className="nav-bar-title">
+								<span className="glyphicon glyphicon-plus" aria-hidden="true"></span> Join leagues
+							</li>
+						</Link>
+						<Link to="/dashboard/">
+							<li className="nav-bar-title">
+								<span className="glyphicon glyphicon-user" aria-hidden="true"></span> Profile
+							</li>
+						</Link>
+						<li className="nav-bar-title">
+							<div onClick={() => this.logout()}>
+								<span className="glyphicon glyphicon-log-out" aria-hidden="true"></span> Logout
+							</div>
+						</li>
+					</ul>
+				</div>
+			</div>
+		);
+	}
+});
+
+// allow for redirects inside the dashboard
+NavBar.contextTypes = {
+	router: React.PropTypes.object
+};
+
+const LeagueList = React.createClass({
+	getInitialState: function () {
+		return {
+			data: [],
+			activeLeagueId: this.props.activeLeagueId,
+		};
+	},
+	componentDidMount: function () {
+		this.leagueDisplay(this.props.baseUrl);
+	},
+
+	componentWillReceiveProps: function (nextProps) {
+		this.setState({
+			activeLeagueId: nextProps.activeLeagueId
+		}, this.leagueDisplay(this.props.baseUrl));
+	},
+	setActiveLeagueId: function (activeLeagueId, url) {
+		console.log('activeLeagueId set at : ' + activeLeagueId);
+		this.setState({ activeLeagueId: activeLeagueId });
+		this.context.router.push(url);
+	},
+	leagueDisplay: function (baseUrl) {
+		$.ajax({
+			type: 'GET',
+			url: baseUrl,
+			dataType: 'json',
+			cache: false,
+			success: function (data) {
+				console.log(JSON.stringify(data));
+				// if successfully logged in, open dashboard, else redirect to login
+
+				this.setState({ data: data.data });
+			}.bind(this),
+			error: function (status, err) {
+				console.error(status, err.toString());
+				this.context.router.push('/login');
+			}.bind(this)
+		});
+	},
+	render: function () {
+		const that = this;
+		const leagueNodes = this.state.data.map(function (league) {
+			let activeClass = '';
+			console.log('that.state.activeID: ' + that.state.activeLeagueId);
+			if (that.state.activeLeagueId === league.league_id) {
+				activeClass = 'league-selected';
+			}
+			return (
+				<LeagueNode
+					leagueId={league.league_id}
+					leagueName={league.league_name}
+					activeClass={activeClass}
+					setActiveLeagueId={that.setActiveLeagueId}
+				/>
+			);
+		});
+
+		if (leagueNodes.length < 1) {
+			return (
+				<div id="no-league-joined">No leagues joined yet.</div>
+			);
+		}
+
+		return (
+			<div className="nav-bar-subtitle">
+				{leagueNodes}
+			</div>
+		);
+	}
+});
+
+// allow for redirects inside the dashboard
+LeagueList.contextTypes = {
+	router: React.PropTypes.object
+};
+
+
+const LeagueNode = React.createClass({
+	getInitialState: function () {
+		return {
+			activeClass: this.props.activeClass,
+			notifStatus: 1
+		};
+	},
+	componentDidMount: function () {
+		socket.on('voteNotif', this._getNotifStatus);
+		socket.emit('voteNotif', { leagueId: this.props.leagueId, userId: 1 });
+	},
+	componentWillReceiveProps: function (nextProps) {
+		this.setState({ activeClass: nextProps.activeClass });
+		socket.on('voteNotif', this._getNotifStatus);
+	},
+	_getNotifStatus: function (data) {
+		if (data.leagueId === this.props.leagueId) {
+			this.setState({ notifStatus: data.result });
+		}
+	},
+	_indexSelected: function (leagueId, url) {
+		console.log('got selected baby!' + leagueId);
+		this.props.setActiveLeagueId(leagueId, url);
+	},
+	render: function () {
+		const url = '/dashboard/league/' + this.props.leagueId + '/voting';
+		let notificationIcon = '';
+		if (this.state.notifStatus === 0) {
+			notificationIcon = <span className="glyphicon glyphicon-triangle-right" aria-hidden="true"></span>;
+		}
+		return (
+			<div className="league-menu-row">
+				<li
+					className={this.state.activeClass}
+					onClick={() => this._indexSelected(this.props.leagueId, url)}
+				>
+					{notificationIcon} {this.props.leagueName}
+				</li>
+			</div>
+		);
+	}
+});
+
+module.exports = {
+	NavBar: NavBar,
+};

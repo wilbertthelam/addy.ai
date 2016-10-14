@@ -2,14 +2,13 @@
 09/27/2016
 football_leagues.js
 
-Contains components for the leagues page
+Contains components for the join leagues section of the website
 
 */
 
 import React from 'react';
-import ReactDOM from 'react-dom';
 import $ from 'jquery';
-import { Router, Route, Link, browserHistory } from 'react-router';
+import { Link } from 'react-router';
 import { Button, Nav, NavItem } from 'react-bootstrap';
 import * as QueryString from 'query-string';
 import Loading from 'react-loading';
@@ -17,7 +16,7 @@ import Loading from 'react-loading';
 const LeagueContainer = React.createClass({
 	render: function () {
 		return (
-			<div className="">
+			<div>
 				<div className="col-md-6">
 					<div className="shadow-z-1 content-box">
 						<div className="league-header">Available leagues</div>
@@ -102,9 +101,9 @@ const LeagueNode = React.createClass({
 				console.log(JSON.stringify(data));
 				// if successfully logged in, open dashboard, else redirect to login
 				if (data.execSuccess === false) {
-					alert('error could not add league');
+					console.log('error could not add league');
 				} else {
-					alert('succesfully added');
+					console.log('succesfully added');
 				}
 				
 			}.bind(this),
@@ -263,8 +262,6 @@ const AddLeague = React.createClass({
 		);
 	}
 });
-
-
 
 module.exports = {
 	LeagueContainer: LeagueContainer,

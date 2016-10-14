@@ -13,6 +13,26 @@ import { Button, Nav, NavItem } from 'react-bootstrap';
 import * as QueryString from 'query-string';
 import Loading from 'react-loading';
 
+//=========================================
+// ROUTER CONTAINER FOR THE PROFILE SECTION
+//=========================================
+const ProfileContainer = React.createClass({
+
+	render: function () {
+		return (
+			<div>
+				<div className="col-md-12">
+					<div className="shadow-z-1 content-box">
+						<div className="league-header">Profile</div>
+					</div>
+				</div>
+
+				<ProfileBox />
+			</div>
+		);
+	}
+});
+
 const ProfileBox = React.createClass({
 	render: function () {
 		return (
@@ -164,5 +184,5 @@ RecordNode.contextTypes = {
 };
 
 module.exports = {
-	ProfileBox: ProfileBox
+	ProfileContainer: ProfileContainer
 };
