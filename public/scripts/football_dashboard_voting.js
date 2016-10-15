@@ -112,6 +112,8 @@ const VotingContainer = React.createClass({
 				<MatchupNode
 					data={matchup}
 					userId={that.state.userId}
+					currentWeek={that.state.currentWeek}
+					selectedWeek={that.state.selectedWeek}
 				/>
 			);
 		});
@@ -165,18 +167,28 @@ const MatchupNode = React.createClass({
 		// or second team (1) is currently winning
 		return {
 			winner: null,
+			winningId: '',
+			losingId: '',
 			selectClass: ['', ''],
-			activeClass: 'vote-selected'
+			activeClass: 'vote-selected',
+			actualResult: {
+				actualWinnerId: '',
+				actualLoserId: '',
+				actualWinningScore: '',
+				actualLosingScore: ''
+			}
 		};
 	},
 	componentDidMount: function () {
-		this.decideClasses(this.props.data);
+		this._decideClasses(this.props.data);
 	},
 	componentWillReceiveProps: function (nextProps) {
-		this.decideClasses(nextProps.data);
+		this._decideClasses(nextProps.data);
 	},
-	decideClasses: function (data) {
+	_decideClasses: function (data) {
 		const selectClass = ['', ''];
+		
+		// determine the user's selection
 		let winner = null;
 		if (data.team_1_active === 1) {
 			selectClass[0] = this.state.activeClass;
@@ -186,7 +198,23 @@ const MatchupNode = React.createClass({
 			winner = 1;
 		}
 
-		this.setState({ selectClass: selectClass, winner: winner });
+		// if there's a score available, give the actual result
+		if (data.actual_winner_id !== null && data.actual_loser_id !== null) {
+			this.setState({
+				actualResult: {
+					actualWinningId: data.actual_winner_id,
+					actualLosingId: data.actual_loser_id,
+					actualWinningScore: data.actual_winning_score,
+					actualLosingScore: data.actual_losing_score
+				}
+			});
+		}
+		this.setState({
+			selectClass: selectClass,
+			winner: winner,
+			winningId: data.winning_team_id,
+			losingId: data.losing_team_id
+		});
 	},
 	_updateActiveClasses: function () {
 		// on state change, change the classes that highlight your pick
@@ -248,8 +276,15 @@ const MatchupNode = React.createClass({
 		socket.emit('voteNotif', { userId: this.props.userId, leagueId: this.props.data.league_id });
 	},
 	render: function () {
+		let leftBarIcon = <div className="result-icon"><span className="glyphicon glyphicon-check" aria-hidden="true"></span></div>;
+		if (this.props.currentWeek !== this.props.selectedWeek) {
+			leftBarIcon = <LeftBarIcon winningId={this.state.winningId} actualWinningId={this.state.actualResult.actualWinningId} />;
+		}
 		return (
 			<div className="container matchup well">
+				<div className="col-sm-1">
+					{leftBarIcon}
+				</div>
 				<div className="col-sm-5">
 					<div className="team" onClick={() => this._vote(0)}>
 						<div className={this.state.selectClass[0]}>
@@ -258,8 +293,8 @@ const MatchupNode = React.createClass({
 						</div>
 					</div>
 				</div>
-				<div className="col-sm-2">
-					<div id="vs">{this.props.data.locked === 0 ? <span>vs</span> : <span className="glyphicon glyphicon-lock" aria-hidden="true"></span>}</div>
+				<div className="col-sm-1">
+					<div className="vs">{this.props.data.locked === 0 ? <span>vs</span> : <span className="glyphicon glyphicon-lock" aria-hidden="true"></span>}</div>
 				</div>
 				<div className="col-sm-5">
 					<div className="team" onClick={() => this._vote(1)}>
@@ -274,6 +309,26 @@ const MatchupNode = React.createClass({
 	}
 });
 
+const LeftBarIcon = React.createClass({
+	getInitialState: function () {
+		return {
+			actualWinningId: this.props.actualWinningId,
+			winningId: this.props.winningId,
+		};
+	},
+	componentWillReceiveProps: function (nextProps) {
+		this.setState({ actualWinningId: nextProps.actualWinningId, winningId: nextProps.winningId });
+	},
+	render: function () {
+		return (
+			<div className="result-icon">
+				{(this.state.winningId === this.state.actualWinningId && this.state.actualWinningId !== '') ?
+					<span className="glyphicon glyphicon-ok-circle green" aria-hidden="true"></span> :
+					<span className="glyphicon glyphicon-ban-circle red" aria-hidden="true"></span>}
+			</div>
+		);
+	}
+});
 module.exports = {
 	VotingContainer: VotingContainer,
 };

@@ -128,8 +128,8 @@
 	margin-bottom: 10px;
 }
 
-#vs {
-	font-size: 20px;
+.vs {
+	font-size: 30px;
 	vertical-align: bottom;
 	text-align: left;
 	margin-top: 10px;
@@ -201,4 +201,19 @@ tr:hover {
 
 .voting-week-menu {
 	margin-bottom: 10px;
+}
+
+.red {
+	color: red;
+}
+
+.green {
+	color: green;
+}
+
+.result-icon {
+	font-size: 30px;
+	vertical-align: bottom;
+	text-align: center;
+	margin-top: 10px;
 }

@@ -23,7 +23,9 @@ router.get('/matchupsWithUserVote', loginAuth.isAuthenticated, function (req, re
 	async.series({
 		getMatchups: function (cb1) {
 			var statement = 'SELECT t.team_name as team_name1, t2.team_name as team_name2, ' + 
-				't.owner_name as owner_name1, t2.owner_name as owner_name2, m.*, lvs.locked ' + 
+				't.owner_name as owner_name1, t2.owner_name as owner_name2, m.*, lvs.locked, ' +
+				'null as actual_winner_id, null as actual_loser_id, ' +
+				'null as actual_winning_score, null as actual_losing_score ' + 
 				'FROM addy_ai_football.matchups m, addy_ai_football.teams t, ' +
 				'addy_ai_football.teams t2, addy_ai_football.league_voting_status lvs ' +
 				'WHERE m.team_id1 = t.team_id AND m.team_id2 = t2.team_id ' +
@@ -70,6 +72,8 @@ router.get('/matchupsWithUserVote', loginAuth.isAuthenticated, function (req, re
 					var row = finalData[i];
 					row.team_1_active = 0;
 					row.team_2_active = 0;
+					row.winning_team_id = null;
+					row.losing_team_id = null;
 					var matchupId = row.matchup_id;
 					var tempResult = tempResults[matchupId];
 					console.log('teamResult is: ');
@@ -78,10 +82,51 @@ router.get('/matchupsWithUserVote', loginAuth.isAuthenticated, function (req, re
 					if (tempResult != undefined && tempResult != null) {
 						if (tempResult.winning_team_id === row.team_id1) {
 							row.team_1_active = 1;
+							row.winning_team_id = row.team_id1;
+							row.losing_team_id = row.team_id2;
 						} else if (tempResult.winning_team_id === row.team_id2) {
 							row.team_2_active = 1;
+							row.winning_team_id = row.team_id2;
+							row.losing_team_id = row.team_id1;
 						} else {
 							console.log('weird error, both teams are marked as winners');
+						}
+					}
+				}
+
+				return cb2(null, null);
+			});
+		},
+
+		getResults: function (cb3) {
+			var statement = 'SELECT * FROM addy_ai_football.results WHERE matchup_id in (?);';
+
+			connection.query(statement, [getListofMatchupIds], function (err, results) {
+				if (err) {
+					return res.json({ execSuccess: false, message: 'Cannot get voting result data.', error: err });
+				}
+				// console.log(JSON.stringify(results));
+
+				var tempResults = {};
+				if (results.length > 0 || results != null) {
+					for (var i = 0; i < results.length; i++) {
+						tempResults[results[i].matchup_id] = results[i];
+					}
+
+					// loop through each element of finalData and add in voting data including: 
+					// winning_team_id, losing_team_id, team_1_active, team_2_active
+					// (active meaning if that team num won, thus allowing front end to know which one to highlight)
+					
+					for (var i = 0; i < finalData.length; i++) {
+						var row = finalData[i];
+
+						var matchupId = row.matchup_id;
+						var tempResult = tempResults[matchupId];
+						if (tempResult != undefined && tempResult != null) {
+							row.actual_winner_id = tempResult.winning_team_id;
+							row.actual_loser_id = tempResult.losing_team_id;
+							row.actual_winning_score = tempResult.winning_team_score;
+							row.actual_losing_score = tempResult.losing_team_score;
 						}
 					}
 				}
