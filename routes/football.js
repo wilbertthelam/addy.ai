@@ -24,18 +24,23 @@ router.get('/dashboard', function (req, res) {
 	res.render('football', { title: 'addy.ai' });
 });
 
-// /* Login home page */
-// router.get('/dashboard/leagues', function (req, res) {
-// 	res.render('football', { title: 'addy.ai' });
-// });
+/* Login home page */
+router.get('/dashboard/leagues', function (req, res) {
+	res.render('football', { title: 'addy.ai' });
+});
+
+/* Login home page */
+router.get('/dashboard/league/*/voting', function (req, res) {
+	res.render('football', { title: 'addy.ai' });
+});
+
+/* Login home page */
+router.get('/dashboard/league/*/leaderboard', function (req, res) {
+	res.render('football', { title: 'addy.ai' });
+});
 
 // /* Login home page */
-// router.get('/dashboard/league/*/voting', function (req, res) {
-// 	res.render('football', { title: 'addy.ai' });
-// });
-
-// /* Login home page */
-// router.get('/dashboard/league/*/leaderboard', function (req, res) {
+// router.get('/*', function (req, res) {
 // 	res.render('football', { title: 'addy.ai' });
 // });
 

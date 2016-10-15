@@ -198,10 +198,14 @@ router.post('/createNewLeague', loginAuth.isAuthenticated, function (req, res) {
 // 3. If it cannot get results, then add the leagueId to the list of non working leagues
 // 4. Take working results and populate the database
 // 5. Return success and the leagues that don't work in response
-router.post('/populateLeagueResults', /*loginAuth.isAuthenticated,*/ function (req, res) {
+router.post('/populateLeagueResults', loginAuth.isAuthenticated, function (req, res) {
 	var idList = []; // array with each element being an object with espnId and leagueId
 	var workingLeaguesData = [];
 	var nonWorkingLeaguesList = [];
+
+	if (req.session.userId !== 1) {
+		return res.json({ execSuccess: false, message: 'Only Wilbert can close league results.', error: err });
+	}
 
 	async.series({
 		getLeagueIds: function (cb0) {
@@ -211,18 +215,18 @@ router.post('/populateLeagueResults', /*loginAuth.isAuthenticated,*/ function (r
 					return res.json({ execSuccess: false, message: 'DB error in getLeagueIds.', error: err });
 				}
 
-				console.log(JSON.stringify(results));
+				//console.log(JSON.stringify(results));
 				if (!results || results.length < 1) {
 					console.log('No leagues exists');
 					return res.json({ execSuccess: false, message: 'No leagues exist.', code: 'ERR_NO_LEAGUE', data: [] });
 				}
 				idList = JSON.stringify(results);
-				console.log(idList);
+				//console.log(idList);
 				return cb0(null, 'League available');
 			});
 		},
 		getLeagueResults: function (cb1) {
-			PythonShell.run('./scraper/footballResultsScraper.py', { mode: 'json', args: [idList, 2016, week] }, function (err, results) {
+			PythonShell.run('./scraper/footballResultsScraper.py', { mode: 'json', args: [idList, year, week] }, function (err, results) {
 				if (err) {
 					return res.json({ execSuccess: false, message: 'Could not parse league result data.', code: 'ERR_PRIVATE_NOT_EXIST', error: err });
 				}
@@ -240,25 +244,25 @@ router.post('/populateLeagueResults', /*loginAuth.isAuthenticated,*/ function (r
 			var statement = 'SELECT matchup_id FROM addy_ai_football.matchups WHERE league_id = ? AND week = ? '
 				+ 'AND team_id1 in (?, ?) AND team_id2 in (?, ?) LIMIT 1;';
 
+			console.log('week: ' + week)
 			async.each(workingLeaguesData, function (row, callback) {
-				console.log('week: ' + week)
 				connection.query(statement, [row.league_id, week, row.winning_team_id, row.losing_team_id, row.winning_team_id, row.losing_team_id], function (err, results) {
-					console.log('results: ' + JSON.stringify(results));
+					console.log('results: ' + JSON.stringify(results) + ' for league: ' + row.league_id);
 					var errorMessage = '';
 					if (err) {
 						errorMessage = 'DB error in getMatchupId.';
 						return callback(errorMessage);
 					}
 
-					console.log('result stuff: ' + JSON.stringify(results));
-					console.log('row stuff: ' + JSON.stringify(row))
+					// console.log('result stuff: ' + JSON.stringify(results));
+					// console.log('row stuff: ' + JSON.stringify(row))
 					if (!results || results.length < 1) {
-						console.log('No matchup exists');
+						console.log('No matchup exists for: ' + row.league_id);
 						errorMessage = 'No matchup exist.';
 						return callback(errorMessage);
 					}
 					row['matchup_id'] = results[0].matchup_id;
-					console.log(row);
+					//console.log(row);
 					return callback();
 				});
 			}, function (err) {
@@ -303,6 +307,37 @@ router.post('/populateLeagueResults', /*loginAuth.isAuthenticated,*/ function (r
 		}
 
 	});
+});
+
+/* POST for admin to change the lock status at the moment */
+router.post('/changeLockStatus', loginAuth.isAuthenticated, function (req, res) {
+
+	if (req.session.userId !== 1) {
+		return res.json({ execSuccess: false, message: 'Only Wilbert can change the lock status.', error: err });
+	}
+
+	connection.beginTransaction(function (err) {
+		if (err) {
+			return res.json({ execSuccess: false, message: 'Cannot begin transaction in changeLockStatus route.', error: err });
+		}
+	});
+
+	var statement = 'UPDATE addy_ai_football.league_voting_status SET ? WHERE week = ? AND year = ?;';
+	var row = {
+		locked: req.body.locked,
+	};
+
+	console.log(JSON.stringify(row));
+	connection.query(statement, [row, req.body.week, req.body.year], function(err) {
+		if (err) {
+			connection.rollback();
+			return res.json({ execSuccess: false, message: 'Cannot change lock status.', error: err });
+		} else {
+			connection.commit();
+			return res.json({ execSuccess: true, message: 'Successfully changed lock status', error: err});
+		}
+	});
+
 });
 
 module.exports = router;

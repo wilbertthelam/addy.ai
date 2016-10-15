@@ -130,6 +130,9 @@
 
 #vs {
 	font-size: 20px;
+	vertical-align: bottom;
+	text-align: left;
+	margin-top: 10px;
 }
 
 .owner-name {

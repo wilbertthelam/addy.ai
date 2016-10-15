@@ -23,11 +23,12 @@ router.get('/matchupsWithUserVote', loginAuth.isAuthenticated, function (req, re
 	async.series({
 		getMatchups: function (cb1) {
 			var statement = 'SELECT t.team_name as team_name1, t2.team_name as team_name2, ' + 
-				't.owner_name as owner_name1, t2.owner_name as owner_name2, m.* ' + 
-				'FROM addy_ai_football.matchups m, addy_ai_football.teams t, addy_ai_football.teams t2 ' +
+				't.owner_name as owner_name1, t2.owner_name as owner_name2, m.*, lvs.locked ' + 
+				'FROM addy_ai_football.matchups m, addy_ai_football.teams t, ' +
+				'addy_ai_football.teams t2, addy_ai_football.league_voting_status lvs ' +
 				'WHERE m.team_id1 = t.team_id AND m.team_id2 = t2.team_id ' +
 				'AND t.league_id = m.league_id AND t2.league_id = m.league_id ' +
-				'AND m.league_id = ? AND m.week = ? AND m.year = ?;';
+				'AND m.league_id = ? AND m.week = ? AND m.year = ? AND lvs.year = m.year AND lvs.week = m.week;';
 
 			connection.query(statement, [req.query.leagueId, week, req.query.year], function (err, results) {
 				if (err) {
@@ -192,7 +193,7 @@ router.get('/leaderboardForUser', function (req, res) {
 	 		'm.league_id, ' + 
 	 		'm.year, ' +
 	 		'l.league_name ' +
-		'FROM addy_ai_football.votes v, addy_ai_football.matchups m, addy_ai_football.results r, addy_ai_football.leagues l ' +
+		'FROM addy_ai_football.votes v, addy_ai_football.matchups m, addy_ai_football.results r, addy_ai_football.leagues l, addy_ai_football.user_leagues u ' +
 		'WHERE v.winning_team_id = r.winning_team_id ' +
 		'AND m.matchup_id = v.matchup_id ' +
 		'AND v.matchup_id = r.matchup_id ' +
@@ -200,6 +201,8 @@ router.get('/leaderboardForUser', function (req, res) {
 		'AND m.league_id = l.league_id ' +
 		'AND m.year = ? ' +
 		'AND v.user_id = ? ' +
+		'AND v.user_id = u.user_id ' +
+		'AND u.league_id = m.league_id ' +
 		'GROUP BY m.league_id ' +
 		'ORDER BY wins DESC, win_percentage DESC;';
 

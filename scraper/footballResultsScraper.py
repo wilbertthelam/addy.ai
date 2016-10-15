@@ -58,7 +58,7 @@ for element in idListConvert:
 				team1Score = names[0].select('.score')[0]['title']
 				team2Score = names[1].select('.score')[0]['title']
 
-				if int(team1Score) > int(team2Score):
+				if float(team1Score) > float(team2Score):
 					winningScore = team1Score
 					winningId = teamId1
 					losingScore = team2Score

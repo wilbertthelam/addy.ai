@@ -126,6 +126,22 @@ const AboutPage = React.createClass({
 	}
 });
 
+const NotFound = React.createClass({
+	render: function () {
+		return (
+			<div className="main">
+				<div className="banner">
+				</div>
+
+				<div id="container">
+					<h1>404! 404! 404!</h1>
+					<h3>Uh oh, page not found! This isn't Russell Wilson's playbook after all.</h3>
+				</div>
+			</div>
+		);
+	}
+});
+
 ReactDOM.render((
 	<Router history={browserHistory}>
 		<Route path="/football" component={MainContainerPage}>
@@ -140,6 +156,7 @@ ReactDOM.render((
 				</Route>
 				<Route path="leagues" component={Leagues.LeagueContainer} />
 			</Route>
+			<Route path="*" component={NotFound} />
 		</Route>
 	</Router>
 ), document.getElementById('mainContainerFootball'));

@@ -71,7 +71,7 @@ const LeaderboardContainer = React.createClass({
 							})}
 						</DropdownButton>
 					</ButtonToolbar>
-					*note: forgetting to vote is recorded as a loss
+					<small>*note: forgetting to vote is recorded as a loss</small>
 				</span>
 
 

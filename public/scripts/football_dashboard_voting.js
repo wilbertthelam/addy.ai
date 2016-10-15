@@ -138,7 +138,7 @@ const MatchupNode = React.createClass({
 
 		this.setState({ selectClass: selectClass, winner: winner });
 	},
-	updateActiveClasses: function () {
+	_updateActiveClasses: function () {
 		// on state change, change the classes that highlight your pick
 
 		const newSelectClass = this.state.selectClass;
@@ -148,46 +148,50 @@ const MatchupNode = React.createClass({
 		this.setState({ selectClass: newSelectClass });
 	},
 	_vote: function (winningTeam) {
-		// team 0 is the first team on the list,
-		// team 1 is the second team on the list
-		// if team is already selected, don't bother with the ajax vote update call
-		// alert('winningTeam: ' + winningTeam + '   state winningteam: ' + this.state.winner);
-		if (winningTeam !== this.state.winner || this.state.winner === null) {
-			// get the winning and losing team
-			let winningTeamId = this.props.data.team_id1;
-			let losingTeamId = this.props.data.team_id2;
-			if (winningTeam === 1) {
-				winningTeamId = this.props.data.team_id2;
-				losingTeamId = this.props.data.team_id1;
-			}
+		// if voting is locked, then don't proceed
+		if (this.props.data.locked === 0) {
 
-			// submit vote via ajax call
-			$.ajax({
-				type: 'POST',
-				url: '/football/voting/vote',
-				data: {
-					matchupId: this.props.data.matchup_id,
-					winningTeamId: winningTeamId,
-					losingTeamId: losingTeamId
-				},
-				dataType: 'json',
-				cache: false,
-				success: function (data) {
-					console.log(JSON.stringify(data));
-					if (!data.execSuccess) {
-						console.log('Failed to update');
-					} else {
-						this.setState({ winner: winningTeam }, this.updateActiveClasses);
-						this.updateNotifications();
-					}
-					
-					console.log('successfully updated vote!');
-				}.bind(this),
-				error: function (status, err) {
-					console.error(status, err.toString());
-					// alert('no work');
-				}.bind(this)
-			});
+			// team 0 is the first team on the list,
+			// team 1 is the second team on the list
+			// if team is already selected, don't bother with the ajax vote update call
+			// alert('winningTeam: ' + winningTeam + '   state winningteam: ' + this.state.winner);
+			if (winningTeam !== this.state.winner || this.state.winner === null) {
+				// get the winning and losing team
+				let winningTeamId = this.props.data.team_id1;
+				let losingTeamId = this.props.data.team_id2;
+				if (winningTeam === 1) {
+					winningTeamId = this.props.data.team_id2;
+					losingTeamId = this.props.data.team_id1;
+				}
+
+				// submit vote via ajax call
+				$.ajax({
+					type: 'POST',
+					url: '/football/voting/vote',
+					data: {
+						matchupId: this.props.data.matchup_id,
+						winningTeamId: winningTeamId,
+						losingTeamId: losingTeamId
+					},
+					dataType: 'json',
+					cache: false,
+					success: function (data) {
+						console.log(JSON.stringify(data));
+						if (!data.execSuccess) {
+							console.log('Failed to update');
+						} else {
+							this.setState({ winner: winningTeam }, this._updateActiveClasses);
+							this.updateNotifications();
+						}
+						
+						console.log('successfully updated vote!');
+					}.bind(this),
+					error: function (status, err) {
+						console.error(status, err.toString());
+						// alert('no work');
+					}.bind(this)
+				});
+			}
 		}
 	},
 	updateNotifications: function () {
@@ -205,7 +209,7 @@ const MatchupNode = React.createClass({
 					</div>
 				</div>
 				<div className="col-sm-2">
-					<div id="vs">vs</div>
+					<div id="vs">{this.props.data.locked === 0 ? <span>vs</span> : <span className="glyphicon glyphicon-lock" aria-hidden="true"></span>}</div>
 				</div>
 				<div className="col-sm-5">
 					<div className="team" onClick={() => this._vote(1)}>

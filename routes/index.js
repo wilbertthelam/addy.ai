@@ -238,11 +238,11 @@ router.get('/scoreboard', function (req, res) {
 	}
 });
 
-setInterval(function () {
-	saveScoreboard(currentWeek, leagueId, seasonId, function() {
-		console.log('Matchup scoreboard updated.');
-	});
-}, 300000);
+// setInterval(function () {
+// 	saveScoreboard(currentWeek, leagueId, seasonId, function() {
+// 		console.log('Matchup scoreboard updated.');
+// 	});
+// }, 300000);
 
 
 /* Calculate power rankings*/

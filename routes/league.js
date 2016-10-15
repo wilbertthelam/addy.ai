@@ -67,6 +67,28 @@ router.post('/addLeagueForUser', loginAuth.isAuthenticated, function (req, res) 
 
 });
 
+/* POST to remove a league from the users . */
+router.post('/removeLeagueForUser', loginAuth.isAuthenticated, function (req, res) {
+	connection.beginTransaction(function (err) {
+		if (err) {
+			return res.json({ execSuccess: false, message: 'Cannot begin transaction in removeLeagueForUser route.', error: err });
+		}
+	});
+
+	var statement = 'DELETE FROM addy_ai_football.user_leagues WHERE user_id = ? AND league_id = ?;';
+
+	connection.query(statement, [req.session.userId, req.body.leagueId], function(err) {
+		if (err) {
+			connection.rollback();
+			return res.json({ execSuccess: false, message: 'Cannot delete user league.', error: err });
+		} else {
+			connection.commit();
+			return res.json({ execSuccess: true, message: 'Successfully removed a league for the user.', error: err});
+		}
+	});
+});
+
+
 /* GET info on a league that the user is in. */
 router.get('/leagueInfo', function (req, res) {
 	var statement = 'SELECT * FROM addy_ai_football.leagues WHERE league_id = ?;';
@@ -110,8 +132,6 @@ router.get('/week', loginAuth.isAuthenticated, function (req, res) {
 	};
 	return res.json({ execSuccess: true, message: 'Week successfully retrieved.', data: data });
 });
-
-
 
 
 module.exports = router;
