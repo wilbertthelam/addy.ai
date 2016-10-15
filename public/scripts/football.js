@@ -4,13 +4,14 @@ import * as Dashboard from './football_dashboard.js';
 import * as Leagues from './football_leagues.js';
 import * as NavBar from './football_navbar.js';
 import * as Profile from './football_profile.js';
+import * as Admin from './football_admin.js';
 import * as Voting from './football_dashboard_voting.js';
 import * as Leaderboard from './football_dashboard_leaderboard.js';
 
 import React from 'react';
 import ReactDOM from 'react-dom';
 import $ from 'jquery';
-import { Router, Route, Link, IndexRoute, browserHistory, hashHistory } from 'react-router';
+import { Router, Route, Link, IndexRoute, browserHistory } from 'react-router';
 
 console.log('Football section Entry point');
 
@@ -155,6 +156,7 @@ ReactDOM.render((
 					<Route path="leaderboard" component={Leaderboard.LeaderboardContainer} />
 				</Route>
 				<Route path="leagues" component={Leagues.LeagueContainer} />
+				<Route path="admin" component={Admin.AdminContainer} />
 			</Route>
 			<Route path="*" component={NotFound} />
 		</Route>

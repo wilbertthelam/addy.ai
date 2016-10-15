@@ -39,6 +39,11 @@ router.get('/dashboard/league/*/leaderboard', function (req, res) {
 	res.render('football', { title: 'addy.ai' });
 });
 
+/* Login home page */
+router.get('/dashboard/admin', function (req, res) {
+	res.render('football', { title: 'addy.ai' });
+});
+
 // /* Login home page */
 // router.get('/*', function (req, res) {
 // 	res.render('football', { title: 'addy.ai' });

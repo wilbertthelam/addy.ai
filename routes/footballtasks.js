@@ -203,8 +203,11 @@ router.post('/populateLeagueResults', loginAuth.isAuthenticated, function (req, 
 	var workingLeaguesData = [];
 	var nonWorkingLeaguesList = [];
 
+	var localYear = req.body.year;
+	var localWeek = req.body.week;
+
 	if (req.session.userId !== 1) {
-		return res.json({ execSuccess: false, message: 'Only Wilbert can close league results.', error: err });
+		return res.json({ execSuccess: false, message: 'Only Wilbert can close league results.' });
 	}
 
 	async.series({
@@ -226,7 +229,7 @@ router.post('/populateLeagueResults', loginAuth.isAuthenticated, function (req, 
 			});
 		},
 		getLeagueResults: function (cb1) {
-			PythonShell.run('./scraper/footballResultsScraper.py', { mode: 'json', args: [idList, year, week] }, function (err, results) {
+			PythonShell.run('./scraper/footballResultsScraper.py', { mode: 'json', args: [idList, localYear, localWeek] }, function (err, results) {
 				if (err) {
 					return res.json({ execSuccess: false, message: 'Could not parse league result data.', code: 'ERR_PRIVATE_NOT_EXIST', error: err });
 				}
@@ -301,7 +304,7 @@ router.post('/populateLeagueResults', loginAuth.isAuthenticated, function (req, 
 					return res.json({ execSuccess: false, message: 'Cannot close transaction.', error: err});
 				} else {
 					connection.commit();
-					return res.json({ execSuccess: true, message: 'Successfully updated database.' });
+					return res.json({ execSuccess: true, message: 'Successfully updated database.', data: nonWorkingLeaguesList });
 				}
 			});
 		}
@@ -339,5 +342,15 @@ router.post('/changeLockStatus', loginAuth.isAuthenticated, function (req, res) 
 	});
 
 });
+
+/* GET time. */
+router.get('/currentTime', loginAuth.isAuthenticated, function (req, res) {
+	var data = {
+		week: week,
+		year: year
+	};
+	return res.json({ execSuccess: true, message: 'Current time successfully retrieved.', data: data });
+});
+
 
 module.exports = router;

@@ -20,6 +20,7 @@ const LeaderboardContainer = React.createClass({
 	getInitialState: function () {
 		return {
 			currentWeek: 0,
+			currentYear: 0,
 			selectedWeek: 0,
 			url: '/football/voting/leaderboard',
 			activeMenuItem: 'Cumulative'
@@ -28,11 +29,11 @@ const LeaderboardContainer = React.createClass({
 	componentDidMount: function () {
 		$.ajax({
 			type: 'GET',
-			url: '/football/league/week',
+			url: '/football/league/time',
 			dataType: 'json',
 			cache: false,
 			success: function (data) {
-				this.setState({ currentWeek: data.data.week});
+				this.setState({ currentWeek: data.data.week, currentYear: data.data.year });
 			}.bind(this),
 			error: function (status, err) {
 				console.error(status, err.toString());
@@ -88,7 +89,7 @@ const LeaderboardContainer = React.createClass({
 						<LeaderboardList
 							url={this.state.url}
 							leagueId={this.props.params.leagueId}
-							year="2016"
+							year={this.state.currentYear}
 							week={this.state.selectedWeek}
 						/>
 					</table>

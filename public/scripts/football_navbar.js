@@ -71,6 +71,7 @@ const NavBar = React.createClass({
 	render: function () {
 		return (
 			<div>
+				{this.state.userId === 1 ? <ControlPanelButton /> : ''}
 				<div className="nav-bar shadow-z-1">
 					<ul>
 						<li className="nav-bar-title" onClick={() => this.setState({ open: !this.state.open })}>
@@ -118,6 +119,22 @@ const NavBar = React.createClass({
 NavBar.contextTypes = {
 	router: React.PropTypes.object
 };
+
+const ControlPanelButton = React.createClass({
+	render: function () {
+		return (
+			<div className="nav-bar shadow-z-1">
+				<ul>
+					<Link to="/football/dashboard/admin">
+						<li className="nav-bar-title">
+							<span className="glyphicon glyphicon-wrench" aria-hidden="true"></span> Admin panel
+						</li>
+					</Link>
+				</ul>
+			</div>
+		);
+	}
+});
 
 const LeagueList = React.createClass({
 	getInitialState: function () {

@@ -133,5 +133,14 @@ router.get('/week', loginAuth.isAuthenticated, function (req, res) {
 	return res.json({ execSuccess: true, message: 'Week successfully retrieved.', data: data });
 });
 
+/* GET week. */
+router.get('/time', loginAuth.isAuthenticated, function (req, res) {
+	var data = {
+		week: week,
+		year: year
+	};
+	return res.json({ execSuccess: true, message: 'Time successfully retrieved.', data: data });
+});
+
 
 module.exports = router;

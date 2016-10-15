@@ -9,7 +9,7 @@ Contains components for the Dashboard's leaderboard section
 import React from 'react';
 import $ from 'jquery';
 import { Link } from 'react-router';
-import { Button, Nav, NavItem, ButtonToolbar, DropdownButton, MenuItem } from 'react-bootstrap';
+import { Button, ButtonToolbar, ButtonGroup } from 'react-bootstrap';
 import io from 'socket.io-client';
 
 // TODO: BRING THIS TO BE DYNAMIC
@@ -23,33 +23,52 @@ const VotingContainer = React.createClass({
 		return {
 			data: [],
 			leagueId: this.props.params.leagueId,
-			userId: ''
+			userId: '',
+			currentWeek: 0,
+			selectedWeek: 0,
+			currentYear: 0
 		};
 	},
 	componentDidMount: function () {
 		// alert("voting container mounted");
-		this._displayPage(this.props.params.leagueId);
 		this._getUser();
+		this._getInitialTime();
 	},
 
 	componentWillReceiveProps: function (nextProps) {
 		// alert("voting container received new props")
-		this._displayPage(nextProps.params.leagueId);
 		this._getUser();
+		this._displayPage(nextProps.params.leagueId, this.state.currentWeek, this.state.currentYear);
 	},
-
-	_displayPage: function (leagueId) {
+	_getInitialTime: function () {
+		$.ajax({
+			type: 'GET',
+			url: '/football/league/time',
+			dataType: 'json',
+			cache: false,
+			success: function (data) {
+				this.setState({ 
+					currentWeek: data.data.week,
+					currentYear: data.data.year 
+				}, this._displayPage(this.props.params.leagueId, data.data.week, data.data.year));
+			}.bind(this),
+			error: function (status, err) {
+				console.error(status, err.toString());
+			}.bind(this)
+		});
+	},
+	_displayPage: function (leagueId, week, year) {
 		$.ajax({
 			type: 'GET',
 			url: '/football/voting/matchupsWithUserVote',
 			// TODO: MOVE OUT YEAR
-			data: { leagueId: leagueId, year: 2016 },
+			data: { leagueId: leagueId, week: week, year: year },
 			dataType: 'json',
 			cache: false,
 			success: function (data) {
 				console.log(JSON.stringify(data));
 				// if successfully logged in, open dashboard, else redirect to login
-				this.setState({ leagueId: leagueId, data: data.data });
+				this.setState({ leagueId: leagueId, data: data.data, selectedWeek: week });
 			}.bind(this),
 			error: function (status, err) {
 				console.error(status, err.toString());
@@ -77,6 +96,9 @@ const VotingContainer = React.createClass({
 			}.bind(this)
 		});
 	},
+	_updateWeek: function (leagueId, week, year) {
+		this._displayPage(leagueId, week, year);
+	},
 	render: function () {
 		if (this.state.data == null) {
 			return (
@@ -100,8 +122,36 @@ const VotingContainer = React.createClass({
 			);
 		}
 
+		const weekList = [];
+		for (let i = 0; i < this.state.currentWeek; i++) {
+			weekList[i] = i + 1;
+		}
+
+		const buttons = weekList.map(function (week) {
+			let style = 'default';
+			if (week === that.state.currentWeek) {
+				style = 'primary';
+			}
+			return (
+				<Button
+					active={week === that.state.selectedWeek}
+					onClick={() => that._updateWeek(that.state.leagueId, week, that.state.currentYear)}
+					bsStyle= {style}
+				>
+					{week}
+				</Button>);
+		});
+
 		return (
 			<div>
+				<div className="voting-week-menu">
+					<ButtonToolbar>
+	    				<ButtonGroup>
+	    					<Button>Week: </Button>
+	    					{buttons}
+	    				</ButtonGroup>
+	    			</ButtonToolbar>
+	    		</div>
 				{voteNodes}
 			</div>
 		);

@@ -166,22 +166,36 @@ CREATE TABLE `league_voting_status` (
   PRIMARY KEY (`week`, `year`)
 );
 
-INSERT INTO `league_voting_status` VALUES(1, 2016);
-INSERT INTO `league_voting_status` VALUES(2, 2016);
-INSERT INTO `league_voting_status` VALUES(3, 2016);
-INSERT INTO `league_voting_status` VALUES(4, 2016);
-INSERT INTO `league_voting_status` VALUES(5, 2016);
-INSERT INTO `league_voting_status` VALUES(6, 2016);
-INSERT INTO `league_voting_status` VALUES(7, 2016);
-INSERT INTO `league_voting_status` VALUES(8, 2016);
-INSERT INTO `league_voting_status` VALUES(9, 2016);
-INSERT INTO `league_voting_status` VALUES(10, 2016);
-INSERT INTO `league_voting_status` VALUES(11, 2016);
-INSERT INTO `league_voting_status` VALUES(12, 2016);
-INSERT INTO `league_voting_status` VALUES(13, 2016);
-INSERT INTO `league_voting_status` VALUES(12, 2016);
-INSERT INTO `league_voting_status` VALUES(13, 2016);
-INSERT INTO `league_voting_status` VALUES(14, 2016);
-INSERT INTO `league_voting_status` VALUES(15, 2016);
-INSERT INTO `league_voting_status` VALUES(16, 2016);
-INSERT INTO `league_voting_status` VALUES(17, 2016);
+INSERT INTO `league_voting_status` VALUES(1, 2016, 1);
+INSERT INTO `league_voting_status` VALUES(2, 2016, 1);
+INSERT INTO `league_voting_status` VALUES(3, 2016, 1);
+INSERT INTO `league_voting_status` VALUES(4, 2016, 1);
+INSERT INTO `league_voting_status` VALUES(5, 2016, 1);
+INSERT INTO `league_voting_status` VALUES(6, 2016, 1);
+INSERT INTO `league_voting_status` VALUES(7, 2016, 1);
+INSERT INTO `league_voting_status` VALUES(8, 2016, 1);
+INSERT INTO `league_voting_status` VALUES(9, 2016, 1);
+INSERT INTO `league_voting_status` VALUES(10, 2016, 1);
+INSERT INTO `league_voting_status` VALUES(11, 2016, 1);
+INSERT INTO `league_voting_status` VALUES(12, 2016, 1);
+INSERT INTO `league_voting_status` VALUES(13, 2016, 1);
+INSERT INTO `league_voting_status` VALUES(14, 2016, 1);
+INSERT INTO `league_voting_status` VALUES(15, 2016, 1);
+INSERT INTO `league_voting_status` VALUES(16, 2016, 1);
+INSERT INTO `league_voting_status` VALUES(17, 2016, 1);
+
+################################
+# Football league current time #
+################################
+DROP TABLE IF EXISTS `time`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+
+CREATE TABLE `time` (
+  `time_id` int(10) NOT NULL DEFAULT 1,
+  `week` int(10) NOT NULL,
+  `year` int(10) NOT NULL,
+  PRIMARY KEY (`time_id`)
+);
+
+INSERT INTO `league_voting_status` VALUES(1, 2016, 1);

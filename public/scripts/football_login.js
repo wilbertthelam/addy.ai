@@ -2,27 +2,27 @@
 09/27/2016
 football_login.js
 
-Contains components for the news
+Contains components for the login
 
 */
 
 import React from 'react';
-import ReactDOM from 'react-dom';
 import $ from 'jquery';
-import { Router, Route, Link, browserHistory } from 'react-router';
 import { Button, Nav, NavItem } from 'react-bootstrap';
 
 const LoginContainer = React.createClass({
 	render: function () {
 		return (
 			<div className="container">
-				<div className="splash-image">
-					<div className="col-md-6">
-						<Splash />
-					</div>
+				<div className="col-md-12">
+					<div className="splash-image">
+						<div className="col-md-6">
+							<Splash />
+						</div>
 
-					<div className="col-md-6">
-						<LoginBox />
+						<div className="col-md-6">
+							<LoginBox />
+						</div>
 					</div>
 				</div>
 

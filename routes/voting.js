@@ -30,7 +30,7 @@ router.get('/matchupsWithUserVote', loginAuth.isAuthenticated, function (req, re
 				'AND t.league_id = m.league_id AND t2.league_id = m.league_id ' +
 				'AND m.league_id = ? AND m.week = ? AND m.year = ? AND lvs.year = m.year AND lvs.week = m.week;';
 
-			connection.query(statement, [req.query.leagueId, week, req.query.year], function (err, results) {
+			connection.query(statement, [req.query.leagueId, req.query.week, req.query.year], function (err, results) {
 				if (err) {
 					return res.json({ execSuccess: false, message: 'Cannot get matchup data.', error: err });
 				}

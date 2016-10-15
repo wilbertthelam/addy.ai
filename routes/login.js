@@ -37,6 +37,7 @@ router.post('/isUserLoggedIn', function(req, res) {
 	if (req.session.userId) {
 		status = true;
 	}
+	console.log(req.session.userId)
 	return res.json({ authenticated: status, userId: req.session.userId });
 });
 
