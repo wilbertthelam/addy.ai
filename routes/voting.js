@@ -8,6 +8,7 @@ var connection = db;
 var async = require('async');
 
 var loginAuth = require('./utilities/loginAuthenticationMiddleware.js');
+var leagueLock = require('./utilities/leagueLockedMiddleware.js');
 
 var currentTime = require('./utilities/currentTime.js');
 
@@ -166,7 +167,7 @@ router.get('/votingPicksForUser', loginAuth.isAuthenticated, function (req, res)
 });
 
 /* POST to add a users vote to the matchup for a given matchupId, winning_team_id and losing_team_id */
-router.post('/vote', loginAuth.isAuthenticated, function (req, res) {
+router.post('/vote', loginAuth.isAuthenticated, leagueLock.isUnlocked(week, year), function (req, res) {
 	connection.beginTransaction(function (err) {
 		if (err) {
 			return res.json({ execSuccess: false, message: 'Cannot begin transaction in vote route.', error: err});
@@ -234,10 +235,11 @@ router.get('/cumulativeLeaderboard', function (req, res) {
 		if (err) {
 			return res.json({ execSuccess: false, message: 'Cannot get leaderboard data.', error: err });
 		} else {
-			console.log(JSON.stringify(results));
+			// console.log(JSON.stringify(results));
+			// calculate win percentage
 			for (var i = 0; i < results.length; i++) {
 				var result = results[i];
-				var winPercNum = new Number(result.wins / (result.wins + result.losses));
+				var winPercNum = Number(result.wins / (result.wins + result.losses));
 				result['win_percentage'] = winPercNum.toPrecision(3);
 			}
 			return res.json({ execSuccess: true, message: 'Leaderboard data successfully retrieved.', data: results });
@@ -250,8 +252,19 @@ router.get('/leaderboardForUser', function (req, res) {
 	// pass 
 
 	var statement = 'SELECT count(*) as wins, ' + 
-			'(SELECT count(*) FROM addy_ai_football.matchups m2 WHERE m2.league_id = m.league_id AND m2.week < ?) - count(*) as losses, ' +
-			'count(*) / (SELECT count(*) FROM addy_ai_football.matchups m2 WHERE m2.league_id = m.league_id AND m2.week < ?) as win_percentage, ' +
+			'(SELECT count(*) FROM addy_ai_football.votes v, addy_ai_football.matchups m2, ' +
+				'addy_ai_football.results r, addy_ai_football.leagues l, addy_ai_football.user_leagues u2 ' +
+				'WHERE v.winning_team_id != r.winning_team_id ' +
+				'AND m2.matchup_id = v.matchup_id ' +
+				'AND v.matchup_id = r.matchup_id ' +
+				'AND m2.week < ? ' +
+				'AND m2.league_id = l.league_id ' +
+				'AND m2.year = ? ' +
+				'AND v.user_id = ? ' +
+				'AND v.user_id = u2.user_id ' +
+				'AND u2.league_id = m2.league_id ' + 
+		        'AND u.league_id = u2.league_id ' + 
+				'GROUP BY m2.league_id and m2.year) as losses, ' +
 	 		'v.user_id, ' + 
 	 		'm.league_id, ' + 
 	 		'm.year, ' +
@@ -267,14 +280,19 @@ router.get('/leaderboardForUser', function (req, res) {
 		'AND v.user_id = u.user_id ' +
 		'AND u.league_id = m.league_id ' +
 		'GROUP BY m.league_id ' +
-		'ORDER BY wins DESC, win_percentage DESC;';
+		'ORDER BY wins DESC, losses ASC;';
 
 	// input into query are (in order)
-	connection.query(statement, [week, week, week, req.query.year, req.session.userId], function (err, results) {
+	connection.query(statement, [week, year, req.session.userId, week, req.query.year, req.session.userId], function (err, results) {
 		if (err) {
 			return res.json({ execSuccess: false, message: 'Cannot get profile leaderboard data.', error: err });
 		} else {
 			console.log(JSON.stringify(results));
+			for (var i = 0; i < results.length; i++) {
+				var result = results[i];
+				var winPercNum = Number(result.wins / (result.wins + result.losses));
+				result['win_percentage'] = winPercNum.toPrecision(3);
+			}
 			return res.json({ execSuccess: true, message: 'Profile leaderboard data successfully retrieved.', data: results });
 		}
 	});

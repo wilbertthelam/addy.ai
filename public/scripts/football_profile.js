@@ -57,7 +57,7 @@ const ProfileBox = React.createClass({
 										<th>Your win %</th>
 									</tr>
 								</thead>
-								<OverallRecords 
+								<OverallRecords
 									url="/football/voting/leaderboardForUser"
 									year="2016"
 								/>
@@ -92,7 +92,7 @@ const UserInfo = React.createClass({
 			dataType: 'json',
 			cache: false,
 			success: function (data) {
-				//console.log(JSON.stringify(data));
+				// console.log(JSON.stringify(data));
 				this.setState({ data: data.data[0] });
 			}.bind(this),
 			error: function (status, err) {
@@ -138,7 +138,7 @@ const OverallRecords = React.createClass({
 				console.error(status, err.toString());
 				this.context.router.push('/football/login');
 			}.bind(this)
-		})
+		});
 	},
 	render: function () {
 		if (this.state.data.length < 1) {
@@ -152,11 +152,11 @@ const OverallRecords = React.createClass({
 					data={row}
 				/>
 			);
-		})
+		});
 
 		return (
 			<tbody>
-				{recordNodes}		
+				{recordNodes}	
 			</tbody>
 		);
 	}
