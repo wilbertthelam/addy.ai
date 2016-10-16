@@ -143,7 +143,7 @@ const OverallRecords = React.createClass({
 	render: function () {
 		if (this.state.data.length < 1) {
 			return (
-				<li>You aren't in any leagues.</li>
+				<li>No past results for your leagues.</li>
 			);
 		}
 		const recordNodes = this.state.data.map(function (row) {

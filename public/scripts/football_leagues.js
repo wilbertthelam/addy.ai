@@ -21,9 +21,9 @@ const LeagueContainer = React.createClass({
 					<div className="shadow-z-1 content-box">
 						<div className="league-header">Available leagues</div>
 					</div>
-					
+
 					<div className="shadow-z-1 content-box">
-						<LeagueList 
+						<LeagueList
 							baseUrl="/football/league/availableLeagues"
 						/>
 					</div>
@@ -49,6 +49,9 @@ const LeagueList = React.createClass({
 		};
 	},
 	componentDidMount: function () {
+		this._getLeagueList();
+	},
+	_getLeagueList: function () {
 		$.ajax({
 			type: 'GET',
 			url: this.props.baseUrl,
@@ -56,8 +59,6 @@ const LeagueList = React.createClass({
 			cache: false,
 			success: function (data) {
 				console.log(JSON.stringify(data));
-				// if successfully logged in, open dashboard, else redirect to login
-
 				this.setState({ data: data.data });
 			}.bind(this),
 			error: function (status, err) {
@@ -72,11 +73,13 @@ const LeagueList = React.createClass({
 				<li>No leagues available.</li>
 			);
 		}
+		var that = this;
 		const leagueNodes = this.state.data.map(function (league) {
 			return (
 				<LeagueNode
 					leagueId={league.league_id}
 					leagueName={league.league_name}
+					getLeagueList={that._getLeagueList}
 				/>
 			);
 		});
@@ -90,7 +93,7 @@ const LeagueList = React.createClass({
 });
 
 const LeagueNode = React.createClass({
-	joinLeague: function () {
+	_joinLeague: function () {
 		$.ajax({
 			type: 'POST',
 			url: '/football/league/addLeagueForUser',
@@ -99,17 +102,18 @@ const LeagueNode = React.createClass({
 			cache: false,
 			success: function (data) {
 				console.log(JSON.stringify(data));
-				// if successfully logged in, open dashboard, else redirect to login
 				if (data.execSuccess === false) {
 					console.log('error could not add league');
 				} else {
 					console.log('succesfully added');
+					this.context.router.push('/football/dashboard/leagues');
+					this.props.getLeagueList();
 				}
 				
 			}.bind(this),
 			error: function (status, err) {
 				console.error(status, err.toString());
-				alert('error connecting');
+				// alert('error connecting');
 			}.bind(this)
 		});
 	},
@@ -119,15 +123,19 @@ const LeagueNode = React.createClass({
 				<Button
 					bsStyle="primary"
 					bsSize="xsmall"
-					onClick={this.joinLeague}
+					onClick={this._joinLeague}
 				>
 					<span className="glyphicon glyphicon-plus" /> join
 				</Button>
-				<span className="league-row">{this.props.leagueName} ({this.props.leagueId})</span>
+				<span className="league-row">{this.props.leagueName} </span>
 			</div>
 		);
 	}
 });
+
+LeagueNode.contextTypes = {
+	router: React.PropTypes.object
+};
 
 const AddLeague = React.createClass({
 	getInitialState: function () {
@@ -220,15 +228,11 @@ const AddLeague = React.createClass({
 
 	render: function () {
 		let resultComponent;
-		let displayLoaderComponent;
 		if (this.state.displayResult) {
 			// alert('display thing here : ' + this.state.leagueId);
 			resultComponent = <LeagueNode leagueId={this.state.leagueId} leagueName={this.state.leagueName} />;
 		}
-		if (this.state.displayLoader) {
-			// alert('display thing here : ' + this.state.leagueId);
-			displayLoaderComponent = <Loading type="cylon" color="#e3e3e3" />;
-		}
+		const displayLoaderComponent = <Loading type="spin" color="#e3e3e3" delay="0" height="20" width="20"/>;
 		return (
 			<div>
 				<p>
@@ -244,20 +248,26 @@ const AddLeague = React.createClass({
 						onChange={this.updateUrl}
 					/>
 				</p>
-				<span>
-					<Button
-						bsStyle="primary"
-						onClick={this.createLeague}
-					>
-						Search
-					</Button>
-					<span className="warning">
-						{displayLoaderComponent}
-						{this.state.message}
-					</span>
-				</span>
-				{resultComponent}
+				<div className="league-submit">
+					<div className="leaderboard-menu-item">
+						<Button
+							bsStyle="primary"
+							onClick={this.createLeague}
+							disabled={this.state.displayLoader}
+						>
+							{this.state.displayLoader ? displayLoaderComponent : 'Search'}
+						</Button>
+					</div>
+					<div className="leaderboard-menu-item">
+						<span className="warning">
+							{this.state.message}
+						</span>
+					</div>
+				</div>
 
+				<div>
+					{resultComponent}
+				</div>
 			</div>
 		);
 	}

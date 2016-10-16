@@ -22,6 +22,35 @@ var currentTime = require('./utilities/currentTime.js');
 var week = currentTime.week;
 var year = currentTime.year;
 
+// function to do the lock for the league on a given week/year
+function lock(userId, week, year, lock, callback) {
+	if (userId !== 1) {
+		return callback({ execSuccess: false, message: 'Only Wilbert can change the lock status.', error: err });
+	}
+
+	connection.beginTransaction(function (err) {
+		if (err) {
+			return callback({ execSuccess: false, message: 'Cannot begin transaction in changeLockStatus route.', error: err });
+		}
+	});
+
+	var statement = 'UPDATE addy_ai_football.league_voting_status SET ? WHERE week = ? AND year = ?;';
+	var row = {
+		locked: lock,
+	};
+
+	console.log(JSON.stringify(row));
+	connection.query(statement, [row, week, year], function(err) {
+		if (err) {
+			connection.rollback();
+			return callback({ execSuccess: false, message: 'Cannot change lock status.', error: err });
+		} else {
+			connection.commit();
+			return callback({ execSuccess: true, message: 'Successfully changed lock status', error: err });
+		}
+	});
+}
+
 /* POST to run add league data for a new league  
 	1. parse league information
 	2. check if league is private or not
@@ -211,6 +240,15 @@ router.post('/populateLeagueResults', loginAuth.isAuthenticated, function (req, 
 	}
 
 	async.series({
+		lockLeagues: function (cb) {
+			lock(req.session.userId, localWeek, localYear, 1, function (data) {
+				if (data.execSuccess === true) {
+					return cb(null, null);
+				} else {
+					return res.json(data);
+				}
+			});
+		},
 		getLeagueIds: function (cb0) {
 			var statement = 'SELECT league_id, espn_id FROM addy_ai_football.leagues;';
 			connection.query(statement, function (err, results) {
@@ -240,7 +278,7 @@ router.post('/populateLeagueResults', loginAuth.isAuthenticated, function (req, 
 				nonWorkingLeaguesList = infoData['invalidLeagues'];
 
 				console.log('non working: ' + nonWorkingLeaguesList);
-				cb1(null, null);
+				return cb1(null, null);
 			});
 		},
 		getMatchupId: function (cb2) {
@@ -314,33 +352,9 @@ router.post('/populateLeagueResults', loginAuth.isAuthenticated, function (req, 
 
 /* POST for admin to change the lock status at the moment */
 router.post('/changeLockStatus', loginAuth.isAuthenticated, function (req, res) {
-
-	if (req.session.userId !== 1) {
-		return res.json({ execSuccess: false, message: 'Only Wilbert can change the lock status.', error: err });
-	}
-
-	connection.beginTransaction(function (err) {
-		if (err) {
-			return res.json({ execSuccess: false, message: 'Cannot begin transaction in changeLockStatus route.', error: err });
-		}
+	lock(req.session.userId, req.body.week, req.body.year, req.body.locked, function (result) {
+		return res.json(result);
 	});
-
-	var statement = 'UPDATE addy_ai_football.league_voting_status SET ? WHERE week = ? AND year = ?;';
-	var row = {
-		locked: req.body.locked,
-	};
-
-	console.log(JSON.stringify(row));
-	connection.query(statement, [row, req.body.week, req.body.year], function(err) {
-		if (err) {
-			connection.rollback();
-			return res.json({ execSuccess: false, message: 'Cannot change lock status.', error: err });
-		} else {
-			connection.commit();
-			return res.json({ execSuccess: true, message: 'Successfully changed lock status', error: err});
-		}
-	});
-
 });
 
 /* GET time. */

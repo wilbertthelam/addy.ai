@@ -82,6 +82,10 @@
 	margin-bottom: 5px;
 }
 
+.container {
+
+}
+
 .nav-bar-title:hover {
 	color: #8484C1;
 	text-decoration: underline;
@@ -192,7 +196,7 @@
 }
 
 tr:hover {
-	font-weight: bold;
+	text-decoration: underline;
 }
 
 .league-filled {
@@ -216,4 +220,39 @@ tr:hover {
 	vertical-align: bottom;
 	text-align: center;
 	margin-top: 10px;
+}
+
+.leaderboard-menu-item {
+	display: inline-block;
+	vertical-align: middle;
+	margin-right: 10px;
+}
+
+.remove-league-button {
+	font-size: 0.9em;
+	text-align: right;
+	cursor: pointer;
+	float: right;
+}
+
+.remove-league-icon {
+	vertical-align: bottom;
+}
+
+.remove-league-icon:hover {
+	color: maroon;
+	text-decoration: underline;
+}
+
+.league-submit: {
+	margin: 0px;
+	padding: 0px;
+}
+
+th {
+	font-size: .8em;
+}
+
+tr {
+	font-size: 1.2em;
 }

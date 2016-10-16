@@ -29,10 +29,10 @@ router.get('/matchupsWithUserVote', loginAuth.isAuthenticated, function (req, re
 				'FROM addy_ai_football.matchups m, addy_ai_football.teams t, ' +
 				'addy_ai_football.teams t2, addy_ai_football.league_voting_status lvs ' +
 				'WHERE m.team_id1 = t.team_id AND m.team_id2 = t2.team_id ' +
-				'AND t.league_id = m.league_id AND t2.league_id = m.league_id ' +
-				'AND m.league_id = ? AND m.week = ? AND m.year = ? AND lvs.year = m.year AND lvs.week = m.week;';
+			'AND t.league_id = m.league_id AND t2.league_id = m.league_id ' +
+			'AND m.league_id = ? AND m.week = ? AND m.year = ? AND lvs.year = m.year AND lvs.week = m.week;';
 
-			connection.query(statement, [req.query.leagueId, req.query.week, req.query.year], function (err, results) {
+		connection.query(statement, [req.query.leagueId, req.query.week, req.query.year], function (err, results) {
 				if (err) {
 					return res.json({ execSuccess: false, message: 'Cannot get matchup data.', error: err });
 				}
@@ -194,12 +194,24 @@ router.post('/vote', loginAuth.isAuthenticated, function (req, res) {
 
 });
 
-router.get('/leaderboard', function (req, res) {
+/* GET cumulative leadeboard for a given league */
+router.get('/cumulativeLeaderboard', function (req, res) {
 	// pass 
 
 	var statement = 'SELECT count(*) as wins, ' + 
-			'(SELECT count(*) FROM addy_ai_football.matchups m2 WHERE m2.league_id = m.league_id AND m2.week < ?) - count(*) as losses, ' +
-			'count(*) / (SELECT count(*) FROM addy_ai_football.matchups m2 WHERE m2.league_id = m.league_id AND m2.week < ?) as win_percentage, ' +
+			'(SELECT count(*) ' +
+				'FROM addy_ai_football.votes v, addy_ai_football.matchups m2, ' +
+				'addy_ai_football.results r, addy_ai_football.users u2 ' + 
+				'WHERE v.winning_team_id != r.winning_team_id ' +
+				'AND m2.matchup_id = v.matchup_id ' +
+				'AND v.matchup_id = r.matchup_id ' + 
+				'AND u2.user_id = v.user_id ' +
+				'AND m2.week < ? ' +
+				'AND m2.league_id = ? ' +
+				'AND m2.year = ? ' +
+				'AND u2.user_id = u.user_id ' +
+				'GROUP BY v.user_id ' +
+				') as losses, ' +
 	 		'v.user_id, ' + 
 	 		'm.league_id, ' + 
 	 		'm.year, ' +
@@ -215,19 +227,25 @@ router.get('/leaderboard', function (req, res) {
 		'AND m.league_id = ? ' +
 		'AND m.year = ? ' +
 		'GROUP BY v.user_id ' +
-		'ORDER BY wins DESC, win_percentage DESC;';
+		'ORDER BY wins DESC, losses ASC;';
 
 	// input into query are (in order)
-	connection.query(statement, [week, week, week, req.query.leagueId, req.query.year], function (err, results) {
+	connection.query(statement, [week, req.query.leagueId, req.query.year, week, req.query.leagueId, req.query.year], function (err, results) {
 		if (err) {
 			return res.json({ execSuccess: false, message: 'Cannot get leaderboard data.', error: err });
 		} else {
 			console.log(JSON.stringify(results));
+			for (var i = 0; i < results.length; i++) {
+				var result = results[i];
+				var winPercNum = new Number(result.wins / (result.wins + result.losses));
+				result['win_percentage'] = winPercNum.toPrecision(3);
+			}
 			return res.json({ execSuccess: true, message: 'Leaderboard data successfully retrieved.', data: results });
 		}
 	});
 });
 
+/* GET to find leaderboard results for the logged in user */
 router.get('/leaderboardForUser', function (req, res) {
 	// pass 
 
@@ -262,6 +280,7 @@ router.get('/leaderboardForUser', function (req, res) {
 	});
 });
 
+/* GET to find leaderboard results for a league in a given week */
 router.get('/leaderboardByWeek', function (req, res) {
 	// pass 
 

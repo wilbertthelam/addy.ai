@@ -59,12 +59,12 @@ router.post('/signup', function(req, res) {
 	// check to see if user exists already
 	// if not, then create new user
 
-	var email = req.body.email;
+	var email = req.body.email.toLowerCase();
 	var password = req.body.password;
-	var firstName = req.body.firstName;
-	var lastName = req.body.lastName;
+	var firstName = req.body.firstName.toLowerCase();
+	var lastName = req.body.lastName.toLowerCase();
 
-	if (email == '' || password == '' || firstName == '' || lastName == '') {
+	if (email === '' || password === '' || firstName === '' || lastName === '') {
 		return res.json({ execSuccess: false, message: 'One of the fields is empty.' });
 
 	}

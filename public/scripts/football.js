@@ -158,7 +158,7 @@ ReactDOM.render((
 				<Route path="leagues" component={Leagues.LeagueContainer} />
 				<Route path="admin" component={Admin.AdminContainer} />
 			</Route>
-			<Route path="*" component={NotFound} />
+			<Route path="/*" component={NotFound} />
 		</Route>
 	</Router>
 ), document.getElementById('mainContainerFootball'));

@@ -22,7 +22,7 @@ const LeaderboardContainer = React.createClass({
 			currentWeek: 0,
 			currentYear: 0,
 			selectedWeek: 0,
-			url: '/football/voting/leaderboard',
+			url: '/football/voting/cumulativeLeaderboard',
 			activeMenuItem: 'Cumulative'
 		};
 	},
@@ -44,7 +44,7 @@ const LeaderboardContainer = React.createClass({
 		//alert('clocked');
 		console.log('did updateTable');
 		if (eventKey === 'cumulative') {
-			this.setState({ url: '/football/voting/leaderboard', selectedWeek: 0, activeMenuItem: 'Cumulative' });
+			this.setState({ url: '/football/voting/cumulativeLeaderboard', selectedWeek: 0, activeMenuItem: 'Cumulative' });
 		} else {
 			this.setState({ url: '/football/voting/leaderboardByWeek', selectedWeek: eventKey, activeMenuItem: 'Week ' + eventKey });
 		}
@@ -58,22 +58,26 @@ const LeaderboardContainer = React.createClass({
 		// TODO: years add selection
 		return (
 			<div>
-				<span>
-					<ButtonToolbar>
-						<DropdownButton
-							id="dropdown-size-medium"
-							key="cumulative"
-							title={this.state.activeMenuItem}
-						>
-							<MenuItem eventKey="cumulative" onSelect={that.updateTable}>Cumulative</MenuItem>
-							<MenuItem divider />
-								{weekList.map(function (data) {
-								return (<MenuItem eventKey={data} onSelect={that.updateTable}>Week {data}</MenuItem>);
-							})}
-						</DropdownButton>
-					</ButtonToolbar>
-					<small>*note: forgetting to vote is recorded as a loss</small>
-				</span>
+				<div>
+					<div className="leaderboard-menu-item">
+						<ButtonToolbar>
+							<DropdownButton
+								id="dropdown-size-medium"
+								key="cumulative"
+								title={this.state.activeMenuItem}
+							>
+								<MenuItem eventKey="cumulative" onSelect={that.updateTable}>Cumulative</MenuItem>
+								<MenuItem divider />
+									{weekList.map(function (data) {
+									return (<MenuItem eventKey={data} onSelect={that.updateTable}>Week {data}</MenuItem>);
+								})}
+							</DropdownButton>
+						</ButtonToolbar>
+					</div>
+					<div className="leaderboard-menu-item">
+						<small>*note: forgetting to vote is recorded as a loss</small>
+					</div>
+				</div>
 
 
 				<div className="table-responsive-vertical">

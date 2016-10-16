@@ -20,32 +20,32 @@ router.get('/login', function (req, res) {
 });
 
 /* Login home page */
-router.get('/dashboard', function (req, res) {
+router.get('/dashboard', loginAuth.isAuthenticated, function (req, res) {
 	res.render('football', { title: 'addy.ai' });
 });
 
 /* Login home page */
-router.get('/dashboard/leagues', function (req, res) {
+router.get('/dashboard/leagues', loginAuth.isAuthenticated, function (req, res) {
 	res.render('football', { title: 'addy.ai' });
 });
 
 /* Login home page */
-router.get('/dashboard/league/*/voting', function (req, res) {
+router.get('/dashboard/league/*/voting', loginAuth.isAuthenticated, function (req, res) {
 	res.render('football', { title: 'addy.ai' });
 });
 
 /* Login home page */
-router.get('/dashboard/league/*/leaderboard', function (req, res) {
+router.get('/dashboard/league/*/leaderboard', loginAuth.isAuthenticated, function (req, res) {
 	res.render('football', { title: 'addy.ai' });
 });
 
 /* Login home page */
-router.get('/dashboard/admin', function (req, res) {
+router.get('/dashboard/admin', loginAuth.isAuthenticated, function (req, res) {
 	res.render('football', { title: 'addy.ai' });
 });
 
-// /* Login home page */
-// router.get('/*', function (req, res) {
+/* Login home page */
+// router.get('/*', loginAuth.isAuthenticated, function (req, res) {
 // 	res.render('football', { title: 'addy.ai' });
 // });
 

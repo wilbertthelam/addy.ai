@@ -9,8 +9,7 @@ Contains components for the Dashboard
 import React from 'react';
 import ReactDOM from 'react-dom';
 import $ from 'jquery';
-import { Link } from 'react-router';
-import { Button, Nav, NavItem } from 'react-bootstrap';
+import { Button, Nav, NavItem, OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 
 // ============================================
@@ -79,7 +78,7 @@ const ContentBox = React.createClass({
 		return (
 			<div className="col-md-12">
 				<div className="shadow-z-1 content-box">
-					<LeagueTitle 
+					<LeagueTitle
 						leagueId={this.props.params.leagueId}
 					/>
 				</div>
@@ -106,20 +105,25 @@ ContentBox.contextTypes = {
 	router: React.PropTypes.object
 };
 
+const tooltip = (
+ 	<Tooltip id="tooltip">Leave league</Tooltip>
+);
+
 // Component that displays the league name
 const LeagueTitle = React.createClass({
 	getInitialState: function () {
 		return {
-			leagueName: ''
+			leagueName: '',
+			leagueId: ''
 		};
 	},
 	componentDidMount: function () {
-		this.getLeagueName(this.props.leagueId);
+		this._getLeagueName(this.props.leagueId);
 	},
 	componentWillReceiveProps: function (nextProps) {
-		this.getLeagueName(nextProps.leagueId);
+		this._getLeagueName(nextProps.leagueId);
 	},
-	getLeagueName: function (leagueId) {
+	_getLeagueName: function (leagueId) {
 		$.ajax({
 			type: 'GET',
 			url: '/football/league/leagueInfo',
@@ -127,7 +131,24 @@ const LeagueTitle = React.createClass({
 			dataType: 'json',
 			cache: false,
 			success: function (data) {
-				this.setState({ leagueName: data.data[0].league_name });
+				this.setState({ leagueName: data.data[0].league_name, leagueId: data.data[0].league_id });
+			}.bind(this),
+			error: function (status, err) {
+				console.error(status, err.toString());
+			}
+		});
+	},
+	_removeLeague: function (leagueId) {
+		$.ajax({
+			type: 'POST',
+			url: '/football/league/removeLeagueForUser',
+			data: { leagueId: leagueId },
+			dataType: 'json',
+			cache: false,
+			success: function (data) {
+				if (data.execSuccess) {
+					this.context.router.push('/football/dashboard/leagues');
+				}
 			}.bind(this),
 			error: function (status, err) {
 				console.error(status, err.toString());
@@ -137,11 +158,27 @@ const LeagueTitle = React.createClass({
 	render: function () {
 		return (
 			<div className="league-header">
-				{this.state.leagueName}
+				<span>{this.state.leagueName}</span>
+				<span
+					className="remove-league-button"
+				>
+					<OverlayTrigger placement="left" overlay={tooltip}>
+						<span
+							className="glyphicon glyphicon-remove remove-league-icon"
+							aria-hidden="true"
+							onClick={() => this._removeLeague(this.state.leagueId)}
+						>
+						</span>
+					</OverlayTrigger>
+				</span>
 			</div>
 		);
 	}
 });
+
+LeagueTitle.contextTypes = {
+	router: React.PropTypes.object
+};
 
 module.exports = {
 	DashboardContainer: DashboardContainer,

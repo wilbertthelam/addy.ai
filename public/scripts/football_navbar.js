@@ -70,7 +70,7 @@ const NavBar = React.createClass({
 	},
 	render: function () {
 		return (
-			<div>
+			<div className="nav-bar-container">
 				{this.state.userId === 1 ? <ControlPanelButton /> : ''}
 				<div className="nav-bar shadow-z-1">
 					<ul>
@@ -228,6 +228,7 @@ const LeagueNode = React.createClass({
 	componentWillReceiveProps: function (nextProps) {
 		this.setState({ activeClass: nextProps.activeClass });
 		socket.on('voteNotif', this._getNotifStatus);
+
 	},
 	_getNotifStatus: function (data) {
 		if (data.leagueId === this.props.leagueId) {
@@ -250,7 +251,7 @@ const LeagueNode = React.createClass({
 					className={this.state.activeClass}
 					onClick={() => this._indexSelected(this.props.leagueId, url)}
 				>
-					{this.props.leagueName} {notificationIcon}
+					{notificationIcon} {this.props.leagueName} 
 				</li>
 			</div>
 		);
