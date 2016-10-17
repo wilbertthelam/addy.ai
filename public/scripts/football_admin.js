@@ -140,7 +140,7 @@ const AdminInfo = React.createClass({
 		return (
 			<div className="row">
 				<div className="col-md-12">
-					<div className="league-header">
+					<div className="league-header small-header">
 						Time
 					</div>
 				</div>
@@ -206,7 +206,7 @@ const LockPanel = React.createClass({
 		return (
 			<div className="row">
 				<div className="col-md-12">
-					<div className="league-header">
+					<div className="league-header small-header">
 						Lock/unlock leagues
 					</div>
 				</div>
@@ -281,7 +281,7 @@ const ClosingPanel = React.createClass({
 		return (
 			<div className="row">
 				<div className="col-md-12">
-					<div className="league-header">
+					<div className="league-header small-header">
 						Close leagues
 					</div>
 				</div>

@@ -19,7 +19,7 @@ const LeagueContainer = React.createClass({
 			<div>
 				<div className="col-md-6">
 					<div className="shadow-z-1 content-box">
-						<div className="league-header">Available leagues</div>
+						<div className="league-header small-header">Available leagues</div>
 					</div>
 
 					<div className="shadow-z-1 content-box">
@@ -31,7 +31,7 @@ const LeagueContainer = React.createClass({
 
 				<div className="col-md-6">
 					<div className="shadow-z-1 content-box">
-						<div className="league-header">Can't find a league?</div>
+						<div className="league-header small-header">Can't find a league?</div>
 					</div>
 					<div className="shadow-z-1 content-box">
 						<AddLeague />

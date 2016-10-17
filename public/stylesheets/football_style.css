@@ -1,3 +1,7 @@
+body {
+	font-family: 'Roboto', sans-serif;
+}
+
 .login-box {
 	padding: 0px;
 	background-color: rgba(169,169,169,0.9);
@@ -43,7 +47,7 @@
 
 .splash-description {
 	color: white;
-	font-weight: bold;
+	font-weight: 900;
 }
 
 .splash-description #splash-company {
@@ -153,7 +157,7 @@
 }
 
 .team:hover {
-	font-weight: bold;
+	font-weight: 900;
 	cursor: pointer;
 }
 
@@ -174,9 +178,16 @@
 }
 
 .league-header {
-	font-size: 1.4em;
-	font-weight: bold;
+	font-size: 3em;
+	font-weight: 900;
+	/*font-family: 'Rubik One', sans-serif;*/
 	margin: 5px;
+}
+
+.small-header {
+	font-size: 1.3em;
+	margin: 0px;
+	font-weight: 700;
 }
 
 .league-selected {
@@ -229,14 +240,14 @@ tr:hover {
 }
 
 .remove-league-button {
-	font-size: 0.9em;
+	font-size: 0.4em;
 	text-align: right;
 	cursor: pointer;
 	float: right;
 }
 
 .remove-league-icon {
-	vertical-align: bottom;
+	vertical-align: top;
 }
 
 .remove-league-icon:hover {
