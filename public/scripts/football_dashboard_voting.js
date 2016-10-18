@@ -13,7 +13,7 @@ import { Button, ButtonToolbar, ButtonGroup, Popover, Overlay } from 'react-boot
 import io from 'socket.io-client';
 
 // TODO: BRING THIS TO BE DYNAMIC
-const socket = io.connect('http://localhost:80');
+const socket = io.connect('http://www.addyai.me:80');
 
 //=========================================
 // ROUTER CONTAINER FOR THE VOTING SECTION

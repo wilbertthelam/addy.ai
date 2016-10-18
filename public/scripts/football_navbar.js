@@ -13,7 +13,7 @@ import { Collapse } from 'react-bootstrap';
 import io from 'socket.io-client';
 
 // TODO: BRING THIS TO BE DYNAMIC
-const socket = io.connect('http://localhost:80');
+const socket = io.connect('http://www.addyai.me:80');
 
 // =========================================
 // NAVIGATION BAR ON THE SIDE

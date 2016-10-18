@@ -16,7 +16,7 @@ year = 2016;
 // set initial week and year
 var db = require('./db_conn_football.js');
 var connection = db;
-var statement = "SELECT * FROM addy_ai_football.time WHERE time_id = 1;"
+var statement = "SELECT * FROM addy_ai_football.time WHERE time_id = 1;";
 connection.query(statement, function(err, result) {
     if (err) {
       console.log('Cannot change lock status: ' +  err);

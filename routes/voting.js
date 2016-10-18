@@ -164,7 +164,7 @@ router.get('/votingPicksForUser', loginAuth.isAuthenticated, function (req, res)
 });
 
 /* POST to add a users vote to the matchup for a given matchupId, winning_team_id and losing_team_id */
-router.post('/vote', loginAuth.isAuthenticated, leagueLock.isUnlocked(week, year), function (req, res) {
+router.post('/vote', loginAuth.isAuthenticated, leagueLock.isUnlocked(), function (req, res) {
 	connection.beginTransaction(function (err) {
 		if (err) {
 			return res.json({ execSuccess: false, message: 'Cannot begin transaction in vote route.', error: err});
