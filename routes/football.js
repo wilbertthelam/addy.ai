@@ -1,11 +1,7 @@
+// Default getters for page navigation
+
 var express = require('express');
 var router = express.Router();
-
-var async = require('async');
-
-// pass connection for db
-var db = require('../db_conn_football.js');
-var connection = db;
 
 var loginAuth = require('./utilities/loginAuthenticationMiddleware.js');
 

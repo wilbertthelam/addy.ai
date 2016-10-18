@@ -4,10 +4,6 @@ const path = require('path');
 const PATHS = {
 	app: path.join(__dirname, 'public/scripts/index.js'),
 	football: path.join(__dirname, 'public/scripts/football.js'),
-	leaderboards: path.join(__dirname, 'public/scripts/leaderboards.js'),
-	editor: path.join(__dirname, 'public/scripts/editor.js'),
-	news: path.join(__dirname, 'public/scripts/news.js'),
-	scoreticker: path.join(__dirname, 'public/scripts/scoreticker.js'),
 	hotload: 'webpack-hot-middleware/client',
 	build: path.join(__dirname, '/public/build')
 };
@@ -23,18 +19,6 @@ module.exports = {
 			PATHS.football,
 			PATHS.hotload
 		],
-		// editor: [
-		// 	PATHS.editor,
-		// 	PATHS.hotload
-		// ],
-		// news: [
-		// 	PATHS.news,
-		// 	PATHS.hotload
-		// ],
-		// scoreticker: [
-		// 	PATHS.scoreticker,
-		// 	PATHS.hotload
-		// ],
 	},
 	output: {
 		path: PATHS.build,
@@ -49,7 +33,7 @@ module.exports = {
 		new webpack.DefinePlugin({
 			'process.env': {
 			// This has effect on the react lib size
-				'NODE_ENV': JSON.stringify('production'),
+				NODE_ENV: JSON.stringify('production'),
 			}
 		}),
 	],

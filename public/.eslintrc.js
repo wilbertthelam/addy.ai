@@ -17,8 +17,8 @@ module.exports = {
     	'react/jsx-indent-props': [1, 'tab'],
     	'react/no-multi-comp': 0,
     	'react/prefer-stateless-function': 0,
-        'react/no-underscore-dangle:': 0,
-        'react/prefer-template': 0,
+        "no-underscore-dangle": [2, { "allowAfterThis": true }],
+        'prefer-template': 0,
     },
     'env': {
         'browser': true,

@@ -28,11 +28,16 @@ const LoginContainer = React.createClass({
 
 				<div className="col-sm-12">
 					<div className="col-md-4">
-						<h2><span className="glyphicon glyphicon-menu-right" aria-hidden="true"></span> What's this junk?</h2>
+						<h2>
+							<span className="glyphicon glyphicon-menu-right" aria-hidden="true"></span>
+							&nbsp;
+							What's this junk?
+						</h2>
 						<p>
 							Do you have that friend who always thinks his team is gonna win? 
 							Or that other team manager who thinks he's hot stuff?
-							addy.ai Football let's you vote on yours or someone elses weekly matchups to prove who really knows their league best.
+							addy.ai Football let's you vote on yours or someone elses weekly matchups
+							to prove who really knows their league best.
 							Just search up your league and vote!
 						</p>
 					</div>
@@ -157,7 +162,7 @@ const LoginForm = React.createClass({
 		if (this.state.warnings.notExist) {
 			warningLabel = <WarningLabel warning="Incorrect email or password!" />;
 		} else if (this.state.warnings.networkDown) {
-			warningLabel = <WarningLabel warning="Uh oh, the network's down, check again in a bit!" />
+			warningLabel = <WarningLabel warning="Uh oh, the network's down, check again in a bit!" />;
 		}
 
 		return (
@@ -243,24 +248,25 @@ const SignupForm = React.createClass({
 		this.setState({ errorMessage: '', password: e.target.value });
 	},
 	signup: function () {
-
 		// if all filled in correctly, then check the final checks
-		if (this.state.firstName !== '' && this.state.lastName !== '' && this.state.password !== '' && this.state.email !== '') {
+		if (this.state.firstName !== '' && this.state.lastName !== ''
+				&& this.state.password !== '' && this.state.email !== '') {
 			let message = '';
 			const lowerEmail = this.state.email.toLowerCase();
 			const lowerFirstName = this.state.firstName.toLowerCase();
 
-			if (!this.checkEmailValidity(this.state.email)) {
+			if (!this._checkEmailValidity(this.state.email)) {
 				message = 'We need a valid email!';
 				this.setState({ errorMessage: message });
-			} else if (lowerFirstName === 'wilbert' || lowerFirstName === 'wilburt' || lowerFirstName === 'burt' || lowerFirstName === 'bert' || lowerFirstName === 'wilbs' || lowerFirstName === 'wilb') {
+			} else if (lowerFirstName === 'wilbert' || lowerFirstName === 'wilburt'
+					|| lowerFirstName === 'burt' || lowerFirstName === 'bert'
+					|| lowerFirstName === 'wilbs' || lowerFirstName === 'wilb') {
 				message = 'Yeah, you can\'t use my name stupid.';
 				this.setState({ errorMessage: message });
 			} else if (lowerEmail === 'wilbertthelam@gmail.com' || lowerEmail === 'wlam93@uw.edu') {
 				message = 'Don\'t use my email stupid chris.';
 				this.setState({ errorMessage: message });
 			} else {
-
 				this.setState({
 					errorMessage: '',
 				});
@@ -288,7 +294,9 @@ const SignupForm = React.createClass({
 					}.bind(this),
 					error: function (status, err) {
 						console.error(status, err.toString());
-						this.setState({ errorMessage: 'Uh oh, looks like the network is down, try again later!' });
+						this.setState({
+							errorMessage: 'Uh oh, looks like the network is down, try again later!'
+						});
 					}.bind(this)
 				});
 			}
@@ -296,9 +304,9 @@ const SignupForm = React.createClass({
 			this.checkMessages();
 		}
 	},
-	checkEmailValidity: function (email) {
-		var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    	return re.test(email);
+	_checkEmailValidity: function (email) {
+		const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+		return re.test(email);
 	},
 	checkMessages: function () {
 		let message = 'We need your ';
@@ -306,7 +314,7 @@ const SignupForm = React.createClass({
 		if (this.state.firstName === '') {
 			message += 'first name!';
 			this.setState({ errorMessage: message });
-		} else if (this.state.lastName == '') {
+		} else if (this.state.lastName === '') {
 			message += 'last name!';
 			this.setState({ errorMessage: message });
 		} else if (this.state.email === '') {
@@ -321,12 +329,6 @@ const SignupForm = React.createClass({
 		}
 	},
 	render: function () {
-
-		let warningLabel;
-		if (this.state.message !== '') {
-			warningLabel = <WarningLabel warning={this.state.errorMessage} />;
-		}
-
 		return (
 			<div>
 				<div className="col-md-6">
@@ -391,7 +393,7 @@ const SignupForm = React.createClass({
 				</div>
 
 				<div className="col-sm-10">
-					{warningLabel}
+					{this.state.message !== '' ? <WarningLabel warning={this.state.errorMessage} /> : ''}
 				</div>
 			</div>
 		);

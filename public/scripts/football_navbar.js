@@ -39,7 +39,7 @@ const NavBar = React.createClass({
 			dataType: 'json',
 			cache: false,
 			success: function () {
-				//console.log(JSON.stringify(data));
+				// console.log(JSON.stringify(data));
 				this.context.router.push('/football/login');
 			}.bind(this),
 			error: function (status, err) {
@@ -63,7 +63,7 @@ const NavBar = React.createClass({
 					this.context.router.push('/football/login');
 				}
 			}.bind(this),
-			error: function (status, err) {
+			error: function () {
 				this.context.router.push('/football/login');
 			}.bind(this)
 		});
@@ -228,7 +228,6 @@ const LeagueNode = React.createClass({
 	componentWillReceiveProps: function (nextProps) {
 		this.setState({ activeClass: nextProps.activeClass });
 		socket.on('voteNotif', this._getNotifStatus);
-
 	},
 	_getNotifStatus: function (data) {
 		if (data.leagueId === this.props.leagueId) {
@@ -241,22 +240,23 @@ const LeagueNode = React.createClass({
 	},
 	render: function () {
 		const url = '/football/dashboard/league/' + this.props.leagueId + '/voting';
-		let notificationIcon = '';
-		if (this.state.notifStatus === 1) {
-			notificationIcon = <span className="glyphicon glyphicon-ok league-filled" aria-hidden="true"></span>;
-		}
+
 		return (
 			<div className="league-menu-row">
 				<li
 					className={this.state.activeClass}
 					onClick={() => this._indexSelected(this.props.leagueId, url)}
 				>
-					{notificationIcon} {this.props.leagueName} 
+					{this.state.notifStatus === 1 ? <NotificationIcon /> : ''} {this.props.leagueName}
 				</li>
 			</div>
 		);
 	}
 });
+
+const NotificationIcon = (
+	<span className="glyphicon glyphicon-ok league-filled" aria-hidden="true"></span>
+);
 
 module.exports = {
 	NavBar: NavBar,
