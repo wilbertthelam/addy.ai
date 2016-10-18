@@ -32,6 +32,9 @@ const MainContainerPage = React.createClass({
 								<li className="pure-menu-item">
 									<Link to="/about" className="pure-menu-link">About</Link>
 								</li>
+								<li className="pure-menu-item">
+									<a href="/football" className="pure-menu-link">Football</a>
+								</li>
 							</ul>
 
 							<Scoreticker.ScoreTicker />

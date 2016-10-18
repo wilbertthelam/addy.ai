@@ -65,7 +65,7 @@
 /******/ 	}
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "7e1824ace857b38c334b"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "30354049abc3323361d4"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -81686,7 +81686,7 @@
 	  */
 	
 	// TODO: BRING THIS TO BE DYNAMIC
-	var socket = _socket2.default.connect('http://www.addyai.me:80');
+	var socket = _socket2.default.connect('http://www.addyai.me:8080');
 	
 	//=========================================
 	// ROUTER CONTAINER FOR THE VOTING SECTION
@@ -82739,8 +82739,8 @@
 	
 		getInitialState: function getInitialState() {
 			return {
-				email: 'wilbertthelam@gmail.com',
-				password: 'wilbert',
+				email: '',
+				password: '',
 				warnings: {
 					notExist: false,
 					networkDown: false
@@ -83135,7 +83135,7 @@
 	  */
 	
 	// TODO: BRING THIS TO BE DYNAMIC
-	var socket = _socket2.default.connect('http://www.addyai.me:80');
+	var socket = _socket2.default.connect('http://www.addyai.me:8080');
 	
 	// =========================================
 	// NAVIGATION BAR ON THE SIDE

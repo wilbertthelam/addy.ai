@@ -65,7 +65,7 @@
 /******/ 	}
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "7e1824ace857b38c334b"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "30354049abc3323361d4"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -62959,6 +62959,15 @@
 										_reactRouter.Link,
 										{ to: '/about', className: 'pure-menu-link' },
 										'About'
+									)
+								),
+								_react3.default.createElement(
+									'li',
+									{ className: 'pure-menu-item' },
+									_react3.default.createElement(
+										'a',
+										{ href: '/football', className: 'pure-menu-link' },
+										'Football'
 									)
 								)
 							),
