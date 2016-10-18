@@ -29,11 +29,11 @@ const MainContainerPage = React.createClass({
 								</li>
 								
 								<li className="pure-menu-item">
-									<Link to="/about" className="pure-menu-link">About</Link>
+									<a href="/about" className="pure-menu-link">About</a>
 								</li>
 
 								<li className="pure-menu-item">
-									<a href="/" className="pure-menu-link">Baseball</a>
+									<a href="/news" className="pure-menu-link">Baseball</a>
 								</li>
 							</ul>
 						</div>
@@ -158,7 +158,7 @@ ReactDOM.render((
 				<Route path="leagues" component={Leagues.LeagueContainer} />
 				<Route path="admin" component={Admin.AdminContainer} />
 			</Route>
-			<Route path="/*" component={NotFound} />
+			<Route path="*" component={NotFound} />
 		</Route>
 	</Router>
 ), document.getElementById('mainContainerFootball'));

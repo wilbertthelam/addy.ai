@@ -17,11 +17,6 @@ var loginAuth = require('./utilities/loginAuthenticationMiddleware.js');
 // create Python shell to allow us to run web scraper
 var PythonShell = require('python-shell');
 
-var currentTime = require('./utilities/currentTime.js');
-
-var week = currentTime.week;
-var year = currentTime.year;
-
 // function to do the lock for the league on a given week/year
 function lock(userId, week, year, lock, callback) {
 	if (userId !== 1) {
@@ -366,5 +361,24 @@ router.get('/currentTime', loginAuth.isAuthenticated, function (req, res) {
 	return res.json({ execSuccess: true, message: 'Current time successfully retrieved.', data: data });
 });
 
+router.post('/updateWeek', function (req, res) {
+	connection.beginTransaction(function (err) {
+		if (err) {
+			return res.json({ execSuccess: false, message: 'Cannot begin transaction.', error: err});
+		}
+	});
+
+	var statement = 'UPDATE addy_ai_football.time SET week = ? WHERE time_id = 1;';
+	connection.query(statement, req.body.week, function (err) {
+		if (err) {
+			connection.rollback();
+			return res.json({ execSuccess: false, message: 'Cannot close transaction for week update.', error: err});
+		} else {
+			connection.commit();
+			week = req.body.week;
+			return res.json({ execSuccess: true, message: 'Week successfully updated to: ' + week });
+		}
+	});
+});
 
 module.exports = router;

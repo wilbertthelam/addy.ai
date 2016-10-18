@@ -59,8 +59,13 @@ for (var i = 1; i <= currentWeek; i++) {
 
 /* GET home page. */
 router.get('/', function (req, res) {
-	res.render('index', { title: 'addy.ai' });
+	//res.render('index', { title: 'addy.ai' });
+	res.redirect('/football');
 });
+
+router.get('/baseball', function (req, res) {
+	res.redirect('/news');
+})
 
 /* GET news page. */
 router.get('/news', function (req, res) {

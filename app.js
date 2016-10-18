@@ -11,10 +11,27 @@ var session = require('express-session');
 
 var app = express();
 
+week = 0;
+year = 2016;
+// set initial week and year
+var db = require('./db_conn_football.js');
+var connection = db;
+var statement = "SELECT * FROM addy_ai_football.time WHERE time_id = 1;"
+connection.query(statement, function(err, result) {
+    if (err) {
+      console.log('Cannot change lock status: ' +  err);
+    } else {
+      console.log('Successfully changed lock status');
+      week = result[0].week;
+      year = result[0].year;
+    }
+  });
+
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 
 var notifications = require('./routes/sockets/notifications')(io);
+
 
 
 var routes = require('./routes/index');
@@ -41,6 +58,7 @@ if (app.get('env') === 'development') {
     }));
     app.use(require('webpack-hot-middleware')(compiler));
 }
+
 
 // session middleware
 app.use(session({

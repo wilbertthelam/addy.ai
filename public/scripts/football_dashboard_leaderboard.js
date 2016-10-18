@@ -80,7 +80,7 @@ const LeaderboardContainer = React.createClass({
 				</div>
 
 
-				<div className="table-responsive-vertical">
+				<div className="">
 					<table className="table table-hover table-mc-amber">
 						<thead>
 							<tr>

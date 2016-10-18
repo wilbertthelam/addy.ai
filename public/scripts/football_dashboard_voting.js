@@ -9,7 +9,7 @@ Contains components for the Dashboard's leaderboard section
 import React from 'react';
 import $ from 'jquery';
 import { Link } from 'react-router';
-import { Button, ButtonToolbar, ButtonGroup } from 'react-bootstrap';
+import { Button, ButtonToolbar, ButtonGroup, Popover, Overlay } from 'react-bootstrap';
 import io from 'socket.io-client';
 
 // TODO: BRING THIS TO BE DYNAMIC
@@ -278,7 +278,7 @@ const MatchupNode = React.createClass({
 	render: function () {
 		let leftBarIcon = <div className="result-icon"><span className="glyphicon glyphicon-check" aria-hidden="true"></span></div>;
 		if (this.props.currentWeek !== this.props.selectedWeek) {
-			leftBarIcon = <LeftBarIcon winningId={this.state.winningId} actualWinningId={this.state.actualResult.actualWinningId} />;
+			leftBarIcon = <LeftBarIcon winningId={this.state.winningId} actualWinningId={this.state.actualResult.actualWinningId} actualWinningScore={this.state.actualResult.actualWinningScore} actualLosingScore={this.state.actualResult.actualLosingScore} />;
 		}
 		return (
 			<div className="container matchup well">
@@ -314,17 +314,45 @@ const LeftBarIcon = React.createClass({
 		return {
 			actualWinningId: this.props.actualWinningId,
 			winningId: this.props.winningId,
+			showDetails: false,
+			data: this.props.data,
+			actualWinningScore: this.props.actualWinningScore,
+			actualLosingScore: this.props.actualLosingScore
 		};
 	},
 	componentWillReceiveProps: function (nextProps) {
-		this.setState({ actualWinningId: nextProps.actualWinningId, winningId: nextProps.winningId });
+		this.setState({
+			actualWinningId: nextProps.actualWinningId,
+			winningId: nextProps.winningId,
+			actualWinningScore: nextProps.actualWinningScore,
+			actualLosingScore: nextProps.actualLosingScore
+		});
+	},
+	_showDetails: function () {
+		console.log('hello there')
+		this.setState({ showDetails: true });
+	},
+	_hideDetails: function () {
+		console.log('hello there')
+		this.setState({ showDetails: false });
 	},
 	render: function () {
 		return (
-			<div className="result-icon">
+			<div className="result-icon" onMouseOver={this._showDetails} onMouseOut={this._hideDetails}>
 				{(this.state.winningId === this.state.actualWinningId && this.state.actualWinningId !== '') ?
-					<span className="glyphicon glyphicon-ok-circle green" aria-hidden="true"></span> :
+					<span className="glyphicon glyphicon-ok-circle green" aria-hidden="true" ></span> :
 					<span className="glyphicon glyphicon-ban-circle red" aria-hidden="true"></span>}
+
+				<Overlay
+					show={this.state.showDetails}
+					placement="bottom"
+					container={this}
+					containerPadding={50}
+				>
+					<Popover id="popover-contained" title="Final score">
+						<strong>{this.state.actualWinningScore}</strong> - {this.state.actualLosingScore}
+					</Popover>
+				</Overlay>
 			</div>
 		);
 	}

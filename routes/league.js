@@ -9,11 +9,6 @@ var connection = db;
 
 var async = require('async');
 
-var currentTime = require('./utilities/currentTime.js');
-
-
-var week = currentTime.week;
-var year = currentTime.year;
 
 
 /* GET to return ALL leagues that a user is in. */

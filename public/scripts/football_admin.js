@@ -43,7 +43,7 @@ const AdminContainer = React.createClass({
 		return (
 			<div>
 				<div className="col-md-12">
-					<div className="shadow-z-1 content-box">
+					<div className="s">
 						<div className="league-header">
 							Admin panel
 						</div>
@@ -107,10 +107,19 @@ const AdminBox = React.createClass({
 					</div>
 				</div>
 
-				<div className="col-md-8">
+				<div className="col-md-4">
 					<div className="shadow-z-1 content-box">
 						<ClosingPanel 
 							data={this.state.data}
+						/>
+					</div>
+				</div>
+
+				<div className="col-md-4">
+					<div className="shadow-z-1 content-box">
+						<WeekPanel 
+							data={this.state.data}
+							
 						/>
 					</div>
 				</div>
@@ -255,7 +264,7 @@ const ClosingPanel = React.createClass({
 	componentWillReceiveProps: function (nextProps) {
 		this.setState({ data: nextProps.data });
 	},
-	_getLockCall: function (year, week, lockStatus) {
+	_getLockCall: function (year, week) {
 		$.ajax({
 			type: 'POST',
 			url: '/football/tasks/populateLeagueResults',
@@ -307,6 +316,83 @@ const ClosingPanel = React.createClass({
 		);
 	}
 });
+
+// Display box for the updating the week
+const WeekPanel = React.createClass({
+	getInitialState: function () {
+		return {
+			resultMessage: '',
+			data: {
+				week: '',
+				year: ''
+			}
+		};
+	},
+	componentDidMount: function () {
+		this.setState({ data: this.props.data });
+	},
+	componentWillReceiveProps: function (nextProps) {
+		this.setState({ data: nextProps.data });
+	},
+	_updateWeek: function (week) {
+		$.ajax({
+			type: 'POST',
+			url: '/football/tasks/updateWeek',
+			data: { week: week },
+			dataType: 'json',
+			cache: false,
+			success: function (data) {
+				if (data.execSuccess === true) {
+					this.setState({ resultMessage: 'Successfully updated week.' });
+				} else {
+					this.setState({ resultMessage: 'Could not update leagues for some reason.' });
+				}
+			}.bind(this),
+			error: function (status, err) {
+				console.error(status, err.toString());
+				this.setState({
+					resultMessage: 'Network seems to not be working. '
+				});
+			}.bind(this)
+		});
+	},
+	render: function () {
+		return (
+			<div className="row">
+				<div className="col-md-12">
+					<div className="league-header small-header">
+						Update week
+					</div>
+				</div>
+
+				<div className="col-md-12">
+					<Button
+						bsStyle="warning"
+						onClick={() => this._updateWeek(Number(this.state.data.week) + 1)}
+					>
+						Increment week
+					</Button>
+					<Button
+						bsStyle="info"
+						onClick={() => this._updateWeek(Number(this.state.data.week) - 1)}
+					>
+						Decrement week
+					</Button>
+				</div>
+
+				<div className="col-md-12">
+					<p className="bold">
+						<br />
+						{this.state.resultMessage}
+						<br />
+						{this.state.nonWorkingLeagues}
+					</p>
+				</div>
+			</div>
+		);
+	}
+});
+
 
 module.exports = {
 	AdminContainer: AdminContainer

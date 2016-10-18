@@ -6,6 +6,7 @@ body {
 	padding: 0px;
 	background-color: rgba(169,169,169,0.9);
 	font-weight: bold;
+	margin-bottom: 10px;
 }
 
 .voting-box {
@@ -39,10 +40,10 @@ body {
 	background-repeat: no-repeat;
 	background-position: center;
 	width: 100%;
-	height: 450px;
+	min-height: 450px;
 	padding-top: 90px;
 	margin-top: -23px;
-	border: 3px solid black;
+	/*border: 3px solid black;*/
 }
 
 .splash-description {
@@ -139,7 +140,7 @@ body {
 .vs {
 	font-size: 30px;
 	vertical-align: bottom;
-	text-align: left;
+	text-align: center;
 	margin-top: 10px;
 }
 
@@ -178,7 +179,7 @@ body {
 }
 
 .league-header {
-	font-size: 3em;
+	font-size: 3.5em;
 	font-weight: 900;
 	/*font-family: 'Rubik One', sans-serif;*/
 	margin: 5px;
@@ -188,6 +189,19 @@ body {
 	font-size: 1.3em;
 	margin: 0px;
 	font-weight: 700;
+}
+
+@media (max-width: 480px) {
+	.league-header {
+		font-size: 2em;
+		margin-top: 20px;
+		margin-bottom: 20px;
+	}
+
+	.small-header {
+		font-size: 2em;
+	}
+
 }
 
 .league-selected {
@@ -206,9 +220,6 @@ body {
 	cursor: pointer;
 }
 
-tr:hover {
-	text-decoration: underline;
-}
 
 .league-filled {
 	color: green;
@@ -240,14 +251,17 @@ tr:hover {
 }
 
 .remove-league-button {
-	font-size: 0.4em;
-	text-align: right;
+	font-size: 0.5em;
+	/*text-align: right;*/
 	cursor: pointer;
+	vertical-align: bottom;
 	float: right;
+	/*border: 1px black solid;*/
 }
 
 .remove-league-icon {
-	vertical-align: top;
+	/*border: 1px solid black;*/
+	vertical-align: bottom;
 }
 
 .remove-league-icon:hover {
@@ -261,9 +275,22 @@ tr:hover {
 }
 
 th {
-	font-size: .8em;
+	font-size: .9em;
 }
 
 tr {
 	font-size: 1.2em;
+}
+
+tbody tr:hover {
+	text-decoration: underline;
+}
+
+.profile-league-standings {
+	padding: 0px;
+}
+
+.profile-info div {
+	display: inline-block;
+	margin-right: 50px;
 }

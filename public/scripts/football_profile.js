@@ -12,6 +12,7 @@ import $ from 'jquery';
 import { Button, Nav, NavItem } from 'react-bootstrap';
 import * as QueryString from 'query-string';
 import Loading from 'react-loading';
+const moment = require('moment');
 
 //=========================================
 // ROUTER CONTAINER FOR THE PROFILE SECTION
@@ -22,7 +23,7 @@ const ProfileContainer = React.createClass({
 		return (
 			<div>
 				<div className="col-md-12">
-					<div className="shadow-z-1 content-box">
+					<div className="">
 						<div className="league-header">Profile</div>
 					</div>
 				</div>
@@ -37,7 +38,7 @@ const ProfileBox = React.createClass({
 	render: function () {
 		return (
 			<div>
-				<div className="col-md-4">
+				<div className="col-md-12">
 					<div className="shadow-z-1 content-box">
 						<UserInfo
 							url="/football/league/user"
@@ -45,9 +46,9 @@ const ProfileBox = React.createClass({
 					</div>
 				</div>
 
-				<div className="col-md-8">
-					<div className="shadow-z-1 content-box">
-						<div className="table-responsive-vertical">
+				<div className="col-md-12">
+					<div className="shadow-z-1 content-box profile-league-standings">
+						<div className="">
 							<table className="table table-hover table-mc-amber">
 								<thead>
 									<tr>
@@ -78,14 +79,15 @@ const UserInfo = React.createClass({
 				first_name: '',
 				last_name: '',
 				email: '',
-				userId: ''
-			}
+				userId: '',
+			},
+			createTime: ''
 		};
 	},
 	componentDidMount: function () {
-		this.getUserInfo(this.props.url);
+		this._getUserInfo(this.props.url);
 	},
-	getUserInfo: function (url) {
+	_getUserInfo: function (url) {
 		$.ajax({
 			type: 'GET',
 			url: url,
@@ -93,7 +95,7 @@ const UserInfo = React.createClass({
 			cache: false,
 			success: function (data) {
 				// console.log(JSON.stringify(data));
-				this.setState({ data: data.data[0] });
+				this.setState({ data: data.data[0], createTime: this.formatDate(data.data[0].create_time) });
 			}.bind(this),
 			error: function (status, err) {
 				console.error(status, err.toString());
@@ -104,11 +106,17 @@ const UserInfo = React.createClass({
 	capitalize: function (name) {
 		return name.charAt(0).toUpperCase() + name.slice(1);
 	},
+	formatDate: function (date) {
+		const t = date.split(/[- : T]/);
+		const d = new Date(t[0], t[1] - 1, t[2]);
+		return moment(d).format('MMMM Do YYYY');
+	},
 	render: function () {
 		return (
-			<div>
-				<p>Name: <br /> <span className="bold">{this.capitalize(this.state.data.first_name)} {this.capitalize(this.state.data.last_name)}</span></p>
-				<p>Email: <br /> <span className="bold">{this.state.data.email} </span></p>
+			<div className="profile-info">
+				<div>Name: <br /> <span className="bold">{this.capitalize(this.state.data.first_name)} {this.capitalize(this.state.data.last_name)}</span></div>
+				<div>Email: <br /> <span className="bold">{this.state.data.email} </span></div>
+				<div>Joined: <br /> <span className="bold">{this.state.createTime} </span></div>
 			</div>
 		);
 	}

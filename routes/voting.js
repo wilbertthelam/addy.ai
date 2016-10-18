@@ -10,12 +10,9 @@ var async = require('async');
 var loginAuth = require('./utilities/loginAuthenticationMiddleware.js');
 var leagueLock = require('./utilities/leagueLockedMiddleware.js');
 
-var currentTime = require('./utilities/currentTime.js');
-
-
-var week = currentTime.week;
-console.log('current week as of now: ' + currentTime.week);
-var year = currentTime.year;
+// var week = currentTime.week;
+console.log('current week as of now: ' + week);
+// var year = currentTime.year;
 
 /* GET to return all matchups with the user vote included */
 router.get('/matchupsWithUserVote', loginAuth.isAuthenticated, function (req, res) {

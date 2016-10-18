@@ -6,8 +6,7 @@ var async = require('async');
 
 var currentTime = require('../utilities/currentTime.js');
 
-var week = currentTime.week;
-var year = currentTime.year;
+
 
 function updateVoteNotif(io, data) {
 	console.log(data.userId + ' is logged in');

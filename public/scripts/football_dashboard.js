@@ -77,7 +77,7 @@ const ContentBox = React.createClass({
 
 		return (
 			<div className="col-md-12">
-				<div className="shadow-z-1 content-box">
+				<div className="">
 					<LeagueTitle
 						leagueId={this.props.params.leagueId}
 					/>
@@ -164,7 +164,7 @@ const LeagueTitle = React.createClass({
 				>
 					<OverlayTrigger placement="left" overlay={tooltip}>
 						<span
-							className="glyphicon glyphicon-remove remove-league-icon"
+							className="glyphicon glyphicon-remove-circle remove-league-icon"
 							aria-hidden="true"
 							onClick={() => this._removeLeague(this.state.leagueId)}
 						>

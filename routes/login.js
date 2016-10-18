@@ -9,7 +9,6 @@ var connection = db;
 
 var loginAuth = require('./utilities/loginAuthenticationMiddleware.js');
 
-
 /* POST to login into user account */
 router.post('/login', function (req, res) {
 	checkUserLogin(req.body.email, req.body.password, function(userStatus) {
