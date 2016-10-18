@@ -43,7 +43,7 @@ var voting = require('./routes/voting');
 var league = require('./routes/league');
 var footballtasks = require('./routes/footballtasks');
 
-server.listen(80);
+server.listen(8080);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
