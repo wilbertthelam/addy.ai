@@ -7,15 +7,13 @@ Contains components for the Dashboard
 */
 
 import React from 'react';
-import ReactDOM from 'react-dom';
 import $ from 'jquery';
-import { Link } from 'react-router';
-import { Button, Nav, NavItem, ButtonToolbar, DropdownButton, MenuItem } from 'react-bootstrap';
+import { ButtonToolbar, DropdownButton, MenuItem } from 'react-bootstrap';
 
 
-//==============================================
+// ==============================================
 // ROUTER CONTAINER FOR THE LEADERBOARD SECTION
-//==============================================
+// ==============================================
 const LeaderboardContainer = React.createClass({
 	getInitialState: function () {
 		return {
@@ -37,16 +35,24 @@ const LeaderboardContainer = React.createClass({
 			}.bind(this),
 			error: function (status, err) {
 				console.error(status, err.toString());
-			}.bind(this)
+			}
 		});
 	},
 	updateTable: function (eventKey) {
-		//alert('clocked');
+		// alert('clocked');
 		console.log('did updateTable');
 		if (eventKey === 'cumulative') {
-			this.setState({ url: '/football/voting/cumulativeLeaderboard', selectedWeek: 0, activeMenuItem: 'Cumulative' });
+			this.setState({
+				url: '/football/voting/cumulativeLeaderboard',
+				selectedWeek: 0,
+				activeMenuItem: 'Cumulative'
+			});
 		} else {
-			this.setState({ url: '/football/voting/leaderboardByWeek', selectedWeek: eventKey, activeMenuItem: 'Week ' + eventKey });
+			this.setState({
+				url: '/football/voting/leaderboardByWeek',
+				selectedWeek: eventKey,
+				activeMenuItem: 'Week ' + eventKey
+			});
 		}
 	},
 	render: function () {
@@ -69,7 +75,13 @@ const LeaderboardContainer = React.createClass({
 								<MenuItem eventKey="cumulative" onSelect={that.updateTable}>Cumulative</MenuItem>
 								<MenuItem divider />
 									{weekList.map(function (data) {
-									return (<MenuItem eventKey={data} onSelect={that.updateTable}>Week {data}</MenuItem>);
+									return (
+										<MenuItem
+											eventKey={data}
+											onSelect={that.updateTable}
+										>
+											Week {data}
+										</MenuItem>);
 								})}
 							</DropdownButton>
 						</ButtonToolbar>
@@ -78,7 +90,6 @@ const LeaderboardContainer = React.createClass({
 						<small>*note: forgetting to vote is recorded as a loss</small>
 					</div>
 				</div>
-
 
 				<div className="">
 					<table className="table table-hover table-mc-amber">
@@ -137,7 +148,7 @@ const LeaderboardList = React.createClass({
 			}.bind(this),
 			error: function (status, err) {
 				console.error(status, err.toString());
-			}.bind(this)
+			}
 		});
 	},
 	render: function () {

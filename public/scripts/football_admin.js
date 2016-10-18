@@ -7,15 +7,12 @@ Contains components for the profile page
 */
 
 import React from 'react';
-import ReactDOM from 'react-dom';
 import $ from 'jquery';
-import { Button, Nav, NavItem } from 'react-bootstrap';
-import * as QueryString from 'query-string';
-import Loading from 'react-loading';
+import { Button } from 'react-bootstrap';
 
-//=========================================
+// =========================================
 // ROUTER CONTAINER FOR THE PROFILE SECTION
-//=========================================
+// =========================================
 const AdminContainer = React.createClass({
 	componentDidMount: function () {
 		this._getUser();
@@ -79,7 +76,7 @@ const AdminBox = React.createClass({
 			dataType: 'json',
 			cache: false,
 			success: function (data) {
-				//console.log(JSON.stringify(data));
+				// console.log(JSON.stringify(data));
 				this.setState({ data: data.data });
 			}.bind(this),
 			error: function (status, err) {
@@ -101,7 +98,7 @@ const AdminBox = React.createClass({
 
 				<div className="col-md-8">
 					<div className="shadow-z-1 content-box">
-						<LockPanel 
+						<LockPanel
 							data={this.state.data}
 						/>
 					</div>
@@ -109,7 +106,7 @@ const AdminBox = React.createClass({
 
 				<div className="col-md-4">
 					<div className="shadow-z-1 content-box">
-						<ClosingPanel 
+						<ClosingPanel
 							data={this.state.data}
 						/>
 					</div>
@@ -117,9 +114,8 @@ const AdminBox = React.createClass({
 
 				<div className="col-md-4">
 					<div className="shadow-z-1 content-box">
-						<WeekPanel 
+						<WeekPanel
 							data={this.state.data}
-							
 						/>
 					</div>
 				</div>
@@ -133,14 +129,8 @@ const AdminBox = React.createClass({
 const AdminInfo = React.createClass({
 	getInitialState: function () {
 		return {
-			data: {
-				week: '',
-				year: ''
-			}
+			data: this.props.data
 		};
-	},
-	componentDidMount: function () {
-		this.setState({ data: this.props.data });
 	},
 	componentWillReceiveProps: function (nextProps) {
 		this.setState({ data: nextProps.data });
@@ -167,14 +157,8 @@ const LockPanel = React.createClass({
 	getInitialState: function () {
 		return {
 			resultMessage: '',
-			data: {
-				week: '',
-				year: ''
-			}
+			data: this.props.data
 		};
-	},
-	componentDidMount: function () {
-		this.setState({ data: this.props.data });
 	},
 	componentWillReceiveProps: function (nextProps) {
 		this.setState({ data: nextProps.data });
@@ -187,21 +171,28 @@ const LockPanel = React.createClass({
 			dataType: 'json',
 			cache: false,
 			success: function (data) {
-				//console.log(JSON.stringify(data));
+				// console.log(JSON.stringify(data));
 				if (data.execSuccess) {
 					if (lockStatus === 0) {
-						this.setState({ resultMessage: 'Successfully UNLOCKED Week ' + week + ', Year ' + year + '.' });
+						this.setState({
+							resultMessage: 'Successfully UNLOCKED Week ' + week + ', Year ' + year + '.'
+						});
 					} else if (lockStatus === 1) {
-						this.setState({ resultMessage: 'Successfully LOCKED Week ' + week + ', Year ' + year + '.' });
+						this.setState({
+							resultMessage: 'Successfully LOCKED Week ' + week + ', Year ' + year + '.'
+						});
 					}
 				} else {
 					if (lockStatus === 0) {
-						this.setState({ resultMessage: 'FAILED! Cannot UNLOCK Week ' + week + ', Year ' + year + '.' });
+						this.setState({
+							resultMessage: 'FAILED! Cannot UNLOCK Week ' + week + ', Year ' + year + '.'
+						});
 					} else if (lockStatus === 1) {
-						this.setState({ resultMessage: 'FAILED! Cannot LOCK Week ' + week + ', Year ' + year + '.' });
+						this.setState({
+							resultMessage: 'FAILED! Cannot LOCK Week ' + week + ', Year ' + year + '.'
+						});
 					}
 				}
-				
 			}.bind(this),
 			error: function (status, err) {
 				console.error(status, err.toString());
@@ -209,7 +200,7 @@ const LockPanel = React.createClass({
 					resultMessage: 'Network seems to not be working. '
 				});
 			}.bind(this)
-		})
+		});
 	},
 	render: function () {
 		return (
@@ -221,18 +212,18 @@ const LockPanel = React.createClass({
 				</div>
 				<div className="col-md-6">
 					<Button
-							bsStyle="danger"
-							onClick={() => this._getLockCall(this.state.data.year, this.state.data.week, 1)}
-						>
-							Lock leagues
+						bsStyle="danger"
+						onClick={() => this._getLockCall(this.state.data.year, this.state.data.week, 1)}
+					>
+						Lock leagues
 					</Button>
 				</div>
 				<div className="col-md-6">
 					<Button
-							bsStyle="success"
-							onClick={() => this._getLockCall(this.state.data.year, this.state.data.week, 0)}
-						>
-							Unlock leagues
+						bsStyle="success"
+						onClick={() => this._getLockCall(this.state.data.year, this.state.data.week, 0)}
+					>
+						Unlock leagues
 					</Button>
 				</div>
 				<div className="col-md-12">
@@ -252,14 +243,8 @@ const ClosingPanel = React.createClass({
 		return {
 			resultMessage: '',
 			nonWorkingLeagues: '',
-			data: {
-				week: '',
-				year: ''
-			}
+			data: this.props.data
 		};
-	},
-	componentDidMount: function () {
-		this.setState({ data: this.props.data });
 	},
 	componentWillReceiveProps: function (nextProps) {
 		this.setState({ data: nextProps.data });
@@ -273,9 +258,14 @@ const ClosingPanel = React.createClass({
 			cache: false,
 			success: function (data) {
 				if (data.execSuccess === true) {
-					this.setState({ resultMessage: 'Successfully closed week.', nonWorkingLeagues: 'Non working leagues are: ' + data.data });
+					this.setState({
+						resultMessage: 'Successfully closed week.',
+						nonWorkingLeagues: 'Non working leagues are: ' + data.data
+					});
 				} else {
-					this.setState({ resultMessage: 'Could not close leagues for some reason.' });
+					this.setState({
+						resultMessage: 'Could not close leagues for some reason.'
+					});
 				}
 			}.bind(this),
 			error: function (status, err) {
@@ -284,7 +274,7 @@ const ClosingPanel = React.createClass({
 					resultMessage: 'Network seems to not be working. '
 				});
 			}.bind(this)
-		})
+		});
 	},
 	render: function () {
 		return (
@@ -297,9 +287,9 @@ const ClosingPanel = React.createClass({
 
 				<div className="col-md-12">
 					<Button
-							bsStyle="warning"
-							onClick={() => this._getLockCall(this.state.data.year, this.state.data.week)}
-						>
+						bsStyle="warning"
+						onClick={() => this._getLockCall(this.state.data.year, this.state.data.week)}
+					>
 							Close leagues
 					</Button>
 				</div>
@@ -322,14 +312,8 @@ const WeekPanel = React.createClass({
 	getInitialState: function () {
 		return {
 			resultMessage: '',
-			data: {
-				week: '',
-				year: ''
-			}
+			data: this.props.data,
 		};
-	},
-	componentDidMount: function () {
-		this.setState({ data: this.props.data });
 	},
 	componentWillReceiveProps: function (nextProps) {
 		this.setState({ data: nextProps.data });

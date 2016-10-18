@@ -34,7 +34,7 @@ const LoginContainer = React.createClass({
 							What's this junk?
 						</h2>
 						<p>
-							Do you have that friend who always thinks his team is gonna win? 
+							Do you have that friend who always thinks his team is gonna win?
 							Or that other team manager who thinks he's hot stuff?
 							addy.ai Football let's you vote on yours or someone elses weekly matchups
 							to prove who really knows their league best.
@@ -44,7 +44,10 @@ const LoginContainer = React.createClass({
 
 					<div className="col-md-4">
 						<h2><span className="glyphicon glyphicon-menu-right" aria-hidden="true"></span> FAQ</h2>
-						<p className="bold"><span className="glyphicon glyphicon-menu-down" aria-hidden="true"></span> Why is my league not listed?</p>
+						<p className="bold">
+							<span className="glyphicon glyphicon-menu-down" aria-hidden="true"></span>
+								&nbsp;Why is my league not listed?
+						</p>
 						<p>
 							Some leagues aren't listed yet in our database, so you can add your league by simply pasting any URL from your ESPN league page (any page works). 
 							Just make sure you're in the league page and not on the general ESPN site or it'll be difficult for us to get the league information. 

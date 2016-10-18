@@ -7,9 +7,8 @@ Contains components for the Dashboard
 */
 
 import React from 'react';
-import ReactDOM from 'react-dom';
 import $ from 'jquery';
-import { Button, Nav, NavItem, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import {Nav, NavItem, OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 
 // ============================================
@@ -22,7 +21,7 @@ const DashboardContainer = React.createClass({
 				<ContentBox
 					params={this.props.params}
 					children={this.props.children}
-					//location={this.props.location}
+					// location={this.props.location}
 				/>
 			</div>
 		);
@@ -45,17 +44,23 @@ const ContentBox = React.createClass({
 	},
 	componentWillReceiveProps: function (nextProps) {
 		if (nextProps.params.leagueId !== this.state.leagueId) {
-			this.setState({ leagueId: nextProps.params.leagueId, activeTab: 1 });
+			this.setState({
+				leagueId: nextProps.params.leagueId,
+				activeTab: 1 });
 		} else {
-			this.setState({ leagueId: nextProps.params.leagueId });
+			this.setState({
+				leagueId: nextProps.params.leagueId });
 		}
-		
 	},
 	changeActiveTab: function (tab) {
 		if (tab === 'voting') {
-			this.setState({ activeTab: 1 });
+			this.setState({
+				activeTab: 1
+			});
 		} else if (tab === 'leaderboard') {
-			this.setState({ activeTab: 2 });
+			this.setState({
+				activeTab: 2
+			});
 		} else {
 			console.log('hm weird issue with the tab select');
 		}
@@ -131,7 +136,10 @@ const LeagueTitle = React.createClass({
 			dataType: 'json',
 			cache: false,
 			success: function (data) {
-				this.setState({ leagueName: data.data[0].league_name, leagueId: data.data[0].league_id });
+				this.setState({
+					leagueName: data.data[0].league_name,
+					leagueId: data.data[0].league_id
+				});
 			}.bind(this),
 			error: function (status, err) {
 				console.error(status, err.toString());

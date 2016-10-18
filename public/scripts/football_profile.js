@@ -7,16 +7,12 @@ Contains components for the profile page
 */
 
 import React from 'react';
-import ReactDOM from 'react-dom';
 import $ from 'jquery';
-import { Button, Nav, NavItem } from 'react-bootstrap';
-import * as QueryString from 'query-string';
-import Loading from 'react-loading';
 const moment = require('moment');
 
-//=========================================
+// =========================================
 // ROUTER CONTAINER FOR THE PROFILE SECTION
-//=========================================
+// =========================================
 const ProfileContainer = React.createClass({
 
 	render: function () {
@@ -95,7 +91,10 @@ const UserInfo = React.createClass({
 			cache: false,
 			success: function (data) {
 				// console.log(JSON.stringify(data));
-				this.setState({ data: data.data[0], createTime: this.formatDate(data.data[0].create_time) });
+				this.setState({
+					data: data.data[0],
+					createTime: this.formatDate(data.data[0].create_time)
+				});
 			}.bind(this),
 			error: function (status, err) {
 				console.error(status, err.toString());
@@ -114,9 +113,25 @@ const UserInfo = React.createClass({
 	render: function () {
 		return (
 			<div className="profile-info">
-				<div>Name: <br /> <span className="bold">{this.capitalize(this.state.data.first_name)} {this.capitalize(this.state.data.last_name)}</span></div>
-				<div>Email: <br /> <span className="bold">{this.state.data.email} </span></div>
-				<div>Joined: <br /> <span className="bold">{this.state.createTime} </span></div>
+				<div>
+					Name: <br />
+					<span className="bold">
+						{this.capitalize(this.state.data.first_name)}
+						&nbsp;{this.capitalize(this.state.data.last_name)}
+					</span>
+				</div>
+				<div>
+					Email: <br />
+					<span className="bold">
+						{this.state.data.email}
+					</span>
+				</div>
+				<div>
+					Joined: <br />
+					<span className="bold">
+						{this.state.createTime}
+					</span>
+				</div>
 			</div>
 		);
 	}
@@ -129,7 +144,7 @@ const OverallRecords = React.createClass({
 		};
 	},
 	componentDidMount: function () {
-		this.getLeaderboardData(this.props.url, this.props.year)
+		this.getLeaderboardData(this.props.url, this.props.year);
 	},
 	getLeaderboardData: function (url, year) {
 		$.ajax({
@@ -139,8 +154,10 @@ const OverallRecords = React.createClass({
 			dataType: 'json',
 			cache: false,
 			success: function (data) {
-				//console.log(JSON.stringify(data));
-				this.setState({ data: data.data });
+				// console.log(JSON.stringify(data));
+				this.setState({
+					data: data.data 
+				});
 			}.bind(this),
 			error: function (status, err) {
 				console.error(status, err.toString());
@@ -164,7 +181,7 @@ const OverallRecords = React.createClass({
 
 		return (
 			<tbody>
-				{recordNodes}	
+				{recordNodes}
 			</tbody>
 		);
 	}
@@ -177,7 +194,7 @@ const RecordNode = React.createClass({
 	render: function () {
 		const data = this.props.data;
 		return (
-			<tr className="pointer" onClick={() => this.viewLeague(data.league_id) }>
+			<tr className="pointer" onClick={() => this.viewLeague(data.league_id)}>
 				<td>{data.league_name}</td>
 				<td>{data.wins}</td>
 				<td>{data.losses}</td>

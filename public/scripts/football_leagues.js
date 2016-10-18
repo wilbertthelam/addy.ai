@@ -8,8 +8,7 @@ Contains components for the join leagues section of the website
 
 import React from 'react';
 import $ from 'jquery';
-import { Link } from 'react-router';
-import { Button, Nav, NavItem } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import * as QueryString from 'query-string';
 import Loading from 'react-loading';
 
@@ -73,7 +72,7 @@ const LeagueList = React.createClass({
 				<li>No leagues available.</li>
 			);
 		}
-		var that = this;
+		const that = this;
 		const leagueNodes = this.state.data.map(function (league) {
 			return (
 				<LeagueNode
@@ -109,12 +108,11 @@ const LeagueNode = React.createClass({
 					this.context.router.push('/football/dashboard/leagues');
 					this.props.getLeagueList();
 				}
-				
 			}.bind(this),
 			error: function (status, err) {
 				console.error(status, err.toString());
 				// alert('error connecting');
-			}.bind(this)
+			}
 		});
 	},
 	render: function () {
@@ -127,7 +125,7 @@ const LeagueNode = React.createClass({
 				>
 					<span className="glyphicon glyphicon-plus" /> join
 				</Button>
-				<span className="league-row">{this.props.leagueName} </span>
+				<span className="league-row">{this.props.leagueName}</span>
 			</div>
 		);
 	}
@@ -149,11 +147,18 @@ const AddLeague = React.createClass({
 		};
 	},
 	createLeague: function () {
-		this.setState({ displayResult: false, displayLoader: true, message: '' });
+		this.setState({
+			displayResult: false,
+			displayLoader: true,
+			message: ''
+		});
 		const urlSections = this.state.url.split('?');
 		let parameterString = '';
 		if (urlSections.length <= 1) {
-			this.setState({ displayLoader: false, message: 'This URL is invalid, try another one!' });
+			this.setState({
+				displayLoader: false,
+				message: 'This URL is invalid, try another one!'
+			});
 		} else {
 			parameterString = urlSections[1];
 
@@ -161,16 +166,24 @@ const AddLeague = React.createClass({
 			if (!parsed.leagueId) {
 				// invalid url
 				console.log('do prevent here');
-				this.setState({ displayLoader: false, message: 'This URL is invalid, try another one!' });
+				this.setState({
+					displayLoader: false,
+					message: 'This URL is invalid, try another one!'
+				});
 			} else {
 				$.ajax({
 					type: 'POST',
 					url: '/football/tasks/createNewLeague',
-					data: { espnId: parsed.leagueId, seasonId: '' },
+					data: {
+						espnId: parsed.leagueId,
+						seasonId: ''
+					},
 					dataType: 'json',
 					cache: false,
 					success: function (data) {
-						this.setState({ displayLoader: false }); 
+						this.setState({
+							displayLoader: false
+						}); 
 						console.log(JSON.stringify(data));
 						// if successfully logged in, open dashboard, else redirect to login
 						if (data.execSuccess === false) {
@@ -180,59 +193,98 @@ const AddLeague = React.createClass({
 								$.ajax({
 									type: 'GET',
 									url: '/football/league/leagueInfoESPNSeason',
-									data: { espnId: parsed.leagueId, seasonId: '' },
+									data: {
+										espnId: parsed.leagueId,
+										seasonId: ''
+									},
 									dataType: 'json',
 									cache: false,
 									success: function (data2) {
-										this.setState({ displayResult: true, leagueId: data2.data[0].league_id, leagueName: data2.data[0].league_name });
-										
-									}.bind(this),
+										this.setState({
+											displayResult: true,
+											leagueId: data2.data[0].league_id,
+											leagueName: data2.data[0].league_name
+										});
+									},
 									error: function (status, err) {
 										console.error(status, err.toString());
-										this.setState({ message: 'Hm, looks like the servers are down. Try again in a bit!' });
+										this.setState({
+											message: 'Hm, looks like the servers are down. Try again in a bit!'
+										});
 										// print network error warning
 									}.bind(this)
 								});
 							} else if (data.code === 'ERR_PRIVATE_NOT_EXIST') {
-								this.setState({ message: 'Sorry, the league is privated or does not exist! Ask your league manager to make your league public!' });
+								const message = 'Sorry, the league is privated or does not exist! ' +
+									'Ask your league manager to make your league public!';
+								this.setState({
+									message: message
+								});
 							} else if (data.code === 'ERR_INV_LEAGUE_TYPE') {
-								this.setState({ message: 'Sorry, addy.ai currently only works with ESPN standard H2H point leagues.' });
+								const message = 'Sorry, addy.ai currently only ' +
+									'works with ESPN standard H2H point leagues.';
+								this.setState({
+									message: message
+								});
 							} else {
-								this.setState({ message: 'Some strange error happened, try again in a bit!' });
+								this.setState({
+									message: 'Some strange error happened, try again in a bit!'
+								});
 							}
 							// could not add league
 							// return message saying if wrong type or league is privated or does not exist
 						} else {
 							console.log('successfully added');
-							this.setState({ displayResult: true, leagueId: data.data.league_id, leagueName: data.data.league_name });
+							this.setState({
+								displayResult: true,
+								leagueId: data.data.league_id,
+								leagueName: data.data.league_name
+							});
 							// place option for the league to show up below
-							
 						}
-						
-					}.bind(this),
+					},
 					error: function (status, err) {
-						this.setState({ displayLoader: false }); 
+						this.setState({
+							displayLoader: false
+						});
 						console.error(status, err.toString());
-						this.setState({ message: 'Hm, looks like the servers are down. Try again in a bit!' });
+						this.setState({
+							message: 'Hm, looks like the servers are down. Try again in a bit!'
+						});
 						// print network error warning
 					}.bind(this)
 				});
 			}
 		}
-		
 	},
 
 	updateUrl: function (e) {
-		this.setState({ url: e.target.value });
+		this.setState({
+			url: e.target.value
+		});
 	},
 
 	render: function () {
 		let resultComponent;
 		if (this.state.displayResult) {
 			// alert('display thing here : ' + this.state.leagueId);
-			resultComponent = <LeagueNode leagueId={this.state.leagueId} leagueName={this.state.leagueName} />;
+			resultComponent = (
+				<LeagueNode
+					leagueId={this.state.leagueId}
+					leagueName={this.state.leagueName}
+				/>
+			);
 		}
-		const displayLoaderComponent = <Loading type="spin" color="#e3e3e3" delay="0" height="20" width="20"/>;
+		const displayLoaderComponent = (
+			<Loading
+				type="spin"
+				color="#e3e3e3"
+				delay="0"
+				height="20"
+				width="20"
+			/>
+		);
+
 		return (
 			<div>
 				<p>

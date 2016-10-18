@@ -8,16 +8,15 @@ Contains components for the Dashboard's leaderboard section
 
 import React from 'react';
 import $ from 'jquery';
-import { Link } from 'react-router';
 import { Button, ButtonToolbar, ButtonGroup, Popover, Overlay } from 'react-bootstrap';
 import io from 'socket.io-client';
 
 // TODO: BRING THIS TO BE DYNAMIC
 const socket = io.connect('http://www.addyai.me:8080');
 
-//=========================================
+// =========================================
 // ROUTER CONTAINER FOR THE VOTING SECTION
-//=========================================
+// =========================================
 const VotingContainer = React.createClass({
 	getInitialState: function () {
 		return {
@@ -47,14 +46,14 @@ const VotingContainer = React.createClass({
 			dataType: 'json',
 			cache: false,
 			success: function (data) {
-				this.setState({ 
+				this.setState({
 					currentWeek: data.data.week,
-					currentYear: data.data.year 
+					currentYear: data.data.year
 				}, this._displayPage(this.props.params.leagueId, data.data.week, data.data.year));
 			}.bind(this),
 			error: function (status, err) {
 				console.error(status, err.toString());
-			}.bind(this)
+			}
 		});
 	},
 	_displayPage: function (leagueId, week, year) {
@@ -91,7 +90,7 @@ const VotingContainer = React.createClass({
 					this.context.router.push('/football/login');
 				}
 			}.bind(this),
-			error: function (status, err) {
+			error: function (status) {
 				this.context.router.push('/football/login');
 			}.bind(this)
 		});
@@ -106,7 +105,7 @@ const VotingContainer = React.createClass({
 			);
 		}
 
-		var that = this;
+		const that = this;
 		const voteNodes = this.state.data.map(function (matchup) {
 			return (
 				<MatchupNode
@@ -138,7 +137,7 @@ const VotingContainer = React.createClass({
 				<Button
 					active={week === that.state.selectedWeek}
 					onClick={() => that._updateWeek(that.state.leagueId, week, that.state.currentYear)}
-					bsStyle= {style}
+					bsStyle={style}
 				>
 					{week}
 				</Button>);
@@ -148,12 +147,12 @@ const VotingContainer = React.createClass({
 			<div>
 				<div className="voting-week-menu">
 					<ButtonToolbar>
-	    				<ButtonGroup>
-	    					<Button>Week: </Button>
-	    					{buttons}
-	    				</ButtonGroup>
-	    			</ButtonToolbar>
-	    		</div>
+						<ButtonGroup>
+							<Button>Week: </Button>
+							{buttons}
+						</ButtonGroup>
+					</ButtonToolbar>
+				</div>
 				{voteNodes}
 			</div>
 		);
@@ -187,7 +186,7 @@ const MatchupNode = React.createClass({
 	},
 	_decideClasses: function (data) {
 		const selectClass = ['', ''];
-		
+
 		// determine the user's selection
 		let winner = null;
 		if (data.team_1_active === 1) {
@@ -228,7 +227,6 @@ const MatchupNode = React.createClass({
 	_vote: function (winningTeam) {
 		// if voting is locked, then don't proceed
 		if (this.props.data.locked === 0) {
-
 			// team 0 is the first team on the list,
 			// team 1 is the second team on the list
 			// if team is already selected, don't bother with the ajax vote update call
@@ -261,13 +259,12 @@ const MatchupNode = React.createClass({
 							this.setState({ winner: winningTeam }, this._updateActiveClasses);
 							this.updateNotifications();
 						}
-						
 						console.log('successfully updated vote!');
 					}.bind(this),
 					error: function (status, err) {
 						console.error(status, err.toString());
 						// alert('no work');
-					}.bind(this)
+					}
 				});
 			}
 		}
@@ -276,9 +273,20 @@ const MatchupNode = React.createClass({
 		socket.emit('voteNotif', { userId: this.props.userId, leagueId: this.props.data.league_id });
 	},
 	render: function () {
-		let leftBarIcon = <div className="result-icon"><span className="glyphicon glyphicon-check" aria-hidden="true"></span></div>;
+		let leftBarIcon = (
+			<div className="result-icon">
+				<span className="glyphicon glyphicon-check" aria-hidden="true"></span>
+			</div>
+		);
 		if (this.props.currentWeek !== this.props.selectedWeek) {
-			leftBarIcon = <LeftBarIcon winningId={this.state.winningId} actualWinningId={this.state.actualResult.actualWinningId} actualWinningScore={this.state.actualResult.actualWinningScore} actualLosingScore={this.state.actualResult.actualLosingScore} />;
+			leftBarIcon = (
+				<LeftBarIcon
+					winningId={this.state.winningId}
+					actualWinningId={this.state.actualResult.actualWinningId}
+					actualWinningScore={this.state.actualResult.actualWinningScore}
+					actualLosingScore={this.state.actualResult.actualLosingScore}
+				/>
+			);
 		}
 		return (
 			<div className="container matchup well">
@@ -294,7 +302,11 @@ const MatchupNode = React.createClass({
 					</div>
 				</div>
 				<div className="col-sm-1">
-					<div className="vs">{this.props.data.locked === 0 ? <span>vs</span> : <span className="glyphicon glyphicon-lock" aria-hidden="true"></span>}</div>
+					<div className="vs">
+						{this.props.data.locked === 0 ?
+							<span>vs</span> :
+							<span className="glyphicon glyphicon-lock" aria-hidden="true"></span>}
+					</div>
 				</div>
 				<div className="col-sm-5">
 					<div className="team" onClick={() => this._vote(1)}>
@@ -329,17 +341,16 @@ const LeftBarIcon = React.createClass({
 		});
 	},
 	_showDetails: function () {
-		console.log('hello there')
 		this.setState({ showDetails: true });
 	},
 	_hideDetails: function () {
-		console.log('hello there')
 		this.setState({ showDetails: false });
 	},
 	render: function () {
 		return (
 			<div className="result-icon" onMouseOver={this._showDetails} onMouseOut={this._hideDetails}>
-				{(this.state.winningId === this.state.actualWinningId && this.state.actualWinningId !== '') ?
+				{(this.state.winningId === this.state.actualWinningId
+					&& this.state.actualWinningId !== '') ?
 					<span className="glyphicon glyphicon-ok-circle green" aria-hidden="true" ></span> :
 					<span className="glyphicon glyphicon-ban-circle red" aria-hidden="true"></span>}
 
