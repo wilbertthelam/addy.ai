@@ -112,8 +112,8 @@ const LoginBox = React.createClass({
 const LoginForm = React.createClass({
 	getInitialState: function () {
 		return {
-			email: 'wilbertthelam@gmail.com',
-			password: 'wilbert',
+			email: '',
+			password: '',
 			warnings: {
 				notExist: false,
 				networkDown: false,

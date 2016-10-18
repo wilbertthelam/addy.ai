@@ -34,9 +34,9 @@ var notifications = require('./routes/sockets/notifications')(io);
 
 
 
-// var routes = require('./routes/index');
-// var news = require('./routes/news');
-// var automatedtasks = require('./routes/automatedtasks');
+var routes = require('./routes/index');
+var news = require('./routes/news');
+var automatedtasks = require('./routes/automatedtasks');
 var football = require('./routes/football');
 var login = require('./routes/login');
 var voting = require('./routes/voting');
@@ -74,9 +74,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// app.use('/', routes);
-// app.use('/news', news);
-// app.use('/tasks', automatedtasks);
+app.use('/', routes);
+app.use('/news', news);
+app.use('/tasks', automatedtasks);
 
 app.use('/football', football);
 app.use('/football/login', login);
