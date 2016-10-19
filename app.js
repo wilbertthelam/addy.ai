@@ -28,10 +28,10 @@ connection.query(statement, function(err, result) {
   }
 });
 
-var io = require('socket.io')();
-app.io = io;
+// var io = require('socket.io')();
+// app.io = io;
 
-var notifications = require('./routes/sockets/notifications')(app.io);
+// var notifications = require('./routes/sockets/notifications')(app.io);
 
 
 
