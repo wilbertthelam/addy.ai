@@ -28,10 +28,10 @@ connection.query(statement, function(err, result) {
   }
 });
 
-var server = require('http').Server(app);
-var io = require('socket.io')(server);
+var io = require('socket.io')();
+app.io = io;
 
-var notifications = require('./routes/sockets/notifications')(io);
+var notifications = require('./routes/sockets/notifications')(app.io);
 
 
 
@@ -43,8 +43,6 @@ var login = require('./routes/login');
 var voting = require('./routes/voting');
 var league = require('./routes/league');
 var footballtasks = require('./routes/footballtasks');
-
-server.listen(8080);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
