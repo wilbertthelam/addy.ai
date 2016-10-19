@@ -11,31 +11,38 @@ import $ from 'jquery';
 import { Button } from 'react-bootstrap';
 import * as QueryString from 'query-string';
 import Loading from 'react-loading';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 const LeagueContainer = React.createClass({
 	render: function () {
 		return (
 			<div>
-				<div className="col-md-6">
-					<div className="shadow-z-1 content-box">
-						<div className="league-header small-header">Available leagues</div>
+				<ReactCSSTransitionGroup
+					transitionName="example"
+					transitionAppear={true}
+					transitionAppearTimeout={500}
+				>
+					<div className="col-md-6">
+						<div className="shadow-z-1 content-box">
+							<div className="league-header small-header">Available leagues</div>
+						</div>
+
+						<div className="shadow-z-1 content-box">
+							<LeagueList
+								baseUrl="/football/league/availableLeagues"
+							/>
+						</div>
 					</div>
 
-					<div className="shadow-z-1 content-box">
-						<LeagueList
-							baseUrl="/football/league/availableLeagues"
-						/>
+					<div className="col-md-6">
+						<div className="shadow-z-1 content-box">
+							<div className="league-header small-header">Can't find a league?</div>
+						</div>
+						<div className="shadow-z-1 content-box">
+							<AddLeague />
+						</div>
 					</div>
-				</div>
-
-				<div className="col-md-6">
-					<div className="shadow-z-1 content-box">
-						<div className="league-header small-header">Can't find a league?</div>
-					</div>
-					<div className="shadow-z-1 content-box">
-						<AddLeague />
-					</div>
-				</div>
+				</ReactCSSTransitionGroup>
 			</div>
 		);
 	}

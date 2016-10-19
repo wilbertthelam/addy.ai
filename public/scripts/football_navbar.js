@@ -71,7 +71,7 @@ const NavBar = React.createClass({
 				{this.state.userId === 1 ? <ControlPanelButton /> : ''}
 				<div className="nav-bar shadow-z-1">
 					<ul>
-						<li className="nav-bar-title" onClick={() => this.setState({ open: !this.state.open })}>
+						<li className="nav-bar-title league-menu-button" onClick={() => this.setState({ open: !this.state.open })}>
 							<span className="glyphicon glyphicon-th-list" aria-hidden="true"></span> Your leagues
 						</li>
 						<Collapse

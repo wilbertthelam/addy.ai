@@ -8,6 +8,7 @@ Contains components for the profile page
 
 import React from 'react';
 import $ from 'jquery';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 const moment = require('moment');
 
 // =========================================
@@ -18,13 +19,19 @@ const ProfileContainer = React.createClass({
 	render: function () {
 		return (
 			<div>
-				<div className="col-md-12">
-					<div className="">
-						<div className="league-header">Profile</div>
+				<ReactCSSTransitionGroup
+						transitionName="example"
+						transitionAppear={true}
+						transitionAppearTimeout={500}
+				>
+					<div className="col-md-12">
+						<div className="">
+							<div className="league-header">Profile</div>
+						</div>
 					</div>
-				</div>
 
-				<ProfileBox />
+					<ProfileBox />
+				</ReactCSSTransitionGroup>
 			</div>
 		);
 	}

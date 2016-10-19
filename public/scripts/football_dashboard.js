@@ -9,7 +9,7 @@ Contains components for the Dashboard
 import React from 'react';
 import $ from 'jquery';
 import { Nav, NavItem, OverlayTrigger, Tooltip } from 'react-bootstrap';
-
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 // ============================================
 // ROUTER CONTAINER FOR THE DASHBOARD SECTION
@@ -18,11 +18,17 @@ const DashboardContainer = React.createClass({
 	render: function () {
 		return (
 			<div>
-				<ContentBox
-					params={this.props.params}
-					children={this.props.children}
-					// location={this.props.location}
-				/>
+				<ReactCSSTransitionGroup
+					transitionName="example"
+					transitionAppear={true}
+					transitionAppearTimeout={500}
+				>
+					<ContentBox
+						params={this.props.params}
+						children={this.props.children}
+						// location={this.props.location}
+					/>
+				</ReactCSSTransitionGroup>
 			</div>
 		);
 	}

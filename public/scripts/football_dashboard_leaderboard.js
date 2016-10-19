@@ -9,7 +9,7 @@ Contains components for the Dashboard
 import React from 'react';
 import $ from 'jquery';
 import { ButtonToolbar, DropdownButton, MenuItem } from 'react-bootstrap';
-
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 // ==============================================
 // ROUTER CONTAINER FOR THE LEADERBOARD SECTION
@@ -64,51 +64,57 @@ const LeaderboardContainer = React.createClass({
 		// TODO: years add selection
 		return (
 			<div>
-				<div>
-					<div className="leaderboard-menu-item">
-						<ButtonToolbar>
-							<DropdownButton
-								id="dropdown-size-medium"
-								key="cumulative"
-								title={this.state.activeMenuItem}
-							>
-								<MenuItem eventKey="cumulative" onSelect={that.updateTable}>Cumulative</MenuItem>
-								<MenuItem divider />
-									{weekList.map(function (data) {
-									return (
-										<MenuItem
-											eventKey={data}
-											onSelect={that.updateTable}
-										>
-											Week {data}
-										</MenuItem>);
-								})}
-							</DropdownButton>
-						</ButtonToolbar>
+				<ReactCSSTransitionGroup
+					transitionName="example"
+					transitionAppear={true}
+					transitionAppearTimeout={500}
+				>
+					<div>
+						<div className="leaderboard-menu-item">
+							<ButtonToolbar>
+								<DropdownButton
+									id="dropdown-size-medium"
+									key="cumulative"
+									title={this.state.activeMenuItem}
+								>
+									<MenuItem eventKey="cumulative" onSelect={that.updateTable}>Cumulative</MenuItem>
+									<MenuItem divider />
+										{weekList.map(function (data) {
+										return (
+											<MenuItem
+												eventKey={data}
+												onSelect={that.updateTable}
+											>
+												Week {data}
+											</MenuItem>);
+									})}
+								</DropdownButton>
+							</ButtonToolbar>
+						</div>
+						<div className="leaderboard-menu-item">
+							<small>*note: forgetting to vote is recorded as a loss</small>
+						</div>
 					</div>
-					<div className="leaderboard-menu-item">
-						<small>*note: forgetting to vote is recorded as a loss</small>
-					</div>
-				</div>
 
-				<div className="">
-					<table className="table table-hover table-mc-amber">
-						<thead>
-							<tr>
-								<th>User</th>
-								<th>Wins</th>
-								<th>Losses</th>
-								<th>Win % </th>
-							</tr>
-						</thead>
-						<LeaderboardList
-							url={this.state.url}
-							leagueId={this.props.params.leagueId}
-							year={this.state.currentYear}
-							week={this.state.selectedWeek}
-						/>
-					</table>
-				</div>
+					<div className="">
+						<table className="table table-hover table-mc-amber">
+							<thead>
+								<tr>
+									<th>User</th>
+									<th>Wins</th>
+									<th>Losses</th>
+									<th>Win % </th>
+								</tr>
+							</thead>
+							<LeaderboardList
+								url={this.state.url}
+								leagueId={this.props.params.leagueId}
+								year={this.state.currentYear}
+								week={this.state.selectedWeek}
+							/>
+						</table>
+					</div>
+				</ReactCSSTransitionGroup>
 			</div>
 		);
 	}

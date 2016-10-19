@@ -75,6 +75,16 @@ body {
 	padding: 10px;
 }
 
+/* splash animations */
+.example-appear {
+  opacity: 0.01;
+}
+
+.example-appear.example-appear-active {
+  opacity: 1;
+  transition: opacity .2s ease-in;
+}
+
 .warning {
 	color: red;
 	text-align: center;
@@ -87,9 +97,6 @@ body {
 	margin-bottom: 5px;
 }
 
-.container {
-
-}
 
 .nav-bar-title:hover {
 	color: #8484C1;
@@ -191,7 +198,11 @@ body {
 	font-weight: 700;
 }
 
-@media (max-width: 480px) {
+@media (max-width: 970px) {
+	.container {
+		margin-top: -20px;
+	}
+
 	.league-header {
 		font-size: 2em;
 		margin-top: 20px;
@@ -200,6 +211,26 @@ body {
 
 	.small-header {
 		font-size: 2em;
+		margin-top: 0px;
+		margin-bottom: 0px;
+	}
+
+	.nav-bar-title {
+		display: inline-block;
+		width: 33.333%;
+		min-height: 100%;
+		vertical-align: bottom;
+		white-space: nowrap;
+		text-overflow: ellipsis;
+		text-align: center;
+	}
+
+	.league-menu-button {
+		width: 100%;
+	}
+
+	.nav-item {
+		min-width: 30px;
 	}
 
 }

@@ -9,6 +9,7 @@ Contains components for the profile page
 import React from 'react';
 import $ from 'jquery';
 import { Button } from 'react-bootstrap';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 // =========================================
 // ROUTER CONTAINER FOR THE PROFILE SECTION
@@ -39,15 +40,21 @@ const AdminContainer = React.createClass({
 	render: function () {
 		return (
 			<div>
-				<div className="col-md-12">
-					<div className="s">
-						<div className="league-header">
-							Admin panel
+				<ReactCSSTransitionGroup
+					transitionName="example"
+					transitionAppear={true}
+					transitionAppearTimeout={500}
+				>
+					<div className="col-md-12">
+						<div className="s">
+							<div className="league-header">
+								Admin panel
+							</div>
 						</div>
 					</div>
-				</div>
 
-				<AdminBox url="/football/tasks/currentTime" />
+					<AdminBox url="/football/tasks/currentTime" />
+				</ReactCSSTransitionGroup>
 			</div>
 		);
 	}

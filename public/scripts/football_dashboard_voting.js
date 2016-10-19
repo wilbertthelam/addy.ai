@@ -10,6 +10,7 @@ import React from 'react';
 import $ from 'jquery';
 import { Button, ButtonToolbar, ButtonGroup, Popover, Overlay } from 'react-bootstrap';
 import { socket } from './football_socket.js';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 // =========================================
 // ROUTER CONTAINER FOR THE VOTING SECTION
@@ -142,15 +143,21 @@ const VotingContainer = React.createClass({
 
 		return (
 			<div>
-				<div className="voting-week-menu">
-					<ButtonToolbar>
-						<ButtonGroup>
-							<Button>Week: </Button>
-							{buttons}
-						</ButtonGroup>
-					</ButtonToolbar>
-				</div>
-				{voteNodes}
+				<ReactCSSTransitionGroup
+					transitionName="example"
+					transitionAppear={true}
+					transitionAppearTimeout={500}
+				>
+					<div className="voting-week-menu">
+						<ButtonToolbar>
+							<ButtonGroup>
+								<Button>Week: </Button>
+								{buttons}
+							</ButtonGroup>
+						</ButtonToolbar>
+					</div>
+					{voteNodes}
+				</ReactCSSTransitionGroup>
 			</div>
 		);
 	}
