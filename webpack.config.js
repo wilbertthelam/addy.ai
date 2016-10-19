@@ -25,7 +25,7 @@ module.exports = {
 		publicPath: '/build',
 		filename: '[name]_bundle.js'
 	},
-	devtool: '#source-map',
+	devtool: 'cheap-module-source-map',
 	plugins: [
 		new webpack.optimize.OccurenceOrderPlugin(),
 		new webpack.HotModuleReplacementPlugin(),
@@ -36,6 +36,14 @@ module.exports = {
 				NODE_ENV: JSON.stringify('production'),
 			}
 		}),
+		new webpack.optimize.UglifyJsPlugin({
+		    compress: {
+		        warnings: false,
+		        drop_console: true
+		    },
+		    comments: false,
+		    sourceMap: false
+		})
 	],
 	module: {
 		noParse: [

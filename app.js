@@ -58,6 +58,7 @@ if (app.get('env') === 'development') {
     app.use(require('webpack-hot-middleware')(compiler));
 }
 
+console.log('variable is: ' + app.get('env'));
 
 // session middleware
 app.use(session({

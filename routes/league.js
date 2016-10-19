@@ -69,7 +69,7 @@ router.post('/addLeagueForUser', loginAuth.isAuthenticated, function (req, res) 
 		user_id: req.session.userId
 	};
 
-	console.log(JSON.stringify(row));
+	// console.log(JSON.stringify(row));
 	connection.query(statement, row, function (err) {
 		if (err) {
 			connection.rollback();

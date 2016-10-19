@@ -7,7 +7,7 @@ var connection = db;
 
 
 function updateVoteNotif(io, data) {
-	console.log(data.userId + ' is logged in');
+	// console.log(data.userId + ' is logged in');
 
 	var statement = 'SELECT ' +
 	'(SELECT count(*) FROM addy_ai_football.matchups m, addy_ai_football.votes v ' +
@@ -27,14 +27,14 @@ function updateVoteNotif(io, data) {
 	];
 	connection.query(statement, params, function (err, results) {
 		if (!err) {
-			console.log('Retrieved result for voting notification for league ' + data.leagueId);
+			// console.log('Retrieved result for voting notification for league ' + data.leagueId);
 
 			var newResult = results[0].filled_out;
-			console.log(newResult);
+			// console.log(newResult);
 			if (newResult == null) {
 				newResult = 0;
 			}
-			console.log('Result for socket retrieve: ' + newResult);
+			// console.log('Result for socket retrieve: ' + newResult);
 			// emit 0 if there are votes left, 1 if user voted on everything
 			io.emit('voteNotif', {
 				leagueId: data.leagueId,
@@ -47,7 +47,7 @@ function updateVoteNotif(io, data) {
 module.exports = function (io) {
 	// socket to keep track of whether a vote has been filled or not
 	io.on('connection', function (socket) {
-		console.log('User connected to the socket.');
+		// console.log('User connected to the socket.');
 		// updateVoteNotif(io, {userId: 1, leagueId: });
 		// when the user selects a vote, check to see if theres still voting notification to be shown
 		socket.on('voteNotif', function (data) {

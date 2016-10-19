@@ -13,7 +13,7 @@ var async = require('async');
 var loginAuth = require('./utilities/loginAuthenticationMiddleware.js');
 var leagueLock = require('./utilities/leagueLockedMiddleware.js');
 
-console.log('Current week as of now: ' + gWeek);
+// console.log('Current week as of now: ' + gWeek);
 
 /* GET to return all matchups with the user vote included */
 router.get('/matchupsWithUserVote', loginAuth.isAuthenticated, function (req, res) {
@@ -46,7 +46,7 @@ router.get('/matchupsWithUserVote', loginAuth.isAuthenticated, function (req, re
 						error: err
 					});
 				}
-				// console.log(JSON.stringify(results));
+				// // console.log(JSON.stringify(results));
 				finalData = results;
 				return cb(null, null);
 			});
@@ -75,7 +75,7 @@ router.get('/matchupsWithUserVote', loginAuth.isAuthenticated, function (req, re
 						error: err
 					});
 				}
-				// console.log(JSON.stringify(results));
+				// // console.log(JSON.stringify(results));
 
 				var tempResults = {};
 
@@ -96,8 +96,8 @@ router.get('/matchupsWithUserVote', loginAuth.isAuthenticated, function (req, re
 					row.losing_team_id = null;
 					var matchupId = row.matchup_id;
 					var tempResult = tempResults[matchupId];
-					console.log('teamResult is: ');
-					console.log(tempResult);
+					// console.log('teamResult is: ');
+					// console.log(tempResult);
 
 					if (tempResult != undefined && tempResult != null) {
 						if (tempResult.winning_team_id === row.team_id1) {
@@ -109,7 +109,7 @@ router.get('/matchupsWithUserVote', loginAuth.isAuthenticated, function (req, re
 							row.winning_team_id = row.team_id2;
 							row.losing_team_id = row.team_id1;
 						} else {
-							console.log('weird error, both teams are marked as winners');
+							// console.log('weird error, both teams are marked as winners');
 						}
 					}
 				}
@@ -129,7 +129,7 @@ router.get('/matchupsWithUserVote', loginAuth.isAuthenticated, function (req, re
 						error: err
 					});
 				}
-				// console.log(JSON.stringify(results));
+				// // console.log(JSON.stringify(results));
 
 				var tempResults = {};
 				if (results.length > 0 || results != null) {
@@ -168,7 +168,7 @@ router.get('/matchupsWithUserVote', loginAuth.isAuthenticated, function (req, re
 
 /* GET to return ALL matchups for a given leagueId. */
 router.get('/matchups', function (req, res) {
-	console.log('variable: ' + req.query.leagueId);
+	// console.log('variable: ' + req.query.leagueId);
 	var statement = 'SELECT t.team_name as team_name1, t2.team_name as team_name2, ' +
 		't.owner_name as owner_name1, t2.owner_name as owner_name2, m.* ' +
 		'FROM addy_ai_football.matchups m, addy_ai_football.teams t, ' +
@@ -189,7 +189,7 @@ router.get('/matchups', function (req, res) {
 				error: err
 			});
 		}
-		console.log(JSON.stringify(results));
+		// console.log(JSON.stringify(results));
 		return res.json({
 			execSuccess: true,
 			message: 'Matchup data successfully retrieved.',
@@ -210,7 +210,7 @@ router.get('/votingPicksForUser', loginAuth.isAuthenticated, function (req, res)
 				message: 'Cannot get matchup data.',
 				error: err });
 		}
-		console.log(JSON.stringify(results));
+		// console.log(JSON.stringify(results));
 		return res.json({
 			execSuccess: true,
 			message: 'Matchup data successfully retrieved.',
@@ -240,7 +240,7 @@ router.post('/vote', loginAuth.isAuthenticated, leagueLock.isUnlocked(), functio
 		losing_team_id: Number(req.body.losingTeamId),
 	};
 
-	console.log(JSON.stringify(row));
+	// console.log(JSON.stringify(row));
 	connection.query(statement, row, function (err) {
 		if (err) {
 			connection.rollback();
@@ -311,7 +311,7 @@ router.get('/cumulativeLeaderboard', function (req, res) {
 				error: err
 			});
 		}
-		// console.log(JSON.stringify(results));
+		// // console.log(JSON.stringify(results));
 		// calculate win percentage
 		for (var i = 0; i < results.length; i++) {
 			var result = results[i];
@@ -378,7 +378,7 @@ router.get('/leaderboardForUser', function (req, res) {
 				error: err
 			});
 		}
-		console.log(JSON.stringify(results));
+		// console.log(JSON.stringify(results));
 		for (var i = 0; i < results.length; i++) {
 			var result = results[i];
 			var winPercNum = Number(result.wins / (result.wins + result.losses));
@@ -432,7 +432,7 @@ router.get('/leaderboardByWeek', function (req, res) {
 				error: err
 			});
 		}
-		console.log(JSON.stringify(results));
+		// console.log(JSON.stringify(results));
 		return res.json({
 			execSuccess: true,
 			message: 'Leaderboard weekly data successfully retrieved.',

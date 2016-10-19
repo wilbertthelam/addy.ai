@@ -13,7 +13,7 @@ var loginAuth = require('./utilities/loginAuthenticationMiddleware.js');
 function _checkUserLogin(email, password, callback) {
 	var statement = 'SELECT * FROM addy_ai_football.users WHERE email = ? AND password = ?;';
 	connection.query(statement, [email, password], function (err, results) {
-		// console.log('Login result: ' + JSON.stringify(results));
+		// // console.log('Login result: ' + JSON.stringify(results));
 		if (err) {
 			return callback({
 				execSuccess: false,
@@ -59,7 +59,7 @@ function _checkUserLogin(email, password, callback) {
 router.post('/login', function (req, res) {
 	_checkUserLogin(req.body.email, req.body.password, function (userStatus) {
 		if (!userStatus.execSuccess) {
-			console.log('DB error while logging in.');
+			// console.log('DB error while logging in.');
 			return res.json(userStatus);
 		}
 		if (userStatus.code === 'SUCCESS') {
@@ -81,7 +81,7 @@ router.post('/isUserLoggedIn', function (req, res) {
 	if (req.session.userId) {
 		status = true;
 	}
-	console.log(req.session.userId);
+	// console.log(req.session.userId);
 	return res.json({
 		authenticated: status,
 		userId: req.session.userId
@@ -135,7 +135,7 @@ router.post('/signup', function (req, res) {
 				}
 
 				if (results.length !== 0) {
-					console.log('User email taken already');
+					// console.log('User email taken already');
 					return res.json({
 						execSuccess: true,
 						message: 'User (email) already exists.',
@@ -143,7 +143,7 @@ router.post('/signup', function (req, res) {
 						data: []
 					});
 				}
-				console.log('User email available');
+				// console.log('User email available');
 				return cb0(null, 'Email available');
 			});
 		},
@@ -176,7 +176,7 @@ router.post('/signup', function (req, res) {
 						});
 					}
 					connection.commit();
-					console.log('id returned: ' + result.insertId);
+					// console.log('id returned: ' + result.insertId);
 					userId = result.insertId;
 					return cb1(null, 'Account created');
 				});

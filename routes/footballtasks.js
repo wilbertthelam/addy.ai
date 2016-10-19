@@ -44,7 +44,7 @@ function lock(userId, week, year, lockStatus, callback) {
 		locked: lockStatus,
 	};
 
-	console.log(JSON.stringify(row));
+	// console.log(JSON.stringify(row));
 	connection.query(statement, [row, week, year], function (err) {
 		if (err) {
 			connection.rollback();
@@ -80,8 +80,8 @@ router.post('/createNewLeague', loginAuth.isAuthenticated, function (req, res) {
 	var leagueName;
 	// var seasonId = req.body.seasonId;
 	var seasonId = gYear;
-	console.log(leagueId);
-	console.log(seasonId);
+	// console.log(leagueId);
+	// console.log(seasonId);
 
 	var infoData;
 	var data;
@@ -98,9 +98,9 @@ router.post('/createNewLeague', loginAuth.isAuthenticated, function (req, res) {
 					});
 				}
 
-				console.log(JSON.stringify(results));
+				// console.log(JSON.stringify(results));
 				if (results.length > 0) {
-					console.log('League already exists');
+					// console.log('League already exists');
 					return res.json({
 						execSuccess: false,
 						message: 'League already exists.',
@@ -108,7 +108,7 @@ router.post('/createNewLeague', loginAuth.isAuthenticated, function (req, res) {
 						data: []
 					});
 				}
-				console.log('LeagueId is available');
+				// console.log('LeagueId is available');
 				return cb0(null, 'League available');
 			});
 		},
@@ -123,11 +123,11 @@ router.post('/createNewLeague', loginAuth.isAuthenticated, function (req, res) {
 					throw err;
 				}
 
-				// console.log('All matchups: ' + JSON.stringify(results[0]));
+				// // console.log('All matchups: ' + JSON.stringify(results[0]));
 				infoData = results[0];
 
 				if (infoData === 'empty') {
-					console.log('league privated');
+					// console.log('league privated');
 					return res.json({
 						execSuccess: false,
 						message: 'League appears to be privated or does not exist.',
@@ -154,9 +154,9 @@ router.post('/createNewLeague', loginAuth.isAuthenticated, function (req, res) {
 		},
 
 		updateDbLeague: function (cb1) {
-			// console.log(listOfStats);
+			// // console.log(listOfStats);
 			var statement = 'INSERT INTO addy_ai_football.leagues SET ?;';
-			// console.log(data.league);
+			// // console.log(data.league);
 			connection.query(statement, infoData.league, function (err, result) {
 				if (err) {
 					connection.rollback();
@@ -169,7 +169,7 @@ router.post('/createNewLeague', loginAuth.isAuthenticated, function (req, res) {
 				// connection.commit();
 				leagueId = result.insertId;
 				leagueName = infoData.league.league_name;
-				console.log('updateDbLeague is: ' + leagueId);
+				// console.log('updateDbLeague is: ' + leagueId);
 				return cb1(null, 'League table updated in DB.');
 			});
 		},
@@ -185,7 +185,7 @@ router.post('/createNewLeague', loginAuth.isAuthenticated, function (req, res) {
 				}
 
 				if (infoData === 'invalid_league') {
-					console.log('league type not correct');
+					// console.log('league type not correct');
 					return res.json({
 						execSuccess: false,
 						message: 'Only H2H leagues supported.',
@@ -193,7 +193,7 @@ router.post('/createNewLeague', loginAuth.isAuthenticated, function (req, res) {
 						error: err
 					});
 				}
-				// console.log('All matchups: ' + JSON.stringify(results[0]));
+				// // console.log('All matchups: ' + JSON.stringify(results[0]));
 				data = results[0];
 				return cb0(null, 'Get league matchups');
 			});
@@ -203,7 +203,7 @@ router.post('/createNewLeague', loginAuth.isAuthenticated, function (req, res) {
 		updateDbTeams: function (cb1) {
 			var statement = 'INSERT INTO addy_ai_football.teams SET ?';
 			async.each(data.teams, function (row, callback) {
-				// console.log(row);
+				// // console.log(row);
 				connection.query(statement, row, function (err) {
 					if (err) {
 						connection.rollback();
@@ -226,10 +226,10 @@ router.post('/createNewLeague', loginAuth.isAuthenticated, function (req, res) {
 		},
 
 		updateDbMatchups: function (cb1) {
-			// console.log(listOfStats);
+			// // console.log(listOfStats);
 			var statement = 'INSERT INTO addy_ai_football.matchups SET ?';
 			async.each(data.matchups, function (row, callback) {
-				// console.log(row);
+				// // console.log(row);
 				connection.query(statement, row, function (err) {
 					if (err) {
 						connection.rollback();
@@ -319,9 +319,9 @@ router.post('/populateLeagueResults', loginAuth.isAuthenticated, function (req, 
 					});
 				}
 
-				// console.log(JSON.stringify(results));
+				// // console.log(JSON.stringify(results));
 				if (!results || results.length < 1) {
-					console.log('No leagues exists');
+					// console.log('No leagues exists');
 					return res.json({
 						execSuccess: false,
 						message: 'No leagues exist.',
@@ -330,7 +330,7 @@ router.post('/populateLeagueResults', loginAuth.isAuthenticated, function (req, 
 					});
 				}
 				idList = JSON.stringify(results);
-				// console.log(idList);
+				// // console.log(idList);
 				return cb0(null, 'League available.');
 			});
 		},
@@ -351,12 +351,12 @@ router.post('/populateLeagueResults', loginAuth.isAuthenticated, function (req, 
 					});
 				}
 
-				// console.log('All matchups: ' + JSON.stringify(results[0]));
+				// // console.log('All matchups: ' + JSON.stringify(results[0]));
 				var infoData = results[0];
 				workingLeaguesData = infoData['leagueData'];
 				nonWorkingLeaguesList = infoData['invalidLeagues'];
 
-				console.log('non working: ' + nonWorkingLeaguesList);
+				// console.log('non working: ' + nonWorkingLeaguesList);
 				return cb1(null, 'Got league results.');
 			});
 		},
@@ -366,7 +366,7 @@ router.post('/populateLeagueResults', loginAuth.isAuthenticated, function (req, 
 				' WHERE league_id = ? AND week = ? AND year = ? ' +
 				'AND team_id1 in (?, ?) AND team_id2 in (?, ?) LIMIT 1;';
 
-			console.log('week: ' + localWeek);
+			// console.log('week: ' + localWeek);
 			async.each(workingLeaguesData, function (row, callback) {
 				var params = [
 					row.league_id,
@@ -378,22 +378,22 @@ router.post('/populateLeagueResults', loginAuth.isAuthenticated, function (req, 
 					row.losing_team_id
 				];
 				connection.query(statement, params, function (err, results) {
-					console.log('results: ' + JSON.stringify(results) + ' for league: ' + row.league_id);
+					// console.log('results: ' + JSON.stringify(results) + ' for league: ' + row.league_id);
 					var errorMessage = '';
 					if (err) {
 						errorMessage = 'DB error in getMatchupId.';
 						return callback(errorMessage);
 					}
 
-					// console.log('result stuff: ' + JSON.stringify(results));
-					// console.log('row stuff: ' + JSON.stringify(row))
+					// // console.log('result stuff: ' + JSON.stringify(results));
+					// // console.log('row stuff: ' + JSON.stringify(row))
 					if (!results || results.length < 1) {
-						console.log('No matchup exists for: ' + row.league_id);
+						// console.log('No matchup exists for: ' + row.league_id);
 						errorMessage = 'No matchup exist.';
 						return callback(errorMessage);
 					}
 					row['matchup_id'] = results[0].matchup_id;
-					// console.log(row);
+					// // console.log(row);
 					return callback();
 				});
 			}, function (err) {
@@ -421,7 +421,7 @@ router.post('/populateLeagueResults', loginAuth.isAuthenticated, function (req, 
 
 			var statement = 'REPLACE INTO addy_ai_football.results SET ?';
 			async.each(workingLeaguesData, function (row, callback) {
-				// console.log(teamStatLine);
+				// // console.log(teamStatLine);
 				delete row.league_id;
 				delete row.espn_id;
 				connection.query(statement, row, function (err) {
