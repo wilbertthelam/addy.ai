@@ -190,7 +190,7 @@ const AddLeague = React.createClass({
 					success: function (data) {
 						this.setState({
 							displayLoader: false
-						}); 
+						});
 						console.log(JSON.stringify(data));
 						// if successfully logged in, open dashboard, else redirect to login
 						if (data.execSuccess === false) {
@@ -212,7 +212,7 @@ const AddLeague = React.createClass({
 											leagueId: data2.data[0].league_id,
 											leagueName: data2.data[0].league_name
 										});
-									},
+									}.bind(this),
 									error: function (status, err) {
 										console.error(status, err.toString());
 										this.setState({
@@ -249,7 +249,7 @@ const AddLeague = React.createClass({
 							});
 							// place option for the league to show up below
 						}
-					},
+					}.bind(this),
 					error: function (status, err) {
 						this.setState({
 							displayLoader: false

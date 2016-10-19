@@ -36,14 +36,14 @@ module.exports = {
 				NODE_ENV: JSON.stringify('production'),
 			}
 		}),
-		new webpack.optimize.UglifyJsPlugin({
-		    compress: {
-		        warnings: false,
-		        drop_console: true
-		    },
-		    comments: false,
-		    sourceMap: false
-		})
+		// new webpack.optimize.UglifyJsPlugin({
+		//     compress: {
+		//         warnings: false,
+		//         drop_console: true
+		//     },
+		//     comments: false,
+		//     sourceMap: false
+		// })
 	],
 	module: {
 		noParse: [
