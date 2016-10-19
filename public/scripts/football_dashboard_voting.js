@@ -9,10 +9,7 @@ Contains components for the Dashboard's leaderboard section
 import React from 'react';
 import $ from 'jquery';
 import { Button, ButtonToolbar, ButtonGroup, Popover, Overlay } from 'react-bootstrap';
-import io from 'socket.io-client';
-
-// TODO: BRING THIS TO BE DYNAMIC
-const socket = io.connect('http://localhost:8080');
+import { socket } from './football_socket.js';
 
 // =========================================
 // ROUTER CONTAINER FOR THE VOTING SECTION

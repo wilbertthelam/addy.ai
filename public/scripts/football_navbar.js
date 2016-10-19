@@ -10,10 +10,7 @@ import React from 'react';
 import $ from 'jquery';
 import { Link } from 'react-router';
 import { Collapse } from 'react-bootstrap';
-import io from 'socket.io-client';
-
-// TODO: BRING THIS TO BE DYNAMIC
-const socket = io.connect('http://localhost:8080');
+import { socket } from './football_socket.js';
 
 // =========================================
 // NAVIGATION BAR ON THE SIDE
