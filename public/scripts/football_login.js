@@ -46,24 +46,42 @@ const LoginContainer = React.createClass({
 						<h2><span className="glyphicon glyphicon-menu-right" aria-hidden="true"></span> FAQ</h2>
 						<p className="bold">
 							<span className="glyphicon glyphicon-menu-down" aria-hidden="true"></span>
-								&nbsp;Why is my league not listed?
+							&nbsp;
+							Why is my league not listed?
 						</p>
 						<p>
-							Some leagues aren't listed yet in our database, so you can add your league by simply pasting any URL from your ESPN league page (any page works). 
-							Just make sure you're in the league page and not on the general ESPN site or it'll be difficult for us to get the league information. 
+							Some leagues aren't listed yet in our database,
+							so you can add your league by simply pasting any URL
+							from your ESPN league page (any page works).
+							Just make sure you're in the league page and
+							not on the general ESPN site or it'll be difficult
+							for us to get the league information.
 						</p>
-						<p className="bold"><span className="glyphicon glyphicon-menu-down" aria-hidden="true"></span> Why won't my league load after I've added it?</p>
+						<p className="bold">
+							<span className="glyphicon glyphicon-menu-down" aria-hidden="true"></span>
+							&nbsp;
+							Why won't my league load after I've added it?
+						</p>
 						<p>
-							The only leagues compatible right now are head-to-head matchups from ESPN fantasy football. 
-							Secondly, check with your league manager to see if your league is current set to private. 
-							Unforunately, addy.ai Football only works with public leagues (ask your LM to change it under LM settings).
+							The only leagues compatible right now are head-to-head
+							matchups from ESPN fantasy football.
+							Secondly, check with your league manager to see if your
+							league is current set to private.
+							Unforunately, addy.ai Football only works with public leagues
+							(ask your LM to change it under LM settings).
 						</p>
-
 					</div>
 
 					<div className="col-md-4">
-						<h2><span className="glyphicon glyphicon-menu-right" aria-hidden="true"></span> Need more help?</h2>
-						<p>Email wilbertthelam@gmail.com for more help, or krestofur@gmail.com for career opportunities.</p>
+						<h2>
+							<span className="glyphicon glyphicon-menu-right" aria-hidden="true"></span>
+							&nbsp;
+							Need more help?
+						</h2>
+						<p>
+							Email wilbertthelam@gmail.com for more help, or krestofur@gmail.com
+							for career opportunities.
+						</p>
 					</div>
 				</div>
 			</div>
@@ -120,8 +138,8 @@ const LoginBox = React.createClass({
 const LoginForm = React.createClass({
 	getInitialState: function () {
 		return {
-			email: '',
-			password: '',
+			email: 'wilbertthelam@gmail.com',
+			password: 'wilbert',
 			warnings: {
 				notExist: false,
 				networkDown: false,

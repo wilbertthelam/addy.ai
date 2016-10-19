@@ -12,7 +12,7 @@ import { Button, ButtonToolbar, ButtonGroup, Popover, Overlay } from 'react-boot
 import io from 'socket.io-client';
 
 // TODO: BRING THIS TO BE DYNAMIC
-const socket = io.connect('http://www.addyai.me:8080');
+const socket = io.connect('http://localhost:8080');
 
 // =========================================
 // ROUTER CONTAINER FOR THE VOTING SECTION
@@ -90,7 +90,7 @@ const VotingContainer = React.createClass({
 					this.context.router.push('/football/login');
 				}
 			}.bind(this),
-			error: function (status) {
+			error: function () {
 				this.context.router.push('/football/login');
 			}.bind(this)
 		});
@@ -256,8 +256,10 @@ const MatchupNode = React.createClass({
 						if (!data.execSuccess) {
 							console.log('Failed to update');
 						} else {
-							this.setState({ winner: winningTeam }, this._updateActiveClasses);
-							this.updateNotifications();
+							this.setState({
+								winner: winningTeam
+							}, this._updateActiveClasses);
+							this._updateNotifications();
 						}
 						console.log('successfully updated vote!');
 					}.bind(this),
@@ -269,7 +271,7 @@ const MatchupNode = React.createClass({
 			}
 		}
 	},
-	updateNotifications: function () {
+	_updateNotifications: function () {
 		socket.emit('voteNotif', { userId: this.props.userId, leagueId: this.props.data.league_id });
 	},
 	render: function () {

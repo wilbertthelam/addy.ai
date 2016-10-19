@@ -8,7 +8,7 @@ Contains components for the Dashboard
 
 import React from 'react';
 import $ from 'jquery';
-import {Nav, NavItem, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Nav, NavItem, OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 
 // ============================================
@@ -111,7 +111,7 @@ ContentBox.contextTypes = {
 };
 
 const tooltip = (
- 	<Tooltip id="tooltip">Leave league</Tooltip>
+	<Tooltip id="tooltip">Leave league</Tooltip>
 );
 
 // Component that displays the league name

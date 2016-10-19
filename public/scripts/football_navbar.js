@@ -13,7 +13,7 @@ import { Collapse } from 'react-bootstrap';
 import io from 'socket.io-client';
 
 // TODO: BRING THIS TO BE DYNAMIC
-const socket = io.connect('http://www.addyai.me:8080');
+const socket = io.connect('http://localhost:8080');
 
 // =========================================
 // NAVIGATION BAR ON THE SIDE
@@ -21,7 +21,7 @@ const socket = io.connect('http://www.addyai.me:8080');
 const NavBar = React.createClass({
 	getInitialState: function () {
 		return {
-			activeLeagueId: this.props.activeLeagueId,
+			activeLeagueId: '',
 			open: true,
 			userId: ''
 		};
@@ -166,7 +166,6 @@ const LeagueList = React.createClass({
 			success: function (data) {
 				console.log(JSON.stringify(data));
 				// if successfully logged in, open dashboard, else redirect to login
-
 				this.setState({ data: data.data });
 			}.bind(this),
 			error: function (status, err) {
@@ -226,8 +225,8 @@ const LeagueNode = React.createClass({
 		socket.emit('voteNotif', { leagueId: this.props.leagueId, userId: this.props.userId });
 	},
 	componentWillReceiveProps: function (nextProps) {
-		this.setState({ activeClass: nextProps.activeClass });
 		socket.on('voteNotif', this._getNotifStatus);
+		this.setState({ activeClass: nextProps.activeClass });
 	},
 	_getNotifStatus: function (data) {
 		if (data.leagueId === this.props.leagueId) {
@@ -254,9 +253,13 @@ const LeagueNode = React.createClass({
 	}
 });
 
-const NotificationIcon = (
-	<span className="glyphicon glyphicon-ok league-filled" aria-hidden="true"></span>
-);
+const NotificationIcon = React.createClass({
+	render: function () {
+		return (
+			<span className="glyphicon glyphicon-ok league-filled" aria-hidden="true"></span>
+		);
+	}
+});
 
 module.exports = {
 	NavBar: NavBar,
