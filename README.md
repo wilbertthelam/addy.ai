@@ -1,11 +1,28 @@
 # addy.ai
-Automated fantasy power rankings for ESPN fantasy sites
+League Pick'em and automated fantasy power rankings for ESPN fantasy football and baseball.
 
-URL (test version) : <a href="http://www.addyai.me">http://www.addyai.me</a>
+URL: <a href="http://www.addyai.me">http://www.addyai.me</a>
 
 <b>Contributors:</b> David Lee, Addison Wright, Wilbert Lam<br>
 
-<h2>Features:</h2>
+<h2>Football features:</h2>
+<ul>
+  <li>Vote on any public ESPN league</li>
+  <li>See past and current voting results</li>
+  <li>Compare voting success against other users</li>
+  <li>Live notifications for leagues that you've filled out</li>
+</ul>
+
+<h2>Tech stack:</h2>
+<ul>
+  <li>Node.JS (Express)</li>
+  <li>ReactJS</li>
+  <li>MySQL (AWS/Heroku)</li>
+  <li>Python</li>
+  <li>Webpack</li>
+</ul>
+
+<h2>Baseball Features:</h2>
 <ul>
   <li>Custom news articles and publishing</li>
   <li>Weekly team stats</li>
@@ -13,18 +30,6 @@ URL (test version) : <a href="http://www.addyai.me">http://www.addyai.me</a>
   <li>Weekly MVP player</li>
   <li>Top team power rankings</li>
   <li>Weekly matchup scores (live)</li>
-</ul>
-
-<h2>Planned features:</h2>
-<ul>
-  <li>No refresh updates (front end)</li>
-  <li>Player profiles</li>
-  <li>Weekly Team profiles</li>
-  <li>Player images</li>
-  <li>Trends</li>
-  <li>Comments</li>
-  <li>Player recommender</li>
-  <li>Player comparator</li>
 </ul>
 
 <h2>Getting server running:</h2>
