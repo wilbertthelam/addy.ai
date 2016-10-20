@@ -43,6 +43,7 @@ body {
 	min-height: 450px;
 	padding-top: 90px;
 	margin-top: -23px;
+	padding-bottom: 10px;
 	/*border: 3px solid black;*/
 }
 
@@ -140,15 +141,77 @@ body {
 
 .matchup {
 	width: 100%;
-	padding: 20px;
+	padding-top: 0px;
+	padding-bottom: 0px;
 	margin-bottom: 10px;
 }
 
 .vs {
-	font-size: 30px;
-	vertical-align: bottom;
+	vertical-align: middle;
 	text-align: center;
-	margin-top: 10px;
+	margin-top: 27px;
+	/*display: inline-block;*/
+	/*border: 1px black solid;*/
+}
+
+.vs span {
+	font-size: 2em;
+	text-align: left;
+	font-weight: 900;
+	/*border: 1px black solid;*/
+}
+.expand-button span {
+	font-size: 26px;
+	text-align: left;
+	/*border: 1px black solid;*/
+}
+
+.expand-button {
+	padding-top: 10px;
+	display: inline-block;
+}
+
+.matchup-details-container {
+	padding-top: 0px;
+	margin-top: 0px;
+}
+
+.matchup-details-container .team {
+	padding-top: 0px;
+	/*border: 1px black solid;*/
+}
+
+.matchup-details-container ul {
+	list-style-type: none;
+	text-align: left;
+	padding: 0px;
+}
+
+.matchup-details-container ul li {
+	margin: 0px;
+
+}
+
+.matchup-details-container .team {
+	padding: 0px;
+	margin-left: 15px;
+	font-size: 0.9em;
+}
+
+.left-icon-container {
+	padding: 10px;
+	margin-top: 8px;
+}
+
+.left-icon-container:hover {
+	cursor: pointer;
+	color: black;
+}
+
+.supporters-label {
+	font-weight: bold;
+	font-size: 1.2em;
+	color: #7072E3;
 }
 
 .owner-name {
@@ -161,7 +224,7 @@ body {
 }
 
 .team {
-	padding: 0px;
+	padding: 20px;
 }
 
 .team:hover {
@@ -261,7 +324,7 @@ body {
 }
 
 .red {
-	color: red;
+	color: crimson;
 }
 
 .green {
@@ -293,11 +356,13 @@ body {
 .remove-league-icon {
 	/*border: 1px solid black;*/
 	vertical-align: bottom;
+	opacity: .4;
 }
 
 .remove-league-icon:hover {
 	color: maroon;
 	text-decoration: underline;
+	opacity: 1;
 }
 
 .league-submit: {

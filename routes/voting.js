@@ -442,4 +442,27 @@ router.get('/leaderboardByWeek', function (req, res) {
 });
 
 
+router.get('/matchupdetails', function (req, res) {
+	var statement = 'SELECT v.*, u.email, u.first_name, u.last_name, m.team_id1, m.team_id2 ' +
+		'FROM addy_ai_football.votes v, addy_ai_football.users u, addy_ai_football.matchups m ' +
+		'WHERE u.user_id = v.user_id AND v.matchup_id = m.matchup_id AND v.matchup_id = ? ' +
+		'ORDER BY v.create_time;';
+
+	connection.query(statement, [req.query.matchupId], function (err, results) {
+		if (err) {
+			return res.json({
+				execSuccess: false,
+				message: 'Cannot get matchup details',
+				error: err
+			});
+		}
+
+		return res.json({
+			execSuccess: true,
+			message: 'Matchup data successfully retrieved.',
+			data: results
+		});
+	});
+});
+
 module.exports = router;
