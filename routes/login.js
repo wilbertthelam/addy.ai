@@ -9,9 +9,29 @@ var connection = db;
 
 var loginAuth = require('./utilities/loginAuthenticationMiddleware.js');
 
+var crypto = require('crypto');
+var algorithm = 'aes-256-ctr';
+var cryptoPassword = 'football';
+
+function _encryptPassword(password) {
+	var cipher = crypto.createCipher(algorithm, cryptoPassword);
+	var crypted = cipher.update(password, 'utf8', 'hex');
+	crypted += cipher.final('hex');
+	return crypted;
+}
+
+router.get('/test', function (req, res) {
+	return res.json(_encryptPassword(req.query.password));
+});
+
 // helper to check if user is logged in
-function _checkUserLogin(email, password, callback) {
+function _checkUserLogin(email, passwordPlain, callback) {
+	console.log(passwordPlain);
 	var statement = 'SELECT * FROM addy_ai_football.users WHERE email = ? AND password = ?;';
+
+	var password = _encryptPassword(passwordPlain);
+
+	console.log(password.toString());
 	connection.query(statement, [email, password], function (err, results) {
 		// // console.log('Login result: ' + JSON.stringify(results));
 		if (err) {
@@ -107,11 +127,11 @@ router.post('/signup', function (req, res) {
 	// if not, then create new user
 
 	var email = req.body.email.toLowerCase();
-	var password = req.body.password;
+	var passwordPlain = req.body.password;
 	var firstName = req.body.firstName.toLowerCase();
 	var lastName = req.body.lastName.toLowerCase();
 
-	if (email === '' || password === '' || firstName === '' || lastName === '') {
+	if (email === '' || passwordPlain === '' || firstName === '' || lastName === '') {
 		return res.json({
 			execSuccess: false,
 			message: 'One of the fields is empty.'
@@ -119,6 +139,8 @@ router.post('/signup', function (req, res) {
 	}
 
 	var userId;
+
+	var password = _encryptPassword(passwordPlain);
 
 	// check to see if email is free
 
