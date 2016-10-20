@@ -113,7 +113,7 @@ const LeagueNode = React.createClass({
 				} else {
 					console.log('succesfully added');
 					this.context.router.push('/football/dashboard/leagues');
-					// this.props.getLeagueList();
+					this.props.getLeagueList();
 				}
 			}.bind(this),
 			error: function (status, err) {
