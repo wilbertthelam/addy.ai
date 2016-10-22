@@ -198,4 +198,4 @@ CREATE TABLE `time` (
   PRIMARY KEY (`time_id`)
 );
 
-INSERT INTO `league_voting_status` VALUES(1, 2016, 1);
+INSERT INTO `league_voting_status` VALUES(1, 4, 2016);

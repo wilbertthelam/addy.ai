@@ -20,10 +20,6 @@ function _encryptPassword(password) {
 	return crypted;
 }
 
-router.get('/test', function (req, res) {
-	return res.json(_encryptPassword(req.query.password));
-});
-
 // helper to check if user is logged in
 function _checkUserLogin(email, passwordPlain, callback) {
 	console.log(passwordPlain);
