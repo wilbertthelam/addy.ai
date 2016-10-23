@@ -27,7 +27,10 @@ const ProfileContainer = React.createClass({
 				>
 					<div className="col-md-12">
 						<div className="">
-							<div className="league-header">Profile</div>
+							<div className="league-header">
+								<span>Profile </span>
+								<EditProfileButton />
+							</div>
 						</div>
 					</div>
 
@@ -140,9 +143,6 @@ const UserInfo = React.createClass({
 						{this.state.createTime}
 					</span>
 				</div>
-				<div>
-					<EditProfileButton />
-				</div>
 			</div>
 		);
 	}
@@ -166,7 +166,7 @@ const EditProfileButton = React.createClass({
 	},
 	render: function () {
 		return (
-			<div>
+			<span>
 				<span className="edit-profile-button red" onClick={() => this._open()}>
 					<span className="glyphicon glyphicon-cog" aria-hidden="true"></span> Edit profile
 				</span>
@@ -175,7 +175,7 @@ const EditProfileButton = React.createClass({
 					showModal={this.state.showModal}
 					closeModal={this._close}
 				/>
-			</div>
+			</span>
 		);
 	}
 });
@@ -208,7 +208,10 @@ const PasswordChangeModal = React.createClass({
 const PasswordChangeBox = React.createClass({
 	getInitialState: function () {
 		return {
-			values: {},
+			values: {
+				passwordOld: '',
+				passwordNew: ''
+			},
 			message: ''
 		};
 	},
@@ -230,13 +233,14 @@ const PasswordChangeBox = React.createClass({
 			},
 			cache: false,
 			success: function (data) {
-				// console.log(JSON.stringify(data));
 				let message = '';
 				if (!data.execSuccess) {
 					if (data.code === 'ERR_NETWORK') {
 						message = 'Uh oh, looks like the network\'s down.';
 					} else if (data.code === 'ERR_PASS_NOT_MATCH') {
 						message = 'The old password doesn\'t match.';
+					} else if (data.code === 'ERR_EMPTY') {
+						message = 'The password can\'t be empty';
 					} else {
 						message = 'Hm some weird unknown error here, sorry...';
 					}
@@ -325,7 +329,7 @@ const OverallRecords = React.createClass({
 			success: function (data) {
 				// console.log(JSON.stringify(data));
 				this.setState({
-					data: data.data 
+					data: data.data
 				});
 			}.bind(this),
 			error: function (status, err) {

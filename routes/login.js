@@ -236,6 +236,14 @@ router.post('/password-change', loginAuth.isAuthenticated, function (req, res) {
 	var oldPassword = _encryptPassword(req.body.oldPassword);
 	var newPassword = req.body.newPassword;
 
+	if (newPassword === '' || newPassword === null) {
+		return res.json({
+			execSuccess: false,
+			message: 'New password empty.',
+			code: 'ERR_EMPTY'
+		});
+	}
+
 	async.series({
 		checkOldPasswordMatch: function (cb) {
 			var statement = 'SELECT * FROM addy_ai_football.users WHERE user_id = ? AND password = ?;';

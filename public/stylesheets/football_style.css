@@ -395,6 +395,11 @@ tbody tr:hover {
 	margin-left: 10px;
 }
 
+.edit-profile-button {
+	font-size: 0.3em;
+	font-weight: 400;
+}
+
 .edit-profile-button:hover {
 	cursor: pointer;
 	text-decoration: underline;
