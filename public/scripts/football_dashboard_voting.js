@@ -8,7 +8,8 @@ Contains components for the Dashboard's leaderboard section
 
 import React from 'react';
 import $ from 'jquery';
-import { Button, ButtonToolbar, ButtonGroup, Collapse, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Button, ButtonToolbar, ButtonGroup,
+	Collapse, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { socket } from './football_socket.js';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 

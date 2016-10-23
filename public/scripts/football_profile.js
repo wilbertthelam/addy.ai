@@ -5,10 +5,11 @@ football_profile.js
 Contains components for the profile page
 
 */
-
+import * as Input from './components/input.js';
 import React from 'react';
 import $ from 'jquery';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+import { Modal, Button } from 'react-bootstrap';
 const moment = require('moment');
 
 // =========================================
@@ -20,9 +21,9 @@ const ProfileContainer = React.createClass({
 		return (
 			<div>
 				<ReactCSSTransitionGroup
-						transitionName="example"
-						transitionAppear={true}
-						transitionAppearTimeout={500}
+					transitionName="example"
+					transitionAppear={true}
+					transitionAppearTimeout={500}
 				>
 					<div className="col-md-12">
 						<div className="">
@@ -100,7 +101,7 @@ const UserInfo = React.createClass({
 				// console.log(JSON.stringify(data));
 				this.setState({
 					data: data.data[0],
-					createTime: this.formatDate(data.data[0].create_time)
+					createTime: this._formatDate(data.data[0].create_time)
 				});
 			}.bind(this),
 			error: function (status, err) {
@@ -109,10 +110,10 @@ const UserInfo = React.createClass({
 			}.bind(this)
 		});
 	},
-	capitalize: function (name) {
+	_capitalize: function (name) {
 		return name.charAt(0).toUpperCase() + name.slice(1);
 	},
-	formatDate: function (date) {
+	_formatDate: function (date) {
 		const t = date.split(/[- : T]/);
 		const d = new Date(t[0], t[1] - 1, t[2]);
 		return moment(d).format('MMMM Do YYYY');
@@ -123,8 +124,8 @@ const UserInfo = React.createClass({
 				<div>
 					Name: <br />
 					<span className="bold">
-						{this.capitalize(this.state.data.first_name)}
-						&nbsp;{this.capitalize(this.state.data.last_name)}
+						{this._capitalize(this.state.data.first_name)}
+						&nbsp;{this._capitalize(this.state.data.last_name)}
 					</span>
 				</div>
 				<div>
@@ -139,10 +140,171 @@ const UserInfo = React.createClass({
 						{this.state.createTime}
 					</span>
 				</div>
+				<div>
+					<EditProfileButton />
+				</div>
 			</div>
 		);
 	}
 });
+
+const EditProfileButton = React.createClass({
+	getInitialState: function () {
+		return {
+			showModal: false
+		};
+	},
+	_open: function () {
+		this.setState({
+			showModal: true
+		});
+	},
+	_close: function () {
+		this.setState({
+			showModal: false
+		});
+	},
+	render: function () {
+		return (
+			<div>
+				<span className="edit-profile-button red" onClick={() => this._open()}>
+					<span className="glyphicon glyphicon-cog" aria-hidden="true"></span> Edit profile
+				</span>
+
+				<PasswordChangeModal
+					showModal={this.state.showModal}
+					closeModal={this._close}
+				/>
+			</div>
+		);
+	}
+});
+
+const PasswordChangeModal = React.createClass({
+	getInitialState: function () {
+		return {
+			showModal: this.props.showModal
+		};
+	},
+	componentWillReceiveProps: function (nextProps) {
+		this.setState({
+			showModal: nextProps.showModal
+		});
+	},
+	render: function () {
+		return (
+			<Modal
+				show={this.state.showModal}
+				onHide={this.props.closeModal}
+			>
+				<Modal.Body>
+					<PasswordChangeBox />
+				</Modal.Body>
+			</Modal>
+		);
+	}
+});
+
+const PasswordChangeBox = React.createClass({
+	getInitialState: function () {
+		return {
+			values: {},
+			message: ''
+		};
+	},
+	_fieldValues: function (name, value) {
+		const stateObj = this.state.values;
+		stateObj[name] = value;
+		this.setState({
+			values: stateObj
+		});
+	},
+	_changePassword: function (oldPassword, newPassword) {
+		$.ajax({
+			type: 'POST',
+			url: '/football/login/password-change',
+			dataType: 'json',
+			data: {
+				oldPassword: oldPassword,
+				newPassword: newPassword
+			},
+			cache: false,
+			success: function (data) {
+				// console.log(JSON.stringify(data));
+				let message = '';
+				if (!data.execSuccess) {
+					if (data.code === 'ERR_NETWORK') {
+						message = 'Uh oh, looks like the network\'s down.';
+					} else if (data.code === 'ERR_PASS_NOT_MATCH') {
+						message = 'The old password doesn\'t match.';
+					} else {
+						message = 'Hm some weird unknown error here, sorry...';
+					}
+					this.setState({
+						message: message
+					});
+				} else {
+					this.setState({
+						message: 'Password updated!'
+					});
+				}
+			}.bind(this),
+			error: function (status, err) {
+				console.error(status, err.toString());
+				this.context.router.push('/football/login');
+			}.bind(this)
+		});
+	},
+	render: function () {
+		return (
+			<div>
+				<div className="small-header">
+					Change password
+				</div>
+				<form className="password-change">
+					<p>
+						<Input.Input
+							type="password"
+							name="passwordOld"
+							placeholder="Old password"
+							className="form-control"
+							fieldChange={this._fieldValues}
+						/>
+					</p>
+					<p>
+						<Input.Input
+							type="password"
+							name="passwordNew"
+							placeholder="New password"
+							className="form-control"
+							fieldChange={this._fieldValues}
+						/>
+					</p>
+					<p>
+						<Button
+							bsStyle="primary"
+							onClick={() => this._changePassword(
+								this.state.values.passwordOld,
+								this.state.values.passwordNew
+							)}
+						>
+							Change
+						</Button>
+
+						<span className="red">
+							{this.state.message}
+						</span>
+					</p>
+				</form>
+			</div>
+		);
+	}
+});
+
+PasswordChangeBox.contextTypes = {
+	router: React.PropTypes.object
+};
+
 
 const OverallRecords = React.createClass({
 	getInitialState: function () {

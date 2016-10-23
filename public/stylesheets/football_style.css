@@ -390,3 +390,12 @@ tbody tr:hover {
 	display: inline-block;
 	margin-right: 50px;
 }
+
+.password-change span {
+	margin-left: 10px;
+}
+
+.edit-profile-button:hover {
+	cursor: pointer;
+	text-decoration: underline;
+}

@@ -226,5 +226,67 @@ router.post('/signup', function (req, res) {
 	});
 });
 
+/* POST to change password
+	Get userId
+	Check if userId old password matches
+	If so, then add in new password
+	Else return bad password error
+*/
+router.post('/password-change', loginAuth.isAuthenticated, function (req, res) {
+	var oldPassword = _encryptPassword(req.body.oldPassword);
+	var newPassword = req.body.newPassword;
+
+	async.series({
+		checkOldPasswordMatch: function (cb) {
+			var statement = 'SELECT * FROM addy_ai_football.users WHERE user_id = ? AND password = ?;';
+			connection.query(statement, [req.session.userId, oldPassword], function (err, results) {
+				if (err) {
+					return res.json({
+						execSuccess: false,
+						message: 'Could not get rows.',
+						error: err,
+						code: 'ERR_NETWORK'
+					});
+				}
+
+				if (results.length !== 1) {
+					// console.log('User email taken already');
+					return res.json({
+						execSuccess: false,
+						message: 'Incorrect password.',
+						code: 'ERR_PASS_NOT_MATCH',
+						data: []
+					});
+				}
+				// console.log('User email available');
+				return cb(null, 'Old password doesn\'t matche.');
+			});
+		},
+		updatePassword: function () {
+			var statement = 'UPDATE addy_ai_football.users SET password = ? WHERE user_id = ?;';
+			var params = [
+				_encryptPassword(newPassword),
+				req.session.userId
+			];
+
+			connection.query(statement, params, function (err) {
+				if (err) {
+					return res.json({
+						execSuccess: false,
+						message: 'Could not update password',
+						error: err,
+						code: 'ERR_PASS_UPDATE_FAIL'
+					});
+				}
+				return res.json({
+					execSuccess: true,
+					message: 'Password successfully updated.',
+					data: []
+				});
+			});
+		}
+	});
+});
+
 
 module.exports = router;
