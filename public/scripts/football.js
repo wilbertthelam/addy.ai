@@ -20,7 +20,7 @@ const MainContainerPage = React.createClass({
 		return (
 			<div className="innerMainContainer">
 				<div>
-					<div className="pure-menu pure-menu-horizontal fixedBannerContainer">
+					<div className="pure-menu pure-menu-horizontal fixedBannerContainer fixed-banner-container">
 						<div id="menuContainer">
 							<ul className="pure-menu-list nav">
 
