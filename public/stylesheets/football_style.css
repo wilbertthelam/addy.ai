@@ -35,7 +35,7 @@ body {
 }
 
 .splash-image {
-	background: linear-gradient(rgba(255,255,255,.4), rgba(0,0,0,.5)), url('../media/richardsherman.jpg');
+	background: linear-gradient(rgba(255, 255, 255, 0.4), rgba(0, 0, 0, 0.5) 48.32%), url('../media/richardsherman.jpg');
 	background-size: cover;
 	background-repeat: no-repeat;
 	background-position: center;
@@ -54,20 +54,17 @@ body {
 
 .splash-description #splash-company {
 	vertical-align: bottom;
-	background-color: rgba(169,169,169,0.6);
 	font-size: 1em;
 	padding: 5px;
 }
 
 .splash-description #splash-football {
 	vertical-align: bottom;
-	background-color: rgba(169,169,169,0.6);
 	font-size: 1.5em;
 	padding: 5px;
 }
 
 .splash-description #splash-subtitle {
-	background-color: rgba(169,169,169,0.6);
 	font-size: 4em;
 	padding: 5px;
 }
