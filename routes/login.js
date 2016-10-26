@@ -22,12 +22,12 @@ function _encryptPassword(password) {
 
 // helper to check if user is logged in
 function _checkUserLogin(email, passwordPlain, callback) {
-	console.log(passwordPlain);
+	// console.log(passwordPlain);
 	var statement = 'SELECT * FROM addy_ai_football.users WHERE email = ? AND password = ?;';
 
 	var password = _encryptPassword(passwordPlain);
 
-	console.log(password.toString());
+	// console.log(password.toString());
 	connection.query(statement, [email, password], function (err, results) {
 		// // console.log('Login result: ' + JSON.stringify(results));
 		if (err) {

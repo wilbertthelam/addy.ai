@@ -2,6 +2,14 @@ body {
 	font-family: 'Roboto', sans-serif;
 }
 
+.btn {
+	border-radius: 0px;
+}
+
+.well {
+	border-radius: 0px;
+}
+
 .login-box {
 	padding: 0px;
 	background-color: rgba(169,169,169,0.9);
