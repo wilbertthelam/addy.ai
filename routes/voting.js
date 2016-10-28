@@ -261,20 +261,20 @@ router.post('/vote', loginAuth.isAuthenticated, leagueLock.isUnlocked(), functio
 
 /* GET cumulative leadeboard for a given league */
 router.get('/cumulativeLeaderboard', function (req, res) {
-	var statement = 'SELECT count(*) as wins, ' +
-			'(SELECT count(*) ' +
+	var statement = 'SELECT count(*) as number_of_votes, ' +
+			'IFNULL((SELECT count(*) ' +
 				'FROM addy_ai_football.votes v, addy_ai_football.matchups m2, ' +
 				'addy_ai_football.results r, addy_ai_football.users u2 ' +
-				'WHERE v.winning_team_id != r.winning_team_id ' +
+				'WHERE v.winning_team_id = r.winning_team_id ' +
 				'AND m2.matchup_id = v.matchup_id ' +
 				'AND v.matchup_id = r.matchup_id ' +
 				'AND u2.user_id = v.user_id ' +
 				'AND m2.week < ? ' +
-				'AND m2.league_id = ? ' +
-				'AND m2.year = ? ' +
+				'AND m2.league_id = m.league_id ' +
+				'AND m2.year = m.year ' +
 				'AND u2.user_id = u.user_id ' +
 				'GROUP BY v.user_id ' +
-				') as losses, ' +
+				'), 0) as wins, ' +
 			'v.user_id, ' +
 			'm.league_id, ' +
 			'm.year, ' +
@@ -283,21 +283,18 @@ router.get('/cumulativeLeaderboard', function (req, res) {
 			'u.email ' +
 		'FROM addy_ai_football.votes v, addy_ai_football.matchups m, ' +
 		'addy_ai_football.results r, addy_ai_football.users u ' +
-		'WHERE v.winning_team_id = r.winning_team_id ' +
-		'AND m.matchup_id = v.matchup_id ' +
+		'WHERE m.matchup_id = v.matchup_id ' +
 		'AND v.matchup_id = r.matchup_id ' +
 		'AND u.user_id = v.user_id ' +
 		'AND m.week < ? ' +
 		'AND m.league_id = ? ' +
 		'AND m.year = ? ' +
 		'GROUP BY v.user_id ' +
-		'ORDER BY wins DESC, losses ASC;';
+		'ORDER BY wins DESC;';
 
 	// input into query are (in order)
 	var params = [
 		gWeek,
-		req.query.leagueId,
-		req.query.year,
 		gWeek,
 		req.query.leagueId,
 		req.query.year
@@ -312,11 +309,12 @@ router.get('/cumulativeLeaderboard', function (req, res) {
 			});
 		}
 		// // console.log(JSON.stringify(results));
-		// calculate win percentage
+		// calculate win percentage and losses
 		for (var i = 0; i < results.length; i++) {
 			var result = results[i];
-			var winPercNum = Number(result.wins / (result.wins + result.losses));
+			var winPercNum = Number(result.wins / result.number_of_votes);
 			result['win_percentage'] = winPercNum.toPrecision(3);
+			result['losses'] = Number(result.number_of_votes - result.wins);
 		}
 		return res.json({
 			execSuccess: true,
@@ -328,11 +326,11 @@ router.get('/cumulativeLeaderboard', function (req, res) {
 
 /* GET to find leaderboard results for the logged in user */
 router.get('/leaderboardForUser', function (req, res) {
-	var statement = 'SELECT count(*) as wins, ' +
-			'(SELECT count(*) FROM addy_ai_football.votes v, addy_ai_football.matchups m2, ' +
+	var statement = 'SELECT count(*) as number_of_votes, ' +
+			'IFNULL((SELECT count(*) FROM addy_ai_football.votes v, addy_ai_football.matchups m2, ' +
 				'addy_ai_football.results r, addy_ai_football.leagues l, ' +
 				'addy_ai_football.user_leagues u2 ' +
-				'WHERE v.winning_team_id != r.winning_team_id ' +
+				'WHERE v.winning_team_id = r.winning_team_id ' +
 				'AND m2.matchup_id = v.matchup_id ' +
 				'AND v.matchup_id = r.matchup_id ' +
 				'AND m2.week < ? ' +
@@ -342,15 +340,14 @@ router.get('/leaderboardForUser', function (req, res) {
 				'AND v.user_id = u2.user_id ' +
 				'AND u2.league_id = m2.league_id ' +
 				'AND u.league_id = u2.league_id ' +
-				'GROUP BY m2.league_id and m2.year) as losses, ' +
+				'GROUP BY m2.league_id and m2.year), 0) as wins, ' +
 			'v.user_id, ' +
 			'm.league_id, ' +
 			'm.year, ' +
 			'l.league_name ' +
 		'FROM addy_ai_football.votes v, addy_ai_football.matchups m, addy_ai_football.results r, ' +
 		'addy_ai_football.leagues l, addy_ai_football.user_leagues u ' +
-		'WHERE v.winning_team_id = r.winning_team_id ' +
-		'AND m.matchup_id = v.matchup_id ' +
+		'WHERE m.matchup_id = v.matchup_id ' +
 		'AND v.matchup_id = r.matchup_id ' +
 		'AND m.week < ? ' +
 		'AND m.league_id = l.league_id ' +
@@ -359,7 +356,7 @@ router.get('/leaderboardForUser', function (req, res) {
 		'AND v.user_id = u.user_id ' +
 		'AND u.league_id = m.league_id ' +
 		'GROUP BY m.league_id ' +
-		'ORDER BY wins DESC, losses ASC;';
+		'ORDER BY wins DESC;';
 
 	// input into query are (in order)
 	var params = [
@@ -381,8 +378,9 @@ router.get('/leaderboardForUser', function (req, res) {
 		// console.log(JSON.stringify(results));
 		for (var i = 0; i < results.length; i++) {
 			var result = results[i];
-			var winPercNum = Number(result.wins / (result.wins + result.losses));
+			var winPercNum = Number(result.wins / result.number_of_votes);
 			result['win_percentage'] = winPercNum.toPrecision(3);
+			result['losses'] = Number(result.number_of_votes - result.wins);
 		}
 		return res.json({
 			execSuccess: true,
@@ -394,11 +392,13 @@ router.get('/leaderboardForUser', function (req, res) {
 
 /* GET to find leaderboard results for a league in a given week */
 router.get('/leaderboardByWeek', function (req, res) {
-	var statement = 'SELECT count(*) as wins, ' +
-			'(SELECT count(*) FROM addy_ai_football.matchups m2 WHERE m2.league_id = m.league_id ' +
-				'AND m2.week = ?) - count(*) as losses, ' +
-			'count(*) / (SELECT count(*) FROM addy_ai_football.matchups m2 ' +
-				'WHERE m2.league_id = m.league_id AND m2.week = ?) as win_percentage, ' +
+	var statement = 'SELECT count(*) as number_of_votes, ' +
+			'IFNULL((SELECT count(*) FROM addy_ai_football.votes v2, addy_ai_football.matchups m2, ' +
+				'addy_ai_football.results r2, addy_ai_football.users u2 ' +
+				'WHERE v2.matchup_id = r2.matchup_id AND m2.matchup_id = v2.matchup_id ' +
+				'AND u2.user_id = v2.user_id AND v2.user_id = v.user_id AND ' +
+                'm2.week = m.week AND m2.league_id = m.league_id AND m2.year = m.year ' +
+                'AND v2.winning_team_id = r2.winning_team_id), 0) as wins,' +
 			'v.user_id, ' +
 			'm.league_id, ' +
 			'm.year, ' +
@@ -407,19 +407,17 @@ router.get('/leaderboardByWeek', function (req, res) {
 			'u.email ' +
 		'FROM addy_ai_football.votes v, addy_ai_football.matchups m, ' +
 			'addy_ai_football.results r, addy_ai_football.users u ' +
-		'WHERE v.winning_team_id = r.winning_team_id ' +
-		'AND m.matchup_id = v.matchup_id ' +
+		'WHERE m.matchup_id = v.matchup_id ' +
 		'AND v.matchup_id = r.matchup_id ' +
 		'AND u.user_id = v.user_id ' +
 		'AND m.week = ? ' +
 		'AND m.league_id = ? ' +
 		'AND m.year = ? ' +
 		'GROUP BY v.user_id ' +
-		'ORDER BY wins DESC, win_percentage DESC;';
+		'ORDER BY wins DESC;';
 
 	// input into query are (in order)
-	var params = [req.query.week,
-		req.query.week,
+	var params = [
 		req.query.week,
 		req.query.leagueId,
 		req.query.year
@@ -432,6 +430,15 @@ router.get('/leaderboardByWeek', function (req, res) {
 				error: err
 			});
 		}
+
+		// console.log(JSON.stringify(results));
+		for (var i = 0; i < results.length; i++) {
+			var result = results[i];
+			var winPercNum = Number(result.wins / result.number_of_votes);
+			result['win_percentage'] = winPercNum.toPrecision(3);
+			result['losses'] = Number(result.number_of_votes - result.wins);
+		}
+
 		// console.log(JSON.stringify(results));
 		return res.json({
 			execSuccess: true,
