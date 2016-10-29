@@ -179,6 +179,8 @@ const MatchupNode = React.createClass({
 			losingId: '',
 			selectClass: ['', ''],
 			activeClass: 'vote-selected',
+			teamId1: '',
+			teamId2: '',
 			actualResult: {
 				actualWinnerId: '',
 				actualLoserId: '',
@@ -224,7 +226,9 @@ const MatchupNode = React.createClass({
 			winner: winner,
 			winningId: data.winning_team_id,
 			losingId: data.losing_team_id,
-			matchupId: data.matchup_id
+			matchupId: data.matchup_id,
+			teamId1: data.team_id1,
+			teamId2: data.team_id2
 		});
 	},
 	_updateActiveClasses: function () {
@@ -291,6 +295,9 @@ const MatchupNode = React.createClass({
 			open: !this.state.open
 		});
 	},
+	_decorateScore: function (text) {
+		return '(' + text + ' pts)';
+	},
 	render: function () {
 		let leftBarIcon = (
 			<div className="result-icon">
@@ -307,6 +314,18 @@ const MatchupNode = React.createClass({
 				/>
 			);
 		}
+		let score1 = '';
+		let score2 = '';
+		if (this.props.currentWeek !== this.props.selectedWeek) {
+			if (this.state.actualResult.actualWinningId === this.state.teamId1) {
+				score1 = this._decorateScore(this.state.actualResult.actualWinningScore);
+				score2 = this._decorateScore(this.state.actualResult.actualLosingScore);
+			} else {
+				score1 = this._decorateScore(this.state.actualResult.actualLosingScore);
+				score2 = this._decorateScore(this.state.actualResult.actualWinningScore);
+			}
+		}
+
 		return (
 			<div className="container matchup well">
 				<OverlayTrigger placement="left" overlay={tooltip}>
@@ -319,7 +338,7 @@ const MatchupNode = React.createClass({
 					<div className="team" onClick={() => this._vote(0)}>
 						<div className={this.state.selectClass[0]}>
 							<div className="owner-name">{this.props.data.owner_name1}</div>
-							<div className="team-name">{this.props.data.team_name1}</div>
+							<div className="team-name">{score1} {this.props.data.team_name1}</div>
 						</div>
 					</div>
 				</div>
@@ -341,7 +360,7 @@ const MatchupNode = React.createClass({
 					<div className="team" onClick={() => this._vote(1)}>
 						<div className={this.state.selectClass[1]}>
 							<div className="owner-name">{this.props.data.owner_name2}</div>
-							<div className="team-name">{this.props.data.team_name2}</div>
+							<div className="team-name">{score2} {this.props.data.team_name2}</div>
 						</div>
 					</div>
 				</div>
@@ -449,7 +468,7 @@ const VotedFor = React.createClass({
 		return (
 			<div className="team">
 				<span className="supporters-label">
-					<span className="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
+					<span className="glyphicon glyphicon-thumbs-up bold" aria-hidden="true"></span>
 						&nbsp;{this.props.data.length} {this.props.data.length === 1 ? 'vote' : 'votes'}
 				</span>
 				<ul>

@@ -242,6 +242,16 @@ body {
 	color: black;
 }
 
+.team-score {
+	float: left;
+	font-size: 3em;
+	clear: bottom;
+}
+
+.team-details {
+	float: left;
+}
+
 .league-rows {
 	list-style: none;
 	padding: 3px;
