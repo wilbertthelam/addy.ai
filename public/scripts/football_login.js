@@ -14,9 +14,9 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 const LoginContainer = React.createClass({
 	render: function () {
 		return (
-			<div className="container">
-				<div className="col-md-12">
-					<div className="splash-image">
+			<div>
+				<div className="splash-image">
+					<div className="splash-inner">
 						<div className="col-md-6">
 							<ReactCSSTransitionGroup
 								transitionName="example"
@@ -28,79 +28,122 @@ const LoginContainer = React.createClass({
 						</div>
 
 						<div className="col-md-6">
-							<LoginBox />
+							<ReactCSSTransitionGroup
+								transitionName="example"
+								transitionAppear={true}
+								transitionAppearTimeout={500}
+							>
+								<LoginBox />
+							</ReactCSSTransitionGroup>
 						</div>
 					</div>
 				</div>
-
-				<ReactCSSTransitionGroup
-					transitionName="example"
-					transitionAppear={true}
-					transitionAppearTimeout={500}
-				>
+				<div className="container">
 					<div className="col-sm-12">
-						<div className="col-md-4">
-							<h2>
-								<span className="glyphicon glyphicon-menu-right" aria-hidden="true"></span>
-								&nbsp;
-								What's this junk?
-							</h2>
-							<p>
-								Do you have that friend who always thinks his team is gonna win?
-								Or that other team manager who thinks he's hot stuff?
-								addy.ai Football let's you vote on yours or someone elses weekly matchups
-								to prove who really knows their league best.
-								Just search up your league and vote!
-							</p>
-						</div>
-
-						<div className="col-md-4">
-							<h2>
-								<span className="glyphicon glyphicon-menu-right" aria-hidden="true"></span>
-								&nbsp;
-								FAQ
-							</h2>
-							<p className="bold">
-								<span className="glyphicon glyphicon-menu-down" aria-hidden="true"></span>
-								&nbsp;
-								Why is my league not listed?
-							</p>
-							<p>
-								Some leagues aren't listed yet in our database,
-								so you can add your league by simply pasting any URL
-								from your ESPN league page (any page works).
-								Just make sure you're in the league page and
-								not on the general ESPN site or it'll be difficult
-								for us to get the league information.
-							</p>
-							<p className="bold">
-								<span className="glyphicon glyphicon-menu-down" aria-hidden="true"></span>
-								&nbsp;
-								Why won't my league load after I've added it?
-							</p>
-							<p>
-								The only leagues compatible right now are head-to-head
-								matchups from ESPN fantasy football.
-								Secondly, check with your league manager to see if your
-								league is current set to private.
-								Unforunately, addy.ai Football only works with public leagues
-								(ask your LM to change it under LM settings).
-							</p>
-						</div>
-
-						<div className="col-md-4">
-							<h2>
-								<span className="glyphicon glyphicon-menu-right" aria-hidden="true"></span>
-								&nbsp;
-								Need more help?
-							</h2>
-							<p>
-								Email wilbertthelam@gmail.com for more help, or krestofur@gmail.com
-								for career opportunities.
-							</p>
-						</div>
+						<h1>What's this junk? It's 3 easy steps:</h1>
 					</div>
-				</ReactCSSTransitionGroup>
+
+					<div className="col-md-12">
+						<ReactCSSTransitionGroup
+								transitionName="example"
+								transitionAppear={true}
+								transitionAppearTimeout={500}
+							>
+							<div className="col-md-4">
+								<h2>
+									1. Find that league you're trashing
+								</h2>
+								<img src="../media/leagues_preview.png" alt="leagues_preview" />
+							</div>
+							<div className="col-md-4">
+								<h2>
+									2. Mock how your friends voted
+								</h2>
+								<img src="../media/voting_preview.png" alt="voting_preview" />
+							</div>
+
+							<div className="col-md-4">
+								<h2>
+									3. Gloat at the bottom feeders
+								</h2>
+								<img src="../media/leaderboard_preview.png" alt="leaderboard_preview" />
+							</div>
+						</ReactCSSTransitionGroup>
+					</div>
+
+					<div className="col-sm-12">
+						<h1>Not clear enough?</h1>
+					</div>
+
+					<ReactCSSTransitionGroup
+						transitionName="example"
+						transitionAppear={true}
+						transitionAppearTimeout={500}
+					>
+						<div className="col-sm-12">
+							<div className="col-md-4">
+								<h2>
+									<span className="glyphicon glyphicon-menu-right" aria-hidden="true"></span>
+									&nbsp;
+									More details please
+								</h2>
+								<p>
+									Do you have that friend who always thinks his team is gonna win?
+									Or that other team manager who thinks he's hot stuff?
+									addy.ai Football let's you vote on yours or someone elses weekly matchups
+									to prove who really knows their league best.
+									Just search up your league and vote!
+								</p>
+							</div>
+
+							<div className="col-md-4">
+								<h2>
+									<span className="glyphicon glyphicon-menu-right" aria-hidden="true"></span>
+									&nbsp;
+									FAQ
+								</h2>
+								<p className="bold">
+									<span className="glyphicon glyphicon-menu-down" aria-hidden="true"></span>
+									&nbsp;
+									Why is my league not listed?
+								</p>
+								<p>
+									Some leagues aren't listed yet in our database,
+									so you can add your league by simply pasting any URL
+									from your ESPN league page (any page works).
+									Just make sure you're in the league page and
+									not on the general ESPN site or it'll be difficult
+									for us to get the league information.
+								</p>
+								<p className="bold">
+									<span className="glyphicon glyphicon-menu-down" aria-hidden="true"></span>
+									&nbsp;
+									Why won't my league load after I've added it?
+								</p>
+								<p>
+									The only leagues compatible right now are head-to-head
+									matchups from ESPN fantasy football.
+									Secondly, check with your league manager to see if your
+									league is current set to private.
+									Unforunately, addy.ai Football only works with public leagues
+									(ask your LM to change it under LM settings).
+								</p>
+							</div>
+
+							<div className="col-md-4">
+								<h2>
+									<span className="glyphicon glyphicon-menu-right" aria-hidden="true"></span>
+									&nbsp;
+									Need more help?
+								</h2>
+								<p>
+									Email wilbertthelam@gmail.com for more help, or krestofur@gmail.com
+									for career opportunities.
+								</p>
+							</div>
+						</div>
+					</ReactCSSTransitionGroup>
+				</div>
 			</div>
 		);
 	}
@@ -110,9 +153,6 @@ const Splash = React.createClass({
 	render: function () {
 		return (
 			<div className="splash-description">
-				<div>
-					<span id="splash-company">addy.ai </span>
-				</div>
 				<div>
 					<span id="splash-subtitle">ESPN Fantasy Football League Pick'em</span>
 				</div>

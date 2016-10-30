@@ -1,9 +1,16 @@
 body {
 	font-family: 'Roboto', sans-serif;
+	padding: 0px;
+	margin: 0px;
 }
 
 .btn {
 	border-radius: 0px;
+}
+
+#container {
+	margin: 0px;
+	margin-top: 50px;
 }
 
 .well {
@@ -48,12 +55,34 @@ body {
 	background-repeat: no-repeat;
 	background-position: center;
 	width: 100%;
-	min-height: 450px;
-	padding-top: 90px;
+	min-height: 500px;
+	padding-top: 140px;
 	margin-top: -23px;
 	padding-bottom: 10px;
 	/*border: 3px solid black;*/
 }
+
+.splash-inner {
+	margin-left: auto;
+	margin-right: auto;
+	max-width: 1300px;
+}
+
+.homepage-row {
+
+}
+
+.container h1 {
+	font-weight: 400;
+	font-size: 3em;
+	padding-top: 30px;
+	padding-bottom: 30px;
+}
+
+.container h2 {
+	font-weight: 900;
+}
+
 
 .splash-description {
 	color: white;

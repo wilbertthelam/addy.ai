@@ -10,7 +10,7 @@ var mysql = require('mysql');
 
 // connection to production server (temp)
 var db = mysql.createConnection({
-  host     : 'addyai.ctibdyidax0w.us-west-2.rds.amazonaws.com',
+  host     : 'addyai.ckas2i3zelja.us-east-1.rds.amazonaws.com',
   port 	   : '3306',
   user     : 'addyaiadmin',
   password : 'addyaipassword',
