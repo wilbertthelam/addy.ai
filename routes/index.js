@@ -40,20 +40,20 @@ var topPlayersCache = [];
 // );
 
 
-for (var i = 1; i <= currentWeek; i++) {
-	// console.log('currentweek: ' + i);
-	if (!topPlayersCache[i] || !topPlayersCache[i][type]) {
-		if (!topPlayersCache[i]) {
-			topPlayersCache[i] = {};
-		}
-		cacheTopPlayers('batter', i, leagueId, seasonId, 'SS', 'HR', function() {
-			//console.log('Initial batter cache stored for week: ' + i);
-		});
-		cacheTopPlayers('pitcher', i, leagueId, seasonId, 'SP', 'K', function() {
-			//console.log('Initial pithcer cache stored for week: ' + i);
-		});
-	}
-}
+// for (var i = 1; i <= currentWeek; i++) {
+// 	// console.log('currentweek: ' + i);
+// 	if (!topPlayersCache[i] || !topPlayersCache[i][type]) {
+// 		if (!topPlayersCache[i]) {
+// 			topPlayersCache[i] = {};
+// 		}
+// 		cacheTopPlayers('batter', i, leagueId, seasonId, 'SS', 'HR', function() {
+// 			//console.log('Initial batter cache stored for week: ' + i);
+// 		});
+// 		cacheTopPlayers('pitcher', i, leagueId, seasonId, 'SP', 'K', function() {
+// 			//console.log('Initial pithcer cache stored for week: ' + i);
+// 		});
+// 	}
+// }
 
 
 

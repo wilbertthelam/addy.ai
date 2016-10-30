@@ -194,7 +194,7 @@ router.post('/signup', function (req, res) {
 					});
 				}
 				connection.commit();
-				console.log('id returned: ' + result.insertId);
+				// console.log('id returned: ' + result.insertId);
 				userId = result.insertId;
 				return cb1(null, 'Account created');
 			});
@@ -206,7 +206,6 @@ router.post('/signup', function (req, res) {
 			req.session.firstName = firstName;
 			req.session.lastName = lastName;
 
-			console.log('session started');
 			return res.json(req.session);
 		},
 
