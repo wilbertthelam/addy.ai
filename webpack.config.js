@@ -1,5 +1,6 @@
 const webpack = require('webpack');
 const path = require('path');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const PATHS = {
 	app: path.join(__dirname, 'public/scripts/index.js'),
@@ -28,6 +29,9 @@ module.exports = {
 	devtool: 'cheap-module-source-map',
 	plugins: [
 		new webpack.optimize.OccurenceOrderPlugin(),
+		new CopyWebpackPlugin([
+			{ from: 'public/media' }
+		]),
 		new webpack.HotModuleReplacementPlugin(),
 		new webpack.NoErrorsPlugin(),
 		new webpack.DefinePlugin({

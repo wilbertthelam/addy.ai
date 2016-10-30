@@ -45,28 +45,28 @@ const LoginContainer = React.createClass({
 
 					<div className="col-md-12">
 						<ReactCSSTransitionGroup
-								transitionName="example"
-								transitionAppear={true}
-								transitionAppearTimeout={500}
-							>
+							transitionName="example"
+							transitionAppear={true}
+							transitionAppearTimeout={500}
+						>
 							<div className="col-md-4">
 								<h2>
 									1. Find that league you're trashing
 								</h2>
-								<img src="../media/leagues_preview.png" alt="leagues_preview" />
+								<img src="/build/leagues_preview.png" alt="leagues_preview" />
 							</div>
 							<div className="col-md-4">
 								<h2>
 									2. Mock how your friends voted
 								</h2>
-								<img src="../media/voting_preview.png" alt="voting_preview" />
+								<img src="/build/voting_preview.png" alt="voting_preview" />
 							</div>
 
 							<div className="col-md-4">
 								<h2>
 									3. Gloat at the bottom feeders
 								</h2>
-								<img src="../media/leaderboard_preview.png" alt="leaderboard_preview" />
+								<img src="/build/leaderboard_preview.png" alt="leaderboard_preview" />
 							</div>
 						</ReactCSSTransitionGroup>
 					</div>

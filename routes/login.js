@@ -178,26 +178,26 @@ router.post('/signup', function (req, res) {
 			});
 
 			var statement = 'INSERT INTO addy_ai_football.users SET ?;';
-				var params = {
-					email: email,
-					password: password,
-					last_name: lastName,
-					first_name: firstName
-				};
-				connection.query(statement, params, function (err, result) {
-					if (err) {
-						connection.rollback();
-						return res.json({
-							execSuccess: false,
-							message: 'DB error in createAccount.',
-							error: err
-						});
-					}
-					connection.commit();
-					// console.log('id returned: ' + result.insertId);
-					userId = result.insertId;
-					return cb1(null, 'Account created');
-				});
+			var params = {
+				email: email,
+				password: password,
+				last_name: lastName,
+				first_name: firstName
+			};
+			connection.query(statement, params, function (err, result) {
+				if (err) {
+					connection.rollback();
+					return res.json({
+						execSuccess: false,
+						message: 'DB error in createAccount.',
+						error: err
+					});
+				}
+				connection.commit();
+				console.log('id returned: ' + result.insertId);
+				userId = result.insertId;
+				return cb1(null, 'Account created');
+			});
 		},
 
 		startNewSession: function () {
@@ -206,6 +206,7 @@ router.post('/signup', function (req, res) {
 			req.session.firstName = firstName;
 			req.session.lastName = lastName;
 
+			console.log('session started');
 			return res.json(req.session);
 		},
 
