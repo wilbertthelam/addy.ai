@@ -40,7 +40,7 @@ const LoginContainer = React.createClass({
 				</div>
 				<div className="container">
 					<div className="col-sm-12">
-						<h1>What's this junk? It's 3 easy steps:</h1>
+						<h1>What's this junk?</h1>
 					</div>
 
 					<div className="col-md-12">
@@ -50,29 +50,36 @@ const LoginContainer = React.createClass({
 							transitionAppearTimeout={500}
 						>
 							<div className="col-md-4">
-								<h2>
-									1. Find that league you're trashing
-								</h2>
-								<img src="/build/leagues_preview.png" alt="leagues_preview" />
+								<StepsBox
+									glyphName="glyphicon glyphicon-fire"
+									header="Find that league you're trashing"
+									imgUrl={require('file!../build/public/media/leagues_preview.png')}
+									imgAlt="leagues_preview"
+								/>
 							</div>
 							<div className="col-md-4">
-								<h2>
-									2. Mock how your friends voted
-								</h2>
-								<img src="/build/voting_preview.png" alt="voting_preview" />
+								<StepsBox
+									glyphName="glyphicon glyphicon-trash"
+									header="Mock how your friends voted"
+									imgUrl={require('file!../build/public/media/voting_preview.png')}
+									imgAlt="voting_preview"
+								/>
 							</div>
 
 							<div className="col-md-4">
-								<h2>
-									3. Gloat at the bottom feeders
-								</h2>
-								<img src="/build/leaderboard_preview.png" alt="leaderboard_preview" />
+								<StepsBox
+									glyphName="glyphicon glyphicon-sunglasses"
+									header="Gloat at the plebes"
+									imgUrl={require('file!../build/public/media/leaderboard_preview.png')}
+									imgAlt="leaderboard_preview"
+								/>
 							</div>
+
 						</ReactCSSTransitionGroup>
 					</div>
 
 					<div className="col-sm-12">
-						<h1>Not clear enough?</h1>
+						<h1>Stil don't get it?</h1>
 					</div>
 
 					<ReactCSSTransitionGroup
@@ -144,6 +151,26 @@ const LoginContainer = React.createClass({
 						</div>
 					</ReactCSSTransitionGroup>
 				</div>
+			</div>
+		);
+	}
+});
+
+const StepsBox = React.createClass({
+	render: function () {
+		return (
+			<div>
+				<h2>
+					<span className={this.props.glyphName} aria-hidden="true"></span>
+					&nbsp;
+					&nbsp;
+					{this.props.header}
+				</h2>
+				<img
+					className="steps-box-img"
+					src={this.props.imgUrl}
+					alt={this.props.imgAlt}
+				/>
 			</div>
 		);
 	}

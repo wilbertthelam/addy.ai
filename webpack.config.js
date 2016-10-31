@@ -1,12 +1,14 @@
 const webpack = require('webpack');
 const path = require('path');
+const url = require('url-loader');
 // const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const PATHS = {
 	app: path.join(__dirname, 'public/scripts/index.js'),
 	football: path.join(__dirname, 'public/scripts/football.js'),
 	hotload: 'webpack-hot-middleware/client',
-	build: path.join(__dirname, '/public/build')
+	build: path.join(__dirname, '/public/build'),
+	images: path.join(__dirname, 'public/media/')
 };
 
 module.exports = {
@@ -60,6 +62,12 @@ module.exports = {
 				exclude: /node_modules/,
 				include: [path.join(__dirname, 'public/scripts/')],
 				loader: 'babel',
+			},
+			{
+				test: /\.(jpg|png)$/,
+				exclude: [/node_modules/,'/public/build/'],
+				loader: 'file-loader?name=[path][name].[ext]',
+				include: PATHS.images,
 			}
 		],
 	}

@@ -74,19 +74,28 @@ body {
 
 .container h1 {
 	font-weight: 400;
-	font-size: 3em;
-	padding-top: 30px;
-	padding-bottom: 30px;
+	font-size: 3.5em;
+	padding-top: 10px;
+	padding-bottom: 20px;
+	border-bottom: 2px grey solid;
 }
 
 .container h2 {
-	font-weight: 900;
+	font-weight: 400;
+	margin-bottom: 20px;
+}
+
+.steps-box-img {
+	border-left: 3px grey dotted;
+	padding-left: 10px;
+	margin-bottom: 50px;
 }
 
 
 .splash-description {
 	color: white;
 	font-weight: 900;
+	text-align: right;
 }
 
 .splash-description #splash-company {
