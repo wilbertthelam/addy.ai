@@ -25,7 +25,7 @@ module.exports = {
 	},
 	output: {
 		path: PATHS.build,
-		publicPath: '/build',
+		publicPath: '/build/',
 		filename: '[name]_bundle.js'
 	},
 	devtool: 'cheap-module-source-map',
