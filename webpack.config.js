@@ -1,6 +1,6 @@
 const webpack = require('webpack');
 const path = require('path');
-const url = require('url-loader');
+// const url = require('url-loader');
 // const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const PATHS = {
@@ -65,7 +65,7 @@ module.exports = {
 			},
 			{
 				test: /\.(jpg|png)$/,
-				exclude: [/node_modules/,'/public/build/'],
+				exclude: [/node_modules/, '/public/build/'],
 				loader: 'file-loader?name=[path][name].[ext]',
 				include: PATHS.images,
 			}
