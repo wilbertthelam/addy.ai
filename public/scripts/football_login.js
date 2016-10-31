@@ -53,7 +53,7 @@ const LoginContainer = React.createClass({
 								<StepsBox
 									glyphName="glyphicon glyphicon-fire"
 									header="Find that league you're trashing"
-									imgUrl={require('file!../build/public/media/leagues_preview.png')}
+									imgUrl={require('../media/leagues_preview.png')}
 									imgAlt="leagues_preview"
 								/>
 							</div>
@@ -61,7 +61,7 @@ const LoginContainer = React.createClass({
 								<StepsBox
 									glyphName="glyphicon glyphicon-trash"
 									header="Mock how your friends voted"
-									imgUrl={require('file!../build/public/media/voting_preview.png')}
+									imgUrl={require('../media/voting_preview.png')}
 									imgAlt="voting_preview"
 								/>
 							</div>
@@ -70,7 +70,7 @@ const LoginContainer = React.createClass({
 								<StepsBox
 									glyphName="glyphicon glyphicon-sunglasses"
 									header="Gloat at the plebes"
-									imgUrl={require('file!../build/public/media/leaderboard_preview.png')}
+									imgUrl={require('../media/leaderboard_preview.png')}
 									imgAlt="leaderboard_preview"
 								/>
 							</div>
