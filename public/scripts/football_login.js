@@ -66,7 +66,7 @@ const LoginContainer = React.createClass({
 						<ReactCSSTransitionGroup
 							transitionName="addy-face"
 							transitionAppear={true}
-							transitionAppearTimeout={500}
+							transitionAppearTimeout={1000}
 						>
 							<div className="col-md-4">
 								<StepsBox
@@ -98,7 +98,7 @@ const LoginContainer = React.createClass({
 					</div>
 
 					<div className="col-sm-12">
-						<h1>Stil don't get it?</h1>
+						<h1>Still don't get it?</h1>
 					</div>
 
 					<ReactCSSTransitionGroup
