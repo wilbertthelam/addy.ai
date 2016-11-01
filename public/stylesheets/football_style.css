@@ -139,11 +139,26 @@ body {
 	border-radius: 1000px;
 }
 
+#addy-image img:hover {
+	filter:grayscale(100%);
+}
+
 #addy-image span {
 	display: inline-block;
 	background-color: #717272;
 	color: white;
 	border: 10px white solid;
+	border-radius: 1000px;
+	padding: 20px;
+	font-size: 1.7em;
+	margin-left: 10px;
+}
+
+#addy-image span:hover {
+	display: inline-block;
+	background-color: white;
+	color: black;
+	border: 10px #717272 solid;
 	border-radius: 1000px;
 	padding: 20px;
 	font-size: 1.7em;
