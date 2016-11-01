@@ -36,20 +36,20 @@ module.exports = {
 		// ]),
 		new webpack.HotModuleReplacementPlugin(),
 		new webpack.NoErrorsPlugin(),
-		new webpack.DefinePlugin({
-			'process.env': {
-			// This has effect on the react lib size
-				NODE_ENV: JSON.stringify('production'),
-			}
-		}),
-		new webpack.optimize.UglifyJsPlugin({
-		    compress: {
-		        warnings: false,
-		        drop_console: true
-		    },
-		    comments: false,
-		    sourceMap: false
-		})
+		// new webpack.DefinePlugin({
+		// 	'process.env': {
+		// 	// This has effect on the react lib size
+		// 		NODE_ENV: JSON.stringify('production'),
+		// 	}
+		// }),
+		// new webpack.optimize.UglifyJsPlugin({
+		//     compress: {
+		//         warnings: false,
+		//         drop_console: true
+		//     },
+		//     comments: false,
+		//     sourceMap: false
+		// })
 	],
 	module: {
 		noParse: [

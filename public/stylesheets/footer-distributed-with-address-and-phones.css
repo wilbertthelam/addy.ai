@@ -123,11 +123,11 @@
 	margin-bottom: 20px;
 }
 
-.footer-distributed .footer-icons{
-	margin-top: 25px;
+.footer-icons{
+
 }
 
-.footer-distributed .footer-icons a{
+.footer-icons a{
 	display: inline-block;
 	width: 35px;
 	height: 35px;
@@ -142,6 +142,10 @@
 
 	margin-right: 3px;
 	margin-bottom: 5px;
+}
+
+.footer-icons a:hover {
+	background-color: gold;
 }
 
 /* If you don't want the footer to be responsive, remove these media queries */

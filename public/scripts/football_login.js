@@ -38,6 +38,12 @@ const LoginContainer = React.createClass({
 						</div>
 					</div>
 				</div>
+				<div id="addy-image">
+					<img src="http://i.imgur.com/DaPiYWu.png" alt="addy_iamge" />
+					<span>
+						I endorse this product
+					</span>
+				</div>
 				<div className="container">
 					<div className="col-sm-12">
 						<h1>What's this junk?</h1>
@@ -90,11 +96,11 @@ const LoginContainer = React.createClass({
 						<div className="col-sm-12">
 							<div className="col-md-4">
 								<h2>
-									<span className="glyphicon glyphicon-menu-right" aria-hidden="true"></span>
+									<span className="glyphicon glyphicon-tags" aria-hidden="true"></span>
 									&nbsp;
 									More details please
 								</h2>
-								<p>
+								<p id="login-details-text">
 									Do you have that friend who always thinks his team is gonna win?
 									Or that other team manager who thinks he's hot stuff?
 									addy.ai Football let's you vote on yours or someone elses weekly matchups
@@ -105,7 +111,7 @@ const LoginContainer = React.createClass({
 
 							<div className="col-md-4">
 								<h2>
-									<span className="glyphicon glyphicon-menu-right" aria-hidden="true"></span>
+									<span className="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
 									&nbsp;
 									FAQ
 								</h2>
@@ -135,17 +141,78 @@ const LoginContainer = React.createClass({
 									Unforunately, addy.ai Football only works with public leagues
 									(ask your LM to change it under LM settings).
 								</p>
+								<p className="bold">
+									<span className="glyphicon glyphicon-menu-down" aria-hidden="true"></span>
+									&nbsp;
+									Why won't it let me vote?
+								</p>
+								<p>
+									All voting closes Saturday evening and reopens Tuesday morning, mainly
+									to keep people from seeing too much of the current scores of teams in progress.
+									Just for leeway, we're letting voting extend past the Thursday night games.
+									If you see the lock icon, then voting is closed for the current week.
+								</p>
 							</div>
 
 							<div className="col-md-4">
 								<h2>
-									<span className="glyphicon glyphicon-menu-right" aria-hidden="true"></span>
+									<span className="glyphicon glyphicon-envelope" aria-hidden="true"></span>
 									&nbsp;
 									Need more help?
 								</h2>
 								<p>
-									Email wilbertthelam@gmail.com for more help, or krestofur@gmail.com
+									Email
+									&nbsp;
+									<a href="mailto:wilbertthelam@gmail.com?Subject=addy.ai%20help" target="_top">
+										wilbertthelam@gmail.com
+									</a>
+									&nbsp;
+									for more help, or
+									&nbsp;
+									<a href="mailto:krestofur@gmail.com?Subject=Give%20me%20money" target="_top">
+										krestofur@gmail.com
+									</a>
+									&nbsp;
 									for career opportunities.
+								</p>
+								<h2>
+									<span className="glyphicon glyphicon-paperclip" aria-hidden="true"></span>
+									&nbsp;
+									Technical stuff
+								</h2>
+								<p>
+									Full app created by Wilbert Lam using random stuff
+									learned at University of Washington,
+									Google, StackOverflow and brain.
+								</p>
+								<p>
+									<ul>
+										<li>
+											<span className="bold">Back-end:</span> Node.js (Express)
+										</li>
+										<li>
+											<span className="bold">Front-end:</span> ReactJS
+										</li>
+										<li>
+											<span className="bold">Database:</span> MySQL
+										</li>
+										<li>
+											<span className="bold">Hosting:</span> Heroku/AWS RDS
+										</li>
+										<li>
+											<span className="bold">Other tools:</span> Python, Webpack
+										</li>
+									</ul>
+								</p>
+								<p>
+									Find me:
+									<div className="footer-icons">
+										<a href="https://www.linkedin.com/in/wilbert-lam-47498565"><i className="fa fa-linkedin"></i></a>
+										<a href="https://github.com/wilbertthelam/addy.ai"><i className="fa fa-github"></i></a>
+									</div>
+								</p>
+								<p>
+									Credit to the Men Bowl ESPN fantasy football league. May there never be a repeat champion again.
 								</p>
 							</div>
 						</div>
