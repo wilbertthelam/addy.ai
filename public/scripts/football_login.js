@@ -38,20 +38,33 @@ const LoginContainer = React.createClass({
 						</div>
 					</div>
 				</div>
-				<div id="addy-image">
-					<img src="http://i.imgur.com/DaPiYWu.png" alt="addy_iamge" />
-					<span>
-						I endorse this product
-					</span>
-				</div>
-				<div className="container">
-					<div className="col-sm-12">
-						<h1>What's this junk?</h1>
+
+				<ReactCSSTransitionGroup
+					transitionName="addy-face"
+					transitionAppear={true}
+					transitionAppearTimeout={1000}
+				>
+					<div id="addy-image">
+						<img src="http://i.imgur.com/DaPiYWu.png" alt="addy_iamge" />
+						<span>
+							I endorse this product
+						</span>
 					</div>
+				</ReactCSSTransitionGroup>
+				<div className="container">
+					<ReactCSSTransitionGroup
+						transitionName="example"
+						transitionAppear={true}
+						transitionAppearTimeout={500}
+					>
+						<div className="col-sm-12">
+							<h1>What's this junk?</h1>
+						</div>
+					</ReactCSSTransitionGroup>
 
 					<div className="col-md-12">
 						<ReactCSSTransitionGroup
-							transitionName="example"
+							transitionName="addy-face"
 							transitionAppear={true}
 							transitionAppearTimeout={500}
 						>
@@ -212,7 +225,8 @@ const LoginContainer = React.createClass({
 									</div>
 								</p>
 								<p>
-									Credit to the Men Bowl ESPN fantasy football league. May there never be a repeat champion again.
+									Credit to the Men Bowl ESPN fantasy football league.
+									May there never be a repeat champion again.
 								</p>
 							</div>
 						</div>

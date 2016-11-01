@@ -179,6 +179,16 @@ body {
   transition: opacity .2s ease-in;
 }
 
+/* splash animations */
+.addy-face-appear {
+  opacity: 0.01;
+}
+
+.addy-face-appear.addy-face-appear-active {
+  opacity: 1;
+  transition: opacity 0.8s ease-in;
+}
+
 .warning {
 	color: red;
 	text-align: center;
